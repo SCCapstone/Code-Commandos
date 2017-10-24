@@ -55,11 +55,15 @@
         </Menu>
       </menus>
     </MenuBar>
+<<<<<<< HEAD
       <ButtonBar prefHeight="40.0" prefWidth="200.0">
          <buttons>
             <Button mnemonicParsing="false" text="Change Order" />
          </buttons>
       </ButtonBar>
+=======
+      <ButtonBar minHeight="34.0" prefHeight="34.0" prefWidth="640.0" />
+>>>>>>> 45021969d4533e6bed3e662e2dbb0056e043bb8f
       <TabPane minHeight="-Infinity" prefHeight="38.0" prefWidth="640.0" tabClosingPolicy="UNAVAILABLE">
         <tabs>
           <Tab text="Roster 1">
