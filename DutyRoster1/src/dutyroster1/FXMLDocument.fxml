@@ -102,7 +102,7 @@
             </TableColumn>
             <TableColumn prefWidth="75.0" text="1">
                <columns>
-                  <TableColumn prefWidth="34.0" text="D" />
+                  <TableColumn prefWidth="34.0" text="Day" />
                </columns>
             </TableColumn>
         </columns>
