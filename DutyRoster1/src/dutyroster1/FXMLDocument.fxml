@@ -102,7 +102,10 @@
             </TableColumn>
             <TableColumn prefWidth="75.0" text="1">
                <columns>
+<<<<<<< HEAD
                   <TableColumn prefWidth="34.0" text="Day" />
+=======
+>>>>>>> df36808a9800d47130e39fb11a9f95490114d4df
                </columns>
             </TableColumn>
         </columns>
