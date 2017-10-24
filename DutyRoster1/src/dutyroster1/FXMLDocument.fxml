@@ -82,7 +82,6 @@
           </Tab>
         </tabs>
       </TabPane>
-      <ButtonBar prefHeight="40.0" prefWidth="200.0">
         <buttons>
             <Button maxHeight="31.0" maxWidth="50.0" minHeight="-Infinity" minWidth="50.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="50.0" text="&lt;&lt;" />
             <ComboBox prefWidth="150.0" />
