@@ -55,11 +55,7 @@
         </Menu>
       </menus>
     </MenuBar>
-      <ButtonBar prefHeight="40.0" prefWidth="200.0">
-         <buttons>
-            <Button mnemonicParsing="false" text="Button" />
-         </buttons>
-      </ButtonBar>
+      <ButtonBar minHeight="34.0" prefHeight="34.0" prefWidth="640.0" />
       <TabPane minHeight="-Infinity" prefHeight="38.0" prefWidth="640.0" tabClosingPolicy="UNAVAILABLE">
         <tabs>
           <Tab text="Roster 1">
@@ -78,7 +74,7 @@
           </Tab>
         </tabs>
       </TabPane>
-      <ButtonBar prefHeight="40.0" prefWidth="200.0">
+      <ButtonBar minHeight="50.0" prefHeight="50.0" prefWidth="200.0">
         <buttons>
             <Button maxHeight="31.0" maxWidth="50.0" minHeight="-Infinity" minWidth="50.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="50.0" text="&lt;&lt;" />
             <ComboBox prefWidth="150.0" />
