@@ -41,18 +41,11 @@ public class DutyRoster1 extends Application {
         launch(args);
     }
     
-<<<<<<< HEAD
-<<<<<<< HEAD
 
-=======
-<<<<<<< HEAD
 }
-=======
-<<<<<<< HEAD
-}
-=======
-}
->>>>>>> master
+
+
+
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -63,12 +56,3 @@ public class DutyRoster1 extends Application {
 //Austin added this comment!
 
 //Tanya's comment
-<<<<<<< HEAD
-=======
-
->>>>>>> 92c578b48878b6d4226481281354f7437ed6be72
->>>>>>> master
->>>>>>> master
-=======
-}
->>>>>>> master
