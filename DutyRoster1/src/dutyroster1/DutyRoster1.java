@@ -5,8 +5,15 @@
  * and open the template in the editor.
  */
 
+<<<<<<< HEAD
 //Austin added this comment2!
 //Conflict!!!!!2
+=======
+//9Austin9 9added9 9this9 comment9999!
+/*
+NO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+*/
+>>>>>>> AustinFreed
 
 //Hey this is Harini!!
 package dutyroster1;
