@@ -42,6 +42,7 @@ public class DutyRoster1 extends Application {
     }
     
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 <<<<<<< HEAD
@@ -67,4 +68,7 @@ public class DutyRoster1 extends Application {
 
 >>>>>>> 92c578b48878b6d4226481281354f7437ed6be72
 >>>>>>> master
+>>>>>>> master
+=======
+}
 >>>>>>> master
