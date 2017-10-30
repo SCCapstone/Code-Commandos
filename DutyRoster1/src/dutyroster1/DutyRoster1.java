@@ -11,6 +11,7 @@
 // Hey!!!
 //Hey this is Harini!!
 //Harini 1!!!
+
 package dutyroster1;
 
 import javafx.application.Application;
@@ -41,6 +42,7 @@ public class DutyRoster1 extends Application {
     public static void main(String[] args) {
         launch(args);
 	int a = 0;
+	int b = 0;
     }
     
 
