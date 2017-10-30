@@ -81,7 +81,7 @@
       <ButtonBar minHeight="50.0" prefHeight="50.0" prefWidth="200.0">
         <buttons>
             <Button maxHeight="31.0" maxWidth="50.0" minHeight="-Infinity" minWidth="50.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="50.0" text="&lt;&lt;" />
-            <ComboBox prefWidth="150.0" promptText="Month" />
+            <ComboBox prefWidth="150.0" promptText="Month Title" />
           <Button maxHeight="31.0" maxWidth="50.0" minHeight="31.0" minWidth="17.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="50.0" text="&gt;&gt;" />
         </buttons>
       </ButtonBar>
@@ -90,7 +90,7 @@
           <TableColumn prefWidth="75.0" text="Employee">
                <columns>
                 <TableColumn prefWidth="75.0" text="Rank" />
-                  <TableColumn prefWidth="75.0" text="Name" />
+                  <TableColumn prefWidth="75.0" text="Name234" />
                </columns>
             </TableColumn>
             <TableColumn prefWidth="75.0" text="Increment">
