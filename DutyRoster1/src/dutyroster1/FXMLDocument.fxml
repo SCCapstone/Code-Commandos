@@ -58,7 +58,7 @@
     </MenuBar>
       <ButtonBar prefHeight="40.0" prefWidth="200.0">
          <buttons>
-            <Button mnemonicParsing="false" text="Change" />
+            <Button mnemonicParsing="false" text="Changed!!!!!!!!" />
          </buttons>
       </ButtonBar>
       <TabPane minHeight="-Infinity" prefHeight="38.0" prefWidth="640.0" tabClosingPolicy="UNAVAILABLE">
