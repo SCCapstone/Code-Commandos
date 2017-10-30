@@ -44,6 +44,7 @@ public class DutyRoster1 extends Application {
      */
     public static void main(String[] args) {
         launch(args);
+        int a= 1;
     }
     
 }
