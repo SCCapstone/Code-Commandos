@@ -42,7 +42,7 @@ public class DutyRoster1 extends Application {
      */
     public static void main(String[] args) {
         long b=5;
-        int a = 12;
+        int a = 1;
         launch(args);
 	int a = 0;
 	int b = 0;
