@@ -14,7 +14,6 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 
-
 <VBox prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1">
   <children>
     <MenuBar VBox.vgrow="NEVER">
@@ -72,7 +71,7 @@
                   </AnchorPane>
             </content>
           </Tab>
-          <Tab text="New Roster">
+          <Tab text="Roster+">
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
             </content>
@@ -82,7 +81,7 @@
       <ButtonBar minHeight="50.0" prefHeight="50.0" prefWidth="200.0">
         <buttons>
             <Button maxHeight="31.0" maxWidth="50.0" minHeight="-Infinity" minWidth="50.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="50.0" text="&lt;&lt;" />
-            <ComboBox prefWidth="150.0" />
+            <ComboBox prefWidth="150.0" promptText="Month" />
           <Button maxHeight="31.0" maxWidth="50.0" minHeight="31.0" minWidth="17.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="50.0" text="&gt;&gt;" />
         </buttons>
       </ButtonBar>
