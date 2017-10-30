@@ -1,14 +1,15 @@
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
 
-//9Austin9 9added9 9this9 comment9999!
-/*
-NO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-*/
+//Austin added this comment2!
+//Conflict!!!!!2
 
+//Hey this is Harini!!
+//Harini 1!!!
 package dutyroster1;
 
 import javafx.application.Application;
@@ -40,4 +41,30 @@ public class DutyRoster1 extends Application {
         launch(args);
     }
     
+
 }
+<<<<<<< HEAD
+
+
+
+
+=======
+<<<<<<< Updated upstream
+=======
+>>>>>>> master
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+//Austin added this comment!
+
+//Tanya's comment
+<<<<<<< HEAD
+=======
+
+>>>>>>> 92c578b48878b6d4226481281354f7437ed6be72
+>>>>>>> master
+>>>>>>> Stashed changes
+>>>>>>> master
