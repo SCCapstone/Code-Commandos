@@ -5,7 +5,7 @@
  */
 
 //Austin added this comment2!
-//Merge Conflict!!!!!2
+//Conflict!!!!!2
 package dutyroster1;
 
 import javafx.application.Application;
