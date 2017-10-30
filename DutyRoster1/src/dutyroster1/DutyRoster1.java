@@ -45,9 +45,7 @@ public class DutyRoster1 extends Application {
         int a = 12;
         launch(args);
 	int a = 0;
-
 	int b = 0;
-
     }
     
 
