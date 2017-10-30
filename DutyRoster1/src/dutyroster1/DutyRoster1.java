@@ -43,10 +43,15 @@ public class DutyRoster1 extends Application {
     
 
 }
+<<<<<<< HEAD
 
 
 
 
+=======
+<<<<<<< Updated upstream
+=======
+>>>>>>> master
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -56,3 +61,10 @@ public class DutyRoster1 extends Application {
 //Austin added this comment!
 
 //Tanya's comment
+<<<<<<< HEAD
+=======
+
+>>>>>>> 92c578b48878b6d4226481281354f7437ed6be72
+>>>>>>> master
+>>>>>>> Stashed changes
+>>>>>>> master
