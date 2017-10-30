@@ -1,22 +1,20 @@
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
 
-<<<<<<< HEAD
-//9Austin9 9added9 9this9 comment9999!
-/*
-NO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-*/
-=======
 //Austin added this comment2!
-//Conflict!!!!!2
->>>>>>> master
+//Conflict!!!!!2 2345678
 
+// Heybo!!!
 //Hey this is Harini!!
-package dutyroster1;
+//Harini 1!!!
+// Trying to fix this 
 
+package dutyroster1;
+//testconflict
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -47,4 +45,20 @@ public class DutyRoster1 extends Application {
         int a= 1;
     }
     
+
 }
+
+
+
+
+
+
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+//Austin added this comment!
+
+//Tanya's comment
