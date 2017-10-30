@@ -11,7 +11,10 @@
 // Hey!!!
 //Hey this is Harini!!
 //Harini 1!!!
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
 package dutyroster1;
 //testconflict
 import javafx.application.Application;
@@ -42,7 +45,10 @@ public class DutyRoster1 extends Application {
     public static void main(String[] args) {
         launch(args);
 	int a = 0;
+<<<<<<< Updated upstream
 	int b = 0;
+=======
+>>>>>>> Stashed changes
     }
     
 
