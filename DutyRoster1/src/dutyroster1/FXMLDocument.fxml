@@ -90,7 +90,7 @@
           <TableColumn prefWidth="75.0" text="Employee">
                <columns>
                 <TableColumn prefWidth="75.0" text="Rank" />
-                  <TableColumn prefWidth="75.0" text="HAHAHA" />
+                  <TableColumn prefWidth="75.0" text="HAHA" />
                </columns>
             </TableColumn>
             <TableColumn prefWidth="75.0" text="Increment">
