@@ -6,7 +6,11 @@
  */
 
 //Austin added this comment2!
+<<<<<<< Updated upstream
 //Conflict!!!!!2 234
+=======
+//Conflict!!!!!2
+>>>>>>> Stashed changes
 
 // Hey!!!
 //Hey this is Harini!!
