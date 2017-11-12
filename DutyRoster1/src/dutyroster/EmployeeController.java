@@ -13,11 +13,13 @@ import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.TablePosition;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 //import javafx.stage.WindowEvent;
 import javafx.util.converter.DefaultStringConverter;
 
@@ -52,26 +54,44 @@ public class EmployeeController implements Initializable {
  
         rank.setCellValueFactory(new PropertyValueFactory<>("rank"));
         rank.setCellFactory(ComboBoxTableCell.forTableColumn(new DefaultStringConverter(), rankListing));
-        
-        
-        rank.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Employee, String>>() {
-            @Override
-            public void handle(TableColumn.CellEditEvent<Employee, String> t) {
-              
-                String newName = t.getNewValue();
-                ObservableList<Employee> items = t.getTableView().getItems();
-                TablePosition<Employee, String> tablePosition = t.getTablePosition();
+        rank.setOnEditCommit(
+            new EventHandler<TableColumn.CellEditEvent<Employee, String>>() {
+                @Override
+                public void handle(TableColumn.CellEditEvent<Employee, String> t) {
+                    String newName = t.getNewValue();
+                    ObservableList<Employee> items = t.getTableView().getItems();
+                    TablePosition<Employee, String> tablePosition = t.getTablePosition();
 
-                Employee fieldRow = items.get(tablePosition.getRow());
-                fieldRow.setRank(newName);
-                fieldRow.setSort( getSortIndex(newName) );
-                tableView.sort();
+                    Employee fieldRow = items.get(tablePosition.getRow());
+                    fieldRow.setRank(newName);
+                    fieldRow.setSort( getSortIndex(newName) );
+                    tableView.sort();
             }
         });
+
+        name.setCellValueFactory(new PropertyValueFactory<>("name"));
+        name.setCellFactory(TextFieldTableCell.forTableColumn());
+        name.setOnEditCommit(
+                (TableColumn.CellEditEvent<Employee, String> t) ->
+                    ( t.getTableView().getItems().get(
+                            t.getTablePosition().getRow())
+                    ).setName(t.getNewValue())
+                );       
         
-        
+        /*
+        name.setOnEditCommit(
+            new EventHandler<TableColumn.CellEditEvent<Employee, String>>() {
+                @Override
+                public void handle(CellEditEvent<Employee, String> t) {
+                    ((Employee) t.getTableView().getItems().get(
+                        t.getTablePosition().getRow())
+                    ).setName(t.getNewValue());
+                    tableView.sort();   
+                }
+            }
+        );       
+        */
        
-               
        rankCombo.getItems().setAll(rankListing);
         
         scEmployees = new SecureFile("Employees");
@@ -82,6 +102,7 @@ public class EmployeeController implements Initializable {
         );
         
         tableView.setEditable(true);
+        
         sort.setSortType(TableColumn.SortType.ASCENDING);
         tableView.getSortOrder().add(sort);
          sort.setSortable(true);

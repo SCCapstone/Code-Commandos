@@ -40,13 +40,15 @@ public class Employee {
         rank.set(rankIn);
     }
     
+    public void setName(String nameIn) {
+        name.set(nameIn);
+    } 
+    
     public void setSort(int sortIn) {
         sort = sortIn;
     }
     
-    public void setName(String nameIn) {
-        name.set(nameIn);
-    }
+
     
         
 }
