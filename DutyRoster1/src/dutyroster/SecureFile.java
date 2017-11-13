@@ -34,27 +34,21 @@ public class SecureFile {
   private static String IVKEY = "RandomInitVector";
   private String filePath;
   
- public SecureFile(String filePath){
+    public SecureFile(String filePath){
      
-     this.filePath = filePath;
-    File file=new File(filePath);
-    
-    Path path = file.toPath();
-      try {
-          Files.setAttribute(path, "dos:hidden", true);
-      } catch (IOException ex) {
-          Logger.getLogger(SecureFile.class.getName()).log(Level.SEVERE, null, ex);
-      }
-    
-    
-    
+        this.filePath = filePath;
+        File file=new File(filePath);
+        Path path = file.toPath();
+            
     if (!file.exists()){
          
         try { 
              file.createNewFile();
-         } catch (IOException ex) {
+             Files.setAttribute(path, "dos:hidden", true);
+        } 
+        catch (IOException ex) {
              Logger.getLogger(SecureFile.class.getName()).log(Level.SEVERE, null, ex);
-         }
+        }
     
     }
      
