@@ -1,8 +1,7 @@
-/**
- * This class is used like a private strut for all employee related data
- * @Author Othen W. Prock
- * @Version 1.2, 11 November, 2017
- * 
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
  */
 package dutyroster;
 
@@ -15,27 +14,16 @@ public class Employee {
    private final SimpleStringProperty rank = new SimpleStringProperty("");
    private final SimpleStringProperty name = new SimpleStringProperty("");
 
-    /**
-     * Blank Constructor
-     */
     public Employee() {
       this(0,"", "");
     }
  
-    /**
-     * Main Constructor. used to add new employees
-     * @param sortIn
-     * @param rankIn
-     * @param nameIn 
-     */
     public Employee(int sortIn, String rankIn, String nameIn) {
         setSort(sortIn);
         setRank(rankIn);
         setName(nameIn);
     }
 
-    
-    //Getters
     public String getRank() {
         return rank.get();
     }
@@ -47,8 +35,7 @@ public class Employee {
      public int getSort() {
         return sort;
     }
-    
-    //Setters
+     
     public void setRank(String rankIn) {
         rank.set(rankIn);
     }
@@ -61,4 +48,7 @@ public class Employee {
         sort = sortIn;
     }
     
+
+    
+        
 }

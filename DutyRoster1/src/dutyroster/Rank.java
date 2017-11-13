@@ -1,8 +1,7 @@
-/**
- * This class is used like a private strut for all Rank related data
- * @Author Othen W. Prock
- * @Version 1.2, 11 November, 2017
- * 
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
  */
 package dutyroster;
 
@@ -11,28 +10,21 @@ import javafx.beans.property.SimpleStringProperty;
 
 public class Rank {
 
-    private Integer sort = 0;
+   private Integer sort = 0;
     private final SimpleStringProperty rank = new SimpleStringProperty("");
    
-    /**
-     * Blank constructor. 
-     */
+
     public Rank() {
       this(0, "");
     }
-    
-    /**
-     * Main Constructor. Commonly used to add new ranks.
-     * @param sort
-     * @param rank 
-     */
+ 
     public Rank(int sort, String rank) {
         
         setSort(sort);
-        setRank(rank);    
+        setRank(rank);
+        
     }
 
-    //Getters
     public String getRank() {
         return rank.get();
     }
@@ -41,11 +33,12 @@ public class Rank {
         return sort;
     }
     
-    //Setters
     public void setRank(String rankIn) {
         rank.set(rankIn);
     }
     
+ 
+ 
     public void setSort(int sortIn) {
         sort = sortIn;
     }
