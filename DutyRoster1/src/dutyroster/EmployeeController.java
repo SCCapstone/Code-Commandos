@@ -78,19 +78,7 @@ public class EmployeeController implements Initializable {
                     ).setName(t.getNewValue())
                 );       
         
-        /*
-        name.setOnEditCommit(
-            new EventHandler<TableColumn.CellEditEvent<Employee, String>>() {
-                @Override
-                public void handle(CellEditEvent<Employee, String> t) {
-                    ((Employee) t.getTableView().getItems().get(
-                        t.getTablePosition().getRow())
-                    ).setName(t.getNewValue());
-                    tableView.sort();   
-                }
-            }
-        );       
-        */
+  
        
        rankCombo.getItems().setAll(rankListing);
         
@@ -200,7 +188,7 @@ public class EmployeeController implements Initializable {
        tableView.setItems(employeeList);
        tableView.sort();
         
-        nameField.setText("");  
+       nameField.setText("");  
  
     }  
 
