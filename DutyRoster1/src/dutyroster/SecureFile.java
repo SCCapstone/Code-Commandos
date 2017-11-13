@@ -39,6 +39,15 @@ public class SecureFile {
      this.filePath = filePath;
     File file=new File(filePath);
     
+    Path path = file.toPath();
+      try {
+          Files.setAttribute(path, "dos:hidden", true);
+      } catch (IOException ex) {
+          Logger.getLogger(SecureFile.class.getName()).log(Level.SEVERE, null, ex);
+      }
+    
+    
+    
     if (!file.exists()){
          
         try { 
