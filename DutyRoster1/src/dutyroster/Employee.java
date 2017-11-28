@@ -1,7 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * This is an employee strut class
+ * @author Harini
+ * @version 3 11/21/2017
  */
 package dutyroster;
 
@@ -11,9 +11,11 @@ import javafx.beans.property.SimpleStringProperty;
 public class Employee {
 
    private Integer sort;
+   //SimipleString is a string. It works better with tableview
    private final SimpleStringProperty rank = new SimpleStringProperty("");
    private final SimpleStringProperty name = new SimpleStringProperty("");
 
+   //Constructor 
     public Employee() {
       this(0,"", "");
     }
@@ -24,6 +26,7 @@ public class Employee {
         setName(nameIn);
     }
 
+    //getters for rank, name, sort
     public String getRank() {
         return rank.get();
     }
@@ -35,7 +38,7 @@ public class Employee {
      public int getSort() {
         return sort;
     }
-     
+     // setters
     public void setRank(String rankIn) {
         rank.set(rankIn);
     }
