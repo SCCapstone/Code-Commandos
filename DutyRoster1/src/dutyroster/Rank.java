@@ -2,12 +2,13 @@
  * @authors Austin Freed, Tanya Peyush
  * @version 1
  * 11/20/17
+ * 
  */
 package dutyroster;
 
 import javafx.beans.property.SimpleStringProperty;
 
-//This clas is used as a secure strut
+//This class is used as a secure strut
 public class Rank {
 
    private Integer sort = 0;

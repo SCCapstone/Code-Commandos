@@ -1,4 +1,9 @@
-
+/**
+ * @authors Austin Freed, Tanya Peyush
+ * @version 1
+ * 11/20/17
+ * 
+ */
 package dutyroster;
 
 import java.net.URL;
@@ -110,16 +115,16 @@ public class RankController implements Initializable {
     private void moveSortUp(ActionEvent event){
         
         Rank selectedRank = tableView.getSelectionModel().getSelectedItem();
-        
+        //if no rank selected
         if (selectedRank == null)
             return;
         
         int oldSort = selectedRank.getSort();
         
-        //If already at the top of the list
+        //if already at the top of the list
         if (oldSort == 1)
             return;
-        
+        //move index up
         for(Rank currentRank : rankList) {
 
             int currentSort = currentRank.getSort();
@@ -129,8 +134,9 @@ public class RankController implements Initializable {
 
         }
         
+        //if two duplicate indexes, set older above newer and move both up
         for(Rank currentRank : rankList) {
- 
+            
             if ( currentRank.getRank().equals( selectedRank.getRank() ) )
                 currentRank.setSort(oldSort - 1);
 
@@ -143,7 +149,7 @@ public class RankController implements Initializable {
     private void moveSortDown(ActionEvent event){
         
         Rank selectedRank = tableView.getSelectionModel().getSelectedItem();
-        
+        //if rank value then return nothing
         if (selectedRank == null)
             return;
         
@@ -152,7 +158,7 @@ public class RankController implements Initializable {
         //At the bottom already
         if (oldSort == tableView.getItems().size())
             return;
-        
+        //move index down
         for(Rank currentRank : rankList) {
 
             int currentSort = currentRank.getSort();
@@ -161,7 +167,7 @@ public class RankController implements Initializable {
                currentRank.setSort(oldSort);
 
         }
-        
+        //if two duplicate indexes, set older above newer and move both down
         for(Rank currentRank : rankList) {
  
             if ( currentRank.getRank().equals( selectedRank.getRank() ) )
