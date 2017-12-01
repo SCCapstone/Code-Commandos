@@ -6,6 +6,9 @@ nbbuild/
 dist/
 nbdist/
 .nb-gradle/
+Employees
+Settings
+Ranks
 
 # Compiled class file
 *.class
