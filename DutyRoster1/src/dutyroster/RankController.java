@@ -37,11 +37,11 @@ public class RankController implements Initializable {
         
         rankList = tableView.getItems();
         
-        //add multi select to table.
+        //Add multi select to table
         tableView.getSelectionModel().setSelectionMode(
                 SelectionMode.MULTIPLE
         );
-        
+        //Create the Delete menu item
         MenuItem mi1 = new MenuItem("Delete");
             mi1.setOnAction((ActionEvent event) -> { 
                 ObservableList<Rank> items = tableView.getSelectionModel().getSelectedItems();
@@ -112,7 +112,7 @@ public class RankController implements Initializable {
 
     }
       
-      
+    //The add rank action checks to make sure the rank doesn't already exits
     @FXML
     protected void addRank(ActionEvent event) {
         
@@ -126,7 +126,7 @@ public class RankController implements Initializable {
         }
         
         rankList.add(new Rank(
-                highestRank(),
+                highestIndexRank(),
             rankField.getText()
         ));
          
@@ -136,8 +136,8 @@ public class RankController implements Initializable {
         rankField.setText("");
        
     }  
-
-    private int highestRank(){
+    //Returns highest Rank
+    private int highestIndexRank(){
             return tableView.getItems().size() + 1;
     }
   
@@ -205,7 +205,7 @@ public class RankController implements Initializable {
          tableView.sort();
     }    
  
-    
+    //Check to see if the rank already exitst
     private boolean rankExists (String strIn) {
         
         for(Rank currentRank : rankList)
@@ -216,7 +216,7 @@ public class RankController implements Initializable {
         
     }
     
-    //Change index to the next lower value
+    //Delete rank function
     private void deleteRank(ObservableList<Rank> tmpList){
                                    
         if (tmpList==null)
