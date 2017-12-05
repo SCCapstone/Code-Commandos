@@ -31,9 +31,7 @@ import javafx.util.converter.DefaultStringConverter;
 
 
 public class EmployeeController implements Initializable {
-
-    
-    
+ 
     //for entering a new rank
     @FXML private ComboBox rankCombo;
     @FXML private TextField nameField;
@@ -208,12 +206,11 @@ public class EmployeeController implements Initializable {
                     rankListing.add(bArry[1]);
                 }
             }
-            
+ 
         }   
         
     }
-      
-      
+        
     @FXML
     protected void addEmployee(ActionEvent event) {
        Alert alert;
@@ -224,14 +221,14 @@ public class EmployeeController implements Initializable {
                      + "editor in the Tools menu.");
              alert.setTitle("No Ranks Exists");
              alert.showAndWait();
-          return;
+            return;
         }
         if (nameField.getText().isEmpty()){
-          alert = new Alert(Alert.AlertType.ERROR, "Must Enter an Employee Name.");
-          alert.setTitle("Missing Name");
-          alert.showAndWait();
-       return;
-     }
+            alert = new Alert(Alert.AlertType.ERROR, "Must Enter an Employee Name.");
+            alert.setTitle("Missing Name");
+            alert.showAndWait();
+            return;
+        }
                 
         employeeList.add(new Employee(
             getSortIndex(rankCombo.getValue().toString()),
