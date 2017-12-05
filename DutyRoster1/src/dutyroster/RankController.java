@@ -124,6 +124,12 @@ public class RankController implements Initializable {
              alert.showAndWait();
           return;
         }
+        if (rankField.getText().isEmpty()){
+         alert = new Alert(Alert.AlertType.ERROR, " Enter a Rank ");
+         alert.setTitle("Missing Rank");
+         alert.showAndWait();
+      return;
+    }
         
         rankList.add(new Rank(
                 highestIndexRank(),
