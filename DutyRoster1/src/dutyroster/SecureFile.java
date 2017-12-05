@@ -16,6 +16,8 @@ import javax.crypto.spec.IvParameterSpec;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import static java.nio.file.StandardOpenOption.TRUNCATE_EXISTING;
+import javafx.scene.control.Alert;
 
 
 public class SecureFile {
@@ -72,12 +74,24 @@ public class SecureFile {
      * @throws Exception 
      */
     private void encrypt(String strIn) throws Exception {        
-        Cipher cipher = getCipher(Cipher.ENCRYPT_MODE);      
-        byte[] outputBytes;
-        outputBytes =  strIn.getBytes(ENCODING);
-        outputBytes = cipher.doFinal(outputBytes);    
+        Cipher cipher = getCipher(Cipher.ENCRYPT_MODE);  
         Path path = Paths.get(filePath);
-        Files.write(path, outputBytes); //creates, overwrites
+        byte[] outputBytes = null;
+        
+       
+        
+        if(strIn.length() > 0){
+            outputBytes =  strIn.getBytes(ENCODING);
+            outputBytes = cipher.doFinal(outputBytes);           
+            Files.write(path, outputBytes,TRUNCATE_EXISTING); //creates, overwrites
+        }
+        else{
+          
+             System.out.println("Made it here " + strIn );
+           Files.newBufferedWriter(path , TRUNCATE_EXISTING);
+          
+        }
+    
     } 
 
     /**

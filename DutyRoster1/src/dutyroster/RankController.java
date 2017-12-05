@@ -127,11 +127,12 @@ public class RankController implements Initializable {
         //move index up
         for(Rank currentRank : rankList) {
 
-            int currentSort = currentRank.getSort();
+            currentSort = currentRank.getSort();
 
-            if(currentSort == (oldSort - 1) ) 
+            if(currentSort == (oldSort - 1) ) {
                currentRank.setSort(oldSort);
-
+               break;
+            }
         }
         
         //if two duplicate indexes, set older above newer and move both up
@@ -140,7 +141,9 @@ public class RankController implements Initializable {
             if ( currentRank.getRank().equals( selectedRank.getRank() ) )
                 currentRank.setSort(oldSort - 1);
 
-        }
+        if(currentSort > 0)
+            selectedRank.setSort(currentSort);
+        
         tableView.sort();
     }
     
@@ -161,10 +164,12 @@ public class RankController implements Initializable {
         //move index down
         for(Rank currentRank : rankList) {
 
-            int currentSort = currentRank.getSort();
+            currentSort = currentRank.getSort();
 
-            if(currentSort == (oldSort + 1) ) 
-               currentRank.setSort(oldSort);
+            if(currentSort == (oldSort + 1) ) {
+                currentRank.setSort(oldSort);
+                break;
+            }
 
         }
         //if two duplicate indexes, set older above newer and move both down
