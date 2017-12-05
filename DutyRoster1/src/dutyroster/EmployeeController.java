@@ -1,7 +1,6 @@
 /**
  * 
  * @author Harini
- * @assisted by Austin Freed
  * @version 5 11/25/17
  */
 package dutyroster;
