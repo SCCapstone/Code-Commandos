@@ -14,6 +14,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
@@ -215,10 +216,23 @@ public class EmployeeController implements Initializable {
       
     @FXML
     protected void addEmployee(ActionEvent event) {
-       
-        if (rankCombo.getValue()==null)
-            return;
+       Alert alert;
         
+        if (rankCombo.getValue()==null){
+             alert = new Alert(Alert.AlertType.ERROR, "Each employee must have a rank."
+                     + " If there are no ranks avaiable, you can add ranks using Rank "
+                     + "editor in the Tools menu.");
+             alert.setTitle("No Ranks Exists");
+             alert.showAndWait();
+          return;
+        }
+        if (nameField.getText().isEmpty()){
+          alert = new Alert(Alert.AlertType.ERROR, "Must Enter an Employee Name.");
+          alert.setTitle("Missing Name");
+          alert.showAndWait();
+       return;
+     }
+                
         employeeList.add(new Employee(
             getSortIndex(rankCombo.getValue().toString()),
             rankCombo.getValue().toString(),
