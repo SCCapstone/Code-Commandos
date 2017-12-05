@@ -15,6 +15,8 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TablePosition;
@@ -85,7 +87,7 @@ public class EmployeeController implements Initializable {
                     tableView.sort();
             }
         });
-    // used to make each cell in the rank column in the editable.
+        // used to make each cell in the rank column in the editable.
         name.setCellValueFactory(new PropertyValueFactory<>("name"));
         name.setCellFactory(TextFieldTableCell.forTableColumn());
         name.setOnEditCommit(
@@ -95,8 +97,19 @@ public class EmployeeController implements Initializable {
                     ).setName(t.getNewValue())
                 );       
             
+       
+        MenuItem mi1 = new MenuItem("Delete");
+            mi1.setOnAction((ActionEvent event) -> { 
+                ObservableList<Employee> items = tableView.getSelectionModel().getSelectedItems();
+                deleteEmployee(items);
+            });
+
+        ContextMenu menu = new ContextMenu();
+        menu.getItems().add(mi1);
+        tableView.setContextMenu(menu);
+
         //  load the rankListing into rankCombo
-       rankCombo.getItems().setAll(rankListing);
+        rankCombo.getItems().setAll(rankListing);
         
        // Creating a new secure files employees and load it into secure files.
         scEmployees = new SecureFile("Employees");
@@ -114,7 +127,7 @@ public class EmployeeController implements Initializable {
         //set proper sorting. 
         sort.setSortType(TableColumn.SortType.ASCENDING);
         tableView.getSortOrder().add(sort);
-         sort.setSortable(true);
+        sort.setSortable(true);
         name.setSortType(TableColumn.SortType.ASCENDING);
         tableView.getSortOrder().add(name);
         name.setSortable(true);
@@ -145,7 +158,7 @@ public class EmployeeController implements Initializable {
     
     private static String removeLastChar(String str) {
         if(str.length() <= 1 )
-            return str;
+            return "";
         return str.substring(0, str.length() - 1);
     }
     
@@ -234,6 +247,23 @@ public class EmployeeController implements Initializable {
         }
         
         return 0;
+    }
+    
+    
+    //Change index to the next lower value
+    private void deleteEmployee(ObservableList<Employee> tmpList){
+                                   
+        if (tmpList==null)
+            return;
+ 
+        for(int i = 0; i<tmpList.size(); i++)
+            for(int j = 0; j<employeeList.size(); j++)  
+                if (tmpList.get(i).equals(employeeList.get(j)))  
+                    employeeList.remove(j);
+         
+        tableView.setItems(employeeList);  
+        tableView.sort();
+    
     }
     
 }
