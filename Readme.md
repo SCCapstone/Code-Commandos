@@ -57,6 +57,22 @@ The following steps will instruct how to enter employee names into the system.
 8) To delete an employee on the list, right click the employee to be deleted and select "Delete".
 9) When done, close out of the window. The settings will automatically save.
 
+--------
+Testing
+--------
+The following steps will explain the commands used for testing. 
+
+Unit Test:
+For the first Unit Test, JUnit is used as the framework. 
+1) Open the DutyRoster 1 program in Netbeans.
+2) Select “Run” on the Menu bar on the top. 
+3) Select “Test Project (DutyRoster 1)” to run the tests.
+
+Behavioral Test:
+For the first Behavioral Test, JemmyFX is used as the framework. 
+1) Open the DutyRoster 1 program in Netbeans.
+2) Select “Run” on the Menu bar on the top. 
+3) Select “Test Project (DutyRoster 1)” to run the tests.
 
 --------------
 Contributors: 
