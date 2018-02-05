@@ -69,10 +69,9 @@ For the first Unit Test, JUnit is used as the framework.
 3) Select “Test Project (DutyRoster 1)” to run the tests.
 
 Behavioral Test:
-For the first Behavioral Test, JemmyFX is used as the framework. 
-1) Open the DutyRoster 1 program in Netbeans.
-2) Select “Run” on the Menu bar on the top. 
-3) Select “Test Project (DutyRoster 1)” to run the tests.
+For the first Behavioral Test, JemmyFX is used as the framework.
+
+[currently working on implementing JemmyFX]
 
 --------------
 Contributors: 
