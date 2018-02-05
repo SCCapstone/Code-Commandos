@@ -27,15 +27,13 @@ public class SecureFile {
     private static String IVKEY = "0123456789Sprays"; 
     private String filePath;
 
-    
     //Constructor
     public SecureFile(String inPath){
      
         filePath = inPath;
         File file=new File(filePath);
         Path path = file.toPath();
-             
-        
+                     
         if (!file.exists()){
 
             try { 
@@ -73,25 +71,21 @@ public class SecureFile {
      * @param strIn
      * @throws Exception 
      */
+    
     private void encrypt(String strIn) throws Exception {        
         Cipher cipher = getCipher(Cipher.ENCRYPT_MODE);  
         Path path = Paths.get(filePath);
         byte[] outputBytes = null;
-        
        
-        
         if(strIn.length() > 0){
             outputBytes =  strIn.getBytes(ENCODING);
             outputBytes = cipher.doFinal(outputBytes);           
             Files.write(path, outputBytes,TRUNCATE_EXISTING); //creates, overwrites
         }
-        else{
-          
+        else{          
              System.out.println("Made it here " + strIn );
-           Files.newBufferedWriter(path , TRUNCATE_EXISTING);
-          
+           Files.newBufferedWriter(path , TRUNCATE_EXISTING);   
         }
-    
     } 
 
     /**
@@ -106,7 +100,6 @@ public class SecureFile {
         buffer = cipher.doFinal(buffer);
         return new String(buffer,ENCODING);
     }
-    
     
     /**
      * This function should be used to store data because 

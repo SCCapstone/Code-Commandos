@@ -28,19 +28,19 @@
    <children>
       <TableView fx:id="tableView" styleClass="table" prefHeight="409.0" prefWidth="215.0" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1">
          <columns>
-            <TableColumn fx:id="colSort" minWidth="-Infinity" prefWidth="142.0" resizable="false" sortable="true" text="Sort Order" visible="false">
+            <TableColumn fx:id="sort" minWidth="-Infinity" prefWidth="142.0" resizable="false" sortable="true" text="Sort Order" visible="false">
                <cellValueFactory>
                   <PropertyValueFactory property="sort" />
                </cellValueFactory>
             </TableColumn>
-            <TableColumn fx:id="colRank" maxWidth="1.7976931348623157E308" minWidth="-1.0" prefWidth="255.0" resizable="false" sortable="false" text="Rank">
+            <TableColumn fx:id="rank" maxWidth="1.7976931348623157E308" minWidth="-1.0" prefWidth="255.0" resizable="false" sortable="false" text="Rank">
                <cellValueFactory>
                   <PropertyValueFactory property="rank" />
                </cellValueFactory>
             </TableColumn>
          </columns>
         <sortOrder>
-          <fx:reference source="colSort" />
+          <fx:reference source="sort" />
         </sortOrder> 
       </TableView>
       <HBox alignment="bottom_right" prefHeight="309.0" prefWidth="334.0" spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="2">

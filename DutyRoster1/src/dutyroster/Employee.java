@@ -51,8 +51,6 @@ public class Employee {
     public void setSort(int sortIn) {
         sort = sortIn;
     }
-    
-
-    
+     
         
 }

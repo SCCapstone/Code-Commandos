@@ -5,8 +5,8 @@
 package dutyroster;
 
 import java.net.URL;
-import java.util.Locale;
 import java.util.ResourceBundle;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -15,6 +15,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SelectionMode;
+import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 
@@ -24,18 +25,32 @@ public class RankController implements Initializable {
     //GUI
     @FXML private TableView<Rank> tableView;
     @FXML private TextField rankField;
-    
-    //List of ranks
+    @FXML private TableColumn<Rank,Integer> sort;
+     
+    //List of rankssor
     private ObservableList<Rank> rankList;
     
     //Extracting Data from encrypted file
     private SecureFile sc;
     private String strData;
     
+    public RankController(){
+    startUp();
+    }
+    
+    
+    
+    public void startUp(){
+        rankList = FXCollections.observableArrayList();
+        //instantiates new file, use file name Ranks as storage
+        sc = new SecureFile("Ranks");
+
+        //pull encrypted info and load into ranked list
+        retrieveData();
+    }
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        
-        rankList = tableView.getItems();
         
         //Add multi select to table
         tableView.getSelectionModel().setSelectionMode(
@@ -51,26 +66,20 @@ public class RankController implements Initializable {
         ContextMenu menu = new ContextMenu();
         menu.getItems().add(mi1);
         tableView.setContextMenu(menu);
-
-        //instantiates new file, use file name Ranks as storage
-        sc = new SecureFile("Ranks");
-
-        //pull encrypted info and load into ranked list
-        retrieveData();
-    
-        tableView.sort();
+       
+        startUp();
+        
+        updateSort();
     }    
 
     public void shutDown() {
         
         storeData();
-
     }
     
     //Converting store data into an array string
     public void storeData(){
         
-
         strData = "";
         rankList.forEach((rank) -> {  
             strData +=  rank.getSort() + "@" +  rank.getRank() + "|";    
@@ -114,7 +123,7 @@ public class RankController implements Initializable {
       
     //The add rank action checks to make sure the rank doesn't already exits
     @FXML
-    protected void addRank(ActionEvent event) {
+    public void addRank(ActionEvent event) {
         
         Alert alert;
         
@@ -129,21 +138,21 @@ public class RankController implements Initializable {
          alert.setTitle("Missing Rank");
          alert.showAndWait();
       return;
-    }
+        }
         
         rankList.add(new Rank(
                 highestIndexRank(),
             rankField.getText()
         ));
          
-        tableView.setItems(rankList);
-        tableView.sort();
+         updateSort();
         
         rankField.setText("");
-       
-    }  
+    
+    } 
+    
     //Returns highest Rank
-    private int highestIndexRank(){
+    public int highestIndexRank(){
             return tableView.getItems().size() + 1;
     }
   
@@ -175,13 +184,14 @@ public class RankController implements Initializable {
 
         if(currentSort > 0)
             selectedRank.setSort(currentSort);
-        
-        tableView.sort();
+
+      
+        updateSort();
     }
     
     //Change index to the next lower value
     @FXML
-    private void moveSortDown(ActionEvent event){
+    public void moveSortDown(ActionEvent event){
         
         Rank selectedRank = tableView.getSelectionModel().getSelectedItem();
         
@@ -208,11 +218,12 @@ public class RankController implements Initializable {
         if(currentSort > 0)
             selectedRank.setSort(currentSort);
         
-         tableView.sort();
+  
+         updateSort();
     }    
  
     //Check to see if the rank already exitst
-    private boolean rankExists (String strIn) {
+    public boolean rankExists (String strIn) {
         
         for(Rank currentRank : rankList)
             if(currentRank.getRank().equalsIgnoreCase(strIn)) 
@@ -223,7 +234,7 @@ public class RankController implements Initializable {
     }
     
     //Delete rank function
-    private void deleteRank(ObservableList<Rank> tmpList){
+    public void deleteRank(ObservableList<Rank> tmpList){
                                    
         if (tmpList==null)
             return;
@@ -232,9 +243,49 @@ public class RankController implements Initializable {
             for(int j = 0; j<rankList.size(); j++)  
                 if (tmpList.get(i).equals(rankList.get(j)))  
                     rankList.remove(j);
-         
-        tableView.sort();
+        
+        updateSort();
     
     }
+    
+    private void updateSort(){
+        sort.setSortType(TableColumn.SortType.ASCENDING);
+        tableView.setItems(rankList);
+        tableView.getSortOrder().add(sort);
+        tableView.refresh();
+        tableView.sort();
+    }
+    
+    
+        //Returns highest Rank
+    public int countRanks(){
+            return rankList.size() + 1;
+    }
+    
+     public void addNewRank(String rank) {
+        
+        for(Rank currentRank : rankList)
+            if(currentRank.getRank().equalsIgnoreCase(rank)) 
+                throw new IllegalArgumentException("Rank already exists");
+        
+        if (rank.isEmpty()){
+          throw new IllegalArgumentException("No rank entered");
+        }
+        
+        rankList.add(new Rank(countRanks()+1,rank));
+             
+    } 
+    
+    //Delete rank function
+    public void delRanks(String[] ranks){
+                                   
+        if (ranks==null)
+            throw new IllegalArgumentException("No rank entered");
+        
+        for(int i = 0; i<ranks.length; i++)
+            for(int j = 0; j<rankList.size(); j++)  
+                if (ranks[i].equals(rankList.get(j)))  
+                    rankList.remove(j);
 
+    }
 }

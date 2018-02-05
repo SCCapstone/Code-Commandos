@@ -88,7 +88,7 @@ public class MainController implements Initializable {
             stage.setTitle("Rank Editor");
             stage.setResizable(false);
             Scene sceneRank = new Scene(root1);
-            sceneRank.getStylesheets().add("stylesheet.css");
+            //sceneRank.getStylesheets().add("stylesheet.css");
 
             stage.setScene(sceneRank);
             stage.setOnHidden(e -> eController.shutDown());
@@ -202,7 +202,7 @@ public class MainController implements Initializable {
             colInc.getColumns().add(colN);  
            
             
-            TableColumn<ObservableList<StringProperty>, String> colW = createColumn(3, "N");
+            TableColumn<ObservableList<StringProperty>, String> colW = createColumn(3, "W");
             colW.setPrefWidth(35);
             colW.setMaxWidth(35);
             colW.setResizable(false);
@@ -251,14 +251,14 @@ public class MainController implements Initializable {
             tableView.setEditable(true);
         } 
   
-   row.add(new SimpleStringProperty("Black Belt"));
-   row.add(new SimpleStringProperty("Noris, Chuck"));
-   row.add(new SimpleStringProperty("1"));
-   row.add(new SimpleStringProperty("2"));
-   row.add(new SimpleStringProperty("3"));
+    row.add(new SimpleStringProperty("Black Belt"));
+    row.add(new SimpleStringProperty("Noris, Chuck"));
+    row.add(new SimpleStringProperty("1"));
+    row.add(new SimpleStringProperty("2"));
+    row.add(new SimpleStringProperty("3"));
 
-   tableView.getItems().add(row);
-    
+    tableView.getItems().add(row);
+
     } 
     
     private int convertMonth(String month){

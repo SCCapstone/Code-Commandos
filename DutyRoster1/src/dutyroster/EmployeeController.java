@@ -113,7 +113,7 @@ public class EmployeeController implements Initializable {
        // Creating a new secure files employees and load it into secure files.
         scEmployees = new SecureFile("Employees");
         //pull the ranks from secureFile and loads it into employees.
-        loadEmployess();
+        loadEmployees();
         
         //add multi select on the table. (more than one row at atime).
         tableView.getSelectionModel().setSelectionMode(
@@ -164,7 +164,7 @@ public class EmployeeController implements Initializable {
     /**
      * This is used to load employees from secure files into the link listing array.
      */
-    public void loadEmployess(){
+    public void loadEmployees(){
         
         String a = scEmployees.retrieve();
       
@@ -203,7 +203,7 @@ public class EmployeeController implements Initializable {
                 if(bArry[0].length() > 0 && bArry[1].length() > 0){
                    
                    rankOptions.add( new Rank(Integer.parseInt(bArry[0]), bArry[1] ) );
-                    rankListing.add(bArry[1]);
+                   rankListing.add(bArry[1]);
                 }
             }
  
