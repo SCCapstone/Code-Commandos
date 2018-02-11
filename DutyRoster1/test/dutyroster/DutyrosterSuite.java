@@ -5,6 +5,7 @@
  */
 package dutyroster;
 
+
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -18,7 +19,7 @@ import org.junit.runners.Suite;
  * 
  */
 @RunWith(Suite.class)
-@Suite.SuiteClasses({dutyroster.RankControllerTest.class})
+@Suite.SuiteClasses({dutyroster.RankControllerTest.class, dutyroster.RankGuiTest.class})
 public class DutyrosterSuite {
 
     @BeforeClass

@@ -80,11 +80,12 @@ public class RankController implements Initializable {
     //Converting store data into an array string
     public void storeData(){
         
+        Tools tool = new Tools();
         strData = "";
         rankList.forEach((rank) -> {  
             strData +=  rank.getSort() + "@" +  rank.getRank() + "|";    
         });
-            strData = removeLastChar(strData);
+            strData = tool.removeLastChar(strData);
         
         //Store string array into secure file
         sc.store(strData);
@@ -92,13 +93,6 @@ public class RankController implements Initializable {
         //clear strData
         strData = "";
         
-    }
-    
-    //remove last delimeter from storage array
-    private static String removeLastChar(String str) {
-        if(str.length() <= 1 )
-            return "";
-        return str.substring(0, str.length() - 1);
     }
     
     //retrieve data from secure file

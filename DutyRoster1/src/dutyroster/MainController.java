@@ -1,13 +1,14 @@
 package dutyroster;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.ResourceBundle;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -15,11 +16,16 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.SingleSelectionModel;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableView;
-import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.stage.Stage;
 import javafx.util.Callback;
@@ -29,15 +35,37 @@ public class MainController implements Initializable {
     
     @FXML private TableView<ObservableList<StringProperty>> tableView = new TableView<>();
     @FXML private ComboBox comboMonth;
-    @FXML private ComboBox comboYear;  
-     
+    @FXML private ComboBox comboYear;
+    @FXML private TextField fTitle;
+    @FXML private TextField fInterval;
+    @FXML private TextField fAmount;
+    @FXML private CheckBox cWeekdays;
+    @FXML private CheckBox cHolidays;
+    
+    @FXML private TabPane rosterTabs;
+    @FXML private ButtonBar rosterControls;
    
     private ObservableList<String> monthList = FXCollections.observableArrayList();
     private ObservableList<Integer> yearList = FXCollections.observableArrayList();
     private ObservableList<ObservableList<String>> rosterList = FXCollections
             .observableArrayList();
    
-
+    private ArrayList<Roster> rosterArray = new ArrayList<>(); 
+ 
+    //Extracting Data from encrypted file
+    private SecureFile sc;
+    private String strData;
+    
+    public MainController(){
+        startUp();   
+    }
+    
+    public void startUp(){
+        //instantiates new file, use file name Ranks as storage
+        sc = new SecureFile("Rosters");
+        retrieveData();
+    }  
+ 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         
@@ -49,15 +77,39 @@ public class MainController implements Initializable {
         loadYears(curYear);
         setDate(curYear, curMonth);
         
-    }    
+
+
+        rosterControls.setVisible(false);
+        if (rosterArray.size() > 0){
+        rosterArray.forEach((roster) -> { createTab(roster.getTitle());});
+        rosterControls.setVisible(true);
+        SingleSelectionModel<Tab> selectionModel = rosterTabs.getSelectionModel();
+        selectionModel.select(0);
+        }
         
-    @FXML
-    private void exitProgram(ActionEvent event) {   
+         rosterTabs.getSelectionModel().selectedItemProperty().addListener(
+            new ChangeListener<Tab>() {
+                @Override
+                public void changed(ObservableValue<? extends Tab> ov, Tab t, Tab t1) {
+                    String title = "";
+                    if (t1!=null)title=t1.getText();                           
+                    System.out.println("Tab Selection changed " + title);
+                }
+            }
+        );
+     
+        
+    }    
+ 
+    public void shutDown() {  
+        storeData();
+    }  
+    
+    @FXML private void exitProgram(ActionEvent event) {   
     System.exit(0);
     }
 
-    @FXML
-    private void openEmployeeEditor(ActionEvent event) {
+    @FXML private void openEmployeeEditor(ActionEvent event) {
          
         try{
          FXMLLoader loader = new FXMLLoader(getClass().getResource("EmployeeFXML.fxml")); 
@@ -76,9 +128,7 @@ public class MainController implements Initializable {
         }
     }
     
-    
-     @FXML
-    private void openRankEditor(ActionEvent event) {
+    @FXML private void openRankEditor(ActionEvent event) {
          
         try{
             FXMLLoader loader = new FXMLLoader(getClass().getResource("RankFXML.fxml")); 
@@ -123,7 +173,6 @@ public class MainController implements Initializable {
         comboYear.getItems().setAll(yearList);
         comboYear.getSelectionModel().select(Integer.toString(curYear));
     }
-    
     
     @FXML public void newDate(ActionEvent event){
         
@@ -251,6 +300,7 @@ public class MainController implements Initializable {
             tableView.setEditable(true);
         } 
   
+    /*
     row.add(new SimpleStringProperty("Black Belt"));
     row.add(new SimpleStringProperty("Noris, Chuck"));
     row.add(new SimpleStringProperty("1"));
@@ -258,7 +308,8 @@ public class MainController implements Initializable {
     row.add(new SimpleStringProperty("3"));
 
     tableView.getItems().add(row);
-
+    */
+    
     } 
     
     private int convertMonth(String month){
@@ -296,7 +347,94 @@ public class MainController implements Initializable {
            });
         column.setCellFactory(TextFieldTableCell.<ObservableList<StringProperty>>forTableColumn());
         return column;
-     }
+    }
     
+    //Added for Roster operations
+    @FXML public void addRoster(ActionEvent event) {
+       
+        int nextPriority = rosterArray.size() + 1;
+        createTab("Roster " + nextPriority);
+        rosterArray.add(new Roster("Roster " + nextPriority, nextPriority));
+        
+    }
+
+    public void  createTab(String title){
+        Tab tab = new Tab();
+        tab.setText(title);
+        rosterTabs.getTabs().add(tab);
+        rosterTabs.getSelectionModel().select(tab);
+    }
+    
+    
+    public Roster getSelectedRoster(int xVal) {
+        for(int i = 0; i < rosterArray.size(); i++) 
+            if(rosterArray.get(i).getPriority() == xVal)
+                return rosterArray.get(i);
+     
+    return null; 
+    }
+    
+    //retrieve data from secure file
+    public void retrieveData(){
+        
+        String a = sc.retrieve();
+      
+        String aArry[] = a.split("\\|", -1);
+        for (String b : aArry){
+            
+            if (b.length() > 2){
+                
+                String bArry[] = b.split("\\@", -1);
+                
+                if(bArry[0].length() > 0 && bArry[1].length() > 0) {
+                    rosterArray.add( 
+                        new Roster(
+                        bArry[0],
+                        Integer.parseInt(bArry[1]),
+                        Integer.parseInt(bArry[2]),
+                        Integer.parseInt(bArry[3]),
+                        Boolean.parseBoolean(bArry[4]),
+                        Boolean.parseBoolean(bArry[5])    
+                        ) 
+                    
+                    );
+                    
+                }
+            
+            }
+            
+        }
+
+    }
+  
+     //Converting store data into an array string
+    public void storeData(){
+        
+        Tools tools = new Tools();
+        strData = "";
+        rosterArray.forEach((roster) -> {  
+            strData +=  roster.getTitle() 
+                    + "@" 
+                    +  roster.getPriority() 
+                    + "@" 
+                    +  roster.getInterval() 
+                    + "@"  
+                    +  roster.getAmount() 
+                    + "@" 
+                    +  roster.getWeekends()
+                    + "@" 
+                    +  roster.getHolidays() 
+                    + "|";    
+        });
+            strData = tools.removeLastChar(strData);
+        
+        //Store string array into secure file
+        sc.store(strData);
+        
+        //clear strData
+        strData = "";
+        
+    }   
+
 }
 

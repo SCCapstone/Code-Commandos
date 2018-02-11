@@ -132,12 +132,13 @@ public class LoginController implements Initializable {
          try{
             FXMLLoader loader = new FXMLLoader(getClass().getResource("MainFXML.fxml")); 
             Parent root1 = loader.load();
-            //EmployeeController eController = loader.getController();
+            MainController mController = loader.getController();
             Stage stage = new Stage();
             stage.setTitle("Duty Roster 1.0");
             stage.setResizable(true);
             stage.setScene(new Scene(root1));
             stage.setMaximized(true);
+            stage.setOnHidden(e -> mController.shutDown());
             stage.show(); 
           
         }
