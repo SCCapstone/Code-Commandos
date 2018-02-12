@@ -1,3 +1,7 @@
+/**
+ * @authors Austin Freed, Tanya Peyush, Harini Karnati
+ * 02/12/2017
+ */
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -6,10 +10,7 @@
 package dutyroster;
 
 import javafx.beans.property.SimpleStringProperty;
-/**
- *
- * @authors Austin Freed, Tanya Peyush, Harini Karnati
- */
+
 public class Status {
     
     

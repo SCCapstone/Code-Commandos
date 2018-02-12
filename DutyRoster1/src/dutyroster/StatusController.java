@@ -1,13 +1,14 @@
+/**
+ * @authors Austin Freed, Tanya Peyush, Harini Karnati
+ * 02/12/2017
+ */
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
 
-/**
- * @authors Austin Freed, Tanya Peyush, Harini Karnati
- * 02/12/2017
- */
+
 package dutyroster;
 
 import java.net.URL;
