@@ -3,6 +3,7 @@ package dutyroster;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -11,12 +12,17 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.ButtonBar;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.SingleSelectionModel;
@@ -26,7 +32,9 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 
@@ -39,19 +47,20 @@ public class MainController implements Initializable {
     @FXML private TextField fTitle;
     @FXML private TextField fInterval;
     @FXML private TextField fAmount;
-    @FXML private CheckBox cWeekdays;
+    @FXML private CheckBox cWeekends;
     @FXML private CheckBox cHolidays;
     
     @FXML private TabPane rosterTabs;
-    @FXML private ButtonBar rosterControls;
-   
+    @FXML private HBox rosterControls;
+    @FXML private Button bAddRoster;
+    
     private ObservableList<String> monthList = FXCollections.observableArrayList();
     private ObservableList<Integer> yearList = FXCollections.observableArrayList();
     private ObservableList<ObservableList<String>> rosterList = FXCollections
             .observableArrayList();
    
     private ArrayList<Roster> rosterArray = new ArrayList<>(); 
- 
+    private Roster currentRoster = new Roster();
     //Extracting Data from encrypted file
     private SecureFile sc;
     private String strData;
@@ -77,28 +86,75 @@ public class MainController implements Initializable {
         loadYears(curYear);
         setDate(curYear, curMonth);
         
-
+        bAddRoster.setTooltip(new Tooltip("Click here to add a new roster"));
 
         rosterControls.setVisible(false);
         if (rosterArray.size() > 0){
-        rosterArray.forEach((roster) -> { createTab(roster.getTitle());});
-        rosterControls.setVisible(true);
-        SingleSelectionModel<Tab> selectionModel = rosterTabs.getSelectionModel();
-        selectionModel.select(0);
+            rosterArray.forEach((roster) -> {
+                    createTab(roster.getTitle(), roster.getPriority());
+            });
+            rosterControls.setVisible(true);
+            SingleSelectionModel<Tab> selectionModel = rosterTabs.getSelectionModel();
+            selectionModel.select(0);
+            selectedRoster(0);
         }
         
          rosterTabs.getSelectionModel().selectedItemProperty().addListener(
             new ChangeListener<Tab>() {
                 @Override
                 public void changed(ObservableValue<? extends Tab> ov, Tab t, Tab t1) {
-                    String title = "";
-                    if (t1!=null)title=t1.getText();                           
-                    System.out.println("Tab Selection changed " + title);
+
+                    if (t1!=null){
+       
+                        int id = rosterTabs.getSelectionModel().getSelectedIndex();
+                        selectedRoster(id);
+
+                    }
+                    
                 }
+            
+            }
+        
+        );
+         
+        //Form Controls
+        
+        fTitle.textProperty().addListener((observable, oldValue, newValue) -> {
+             currentRoster.setTitle(newValue);
+             rosterTabs.getSelectionModel().getSelectedItem().setText(newValue);
             }
         );
-     
         
+        fInterval.setTooltip(new Tooltip("The interval (in hours) for each shift"));
+        fInterval.textProperty().addListener((observable, oldValue, newValue) -> {
+             currentRoster.setInterval(Integer.parseInt(newValue));
+            }
+        );  
+        
+        fAmount.setTooltip(new Tooltip("The total number of employees assigned to each shift"));
+        fAmount.textProperty().addListener((observable, oldValue, newValue) -> {
+             currentRoster.setAmount(Integer.parseInt(newValue));
+            }
+        );  
+        
+        cWeekends.setTooltip(new Tooltip("Check this to keep a separate rototion for weekends"));
+        cWeekends.selectedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable,
+                Boolean oldValue, Boolean newValue) {
+                currentRoster.setWeekends(newValue);
+            }
+        });
+        
+        cWeekends.setTooltip(new Tooltip("Check this to keep a separate rototion for holidays"));
+        cHolidays.selectedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable,
+                Boolean oldValue, Boolean newValue) {
+                currentRoster.setHolidays(newValue);
+            }
+        });
+
     }    
  
     public void shutDown() {  
@@ -351,27 +407,87 @@ public class MainController implements Initializable {
     
     //Added for Roster operations
     @FXML public void addRoster(ActionEvent event) {
-       
-        int nextPriority = rosterArray.size() + 1;
-        createTab("Roster " + nextPriority);
-        rosterArray.add(new Roster("Roster " + nextPriority, nextPriority));
-        
+        newRoster();
+    }
+    
+    public void newRoster() {
+        int nextPriority = rosterArray.size();
+        rosterArray.add(new Roster("Roster " + ( nextPriority + 1), nextPriority));
+        createTab("Roster " + (nextPriority + 1), nextPriority);
     }
 
-    public void  createTab(String title){
+    public void  createTab(String title, int priority){
         Tab tab = new Tab();
         tab.setText(title);
+        tab.setOnCloseRequest(new EventHandler<Event>(){
+            @Override
+            public void handle(Event ev) 
+            {
+                Alert alert;
+                alert = new Alert(AlertType.WARNING, 
+                        "This will permanently remove " + currentRoster.getTitle() + "."
+                                + " Do you wish to continue?",
+                        ButtonType.YES,
+                        ButtonType.NO);
+              alert.setTitle("Remove " + currentRoster.getTitle());
+              Optional<ButtonType> result = alert.showAndWait();
+              if (result.get() == ButtonType.YES) {
+                  deleteRoster(currentRoster.getPriority());
+                  if(rosterArray.isEmpty())
+                        rosterControls.setVisible(false);
+              }
+              else{
+                  ev.consume();
+              }  
+           }
+        });
+        
         rosterTabs.getTabs().add(tab);
         rosterTabs.getSelectionModel().select(tab);
+        selectedRoster(priority); 
     }
     
-    
-    public Roster getSelectedRoster(int xVal) {
+    public void deleteRoster(int index){
+       int count = rosterArray.size();
+       rosterArray.remove(index);
+       updatePriority();
+       selectedRoster(index - 1);
+
+    }
+ 
+    public void updatePriority(){
+        
         for(int i = 0; i < rosterArray.size(); i++) 
-            if(rosterArray.get(i).getPriority() == xVal)
-                return rosterArray.get(i);
-     
-    return null; 
+                rosterArray.get(i).setPriority(i);
+              
+        /*int i = 0;
+        for (Tab tab : rosterTabs.getTabs()) 
+	tab.setId(Integer.toString(i++));
+        */
+    }
+    
+    public void setCurrentRoster(){
+        if (currentRoster==null)
+            return;
+        
+        rosterControls.setVisible(true);
+        
+        fTitle.setText(currentRoster.getTitle());
+        fInterval.setText(Integer.toString(currentRoster.getInterval()));
+        fAmount.setText(Integer.toString(currentRoster.getAmount()));
+        cWeekends.setSelected(currentRoster.getWeekends());
+        cHolidays.setSelected(currentRoster.getHolidays());
+    
+    }
+    
+    public void selectedRoster(int xVal) {
+       
+        for(int i = 0; i < rosterArray.size(); i++) 
+            if(rosterArray.get(i).getPriority() == xVal){
+                currentRoster = rosterArray.get(i);
+                setCurrentRoster();
+                return;
+            }
     }
     
     //retrieve data from secure file

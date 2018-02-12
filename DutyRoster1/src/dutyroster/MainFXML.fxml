@@ -14,8 +14,10 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
 <VBox xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dutyroster.MainController">
   <children>
@@ -42,59 +44,42 @@
             </Menu>
           </menus>
         </MenuBar>
-      <ButtonBar prefHeight="40.0" prefWidth="200.0">
-         <buttons>
-            <Button fx:id="newRoster" mnemonicParsing="false" onAction="#addRoster" text="Add Roster" />
-         </buttons>
-         <padding>
-            <Insets right="10.0" />
-         </padding>
-      </ButtonBar>
-      <TabPane fx:id="rosterTabs" prefHeight="44.0" prefWidth="1312.0" tabClosingPolicy="UNAVAILABLE">
-
-      </TabPane>
-      <ButtonBar fx:id="rosterControls" buttonMinWidth="50.0" minHeight="50.0" prefHeight="50.0">
+      <HBox maxHeight="-Infinity" minWidth="-Infinity" prefHeight="44.0" prefWidth="200.0">
+         <children>
+            <AnchorPane maxHeight="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="38.0" prefWidth="48.0">
+               <children>
+                  <Button fx:id="bAddRoster" layoutX="8.0" layoutY="4.0" mnemonicParsing="false" onAction="#addRoster" text="+">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                  </Button>
+               </children></AnchorPane>
+            <TabPane fx:id="rosterTabs" maxWidth="4000.0" prefHeight="44.0" prefWidth="4000.0" tabClosingPolicy="SELECTED_TAB" />
+         </children>
+      </HBox>
+      <ButtonBar buttonMinWidth="50.0" minHeight="50.0" prefHeight="50.0">
         <buttons>
-            <HBox layoutX="738.0" layoutY="20.0" maxHeight="30.0" maxWidth="650.0" minWidth="300.0" prefHeight="30.0" prefWidth="650.0" spacing="10.0" style="-fx-alignment: center-left;">
-               <children>
-                  <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" maxWidth="50.0" minWidth="50.0" prefWidth="50.0" text="Title" />
-                  <TextField fx:id="fTitle" maxHeight="-Infinity" maxWidth="200.0" minHeight="-Infinity" minWidth="200.0" prefHeight="31.0" prefWidth="200.0" />
-                  <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" maxWidth="60.0" minWidth="60.0" prefWidth="60.0" text="Interval" />
-                  <TextField fx:id="fInterval" alignment="CENTER" maxHeight="-Infinity" maxWidth="80.0" minHeight="-Infinity" minWidth="80.0" prefHeight="31.0" prefWidth="40.0" />
-                  <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" maxWidth="60.0" minWidth="60.0" prefHeight="21.0" prefWidth="60.0" text="Amount" />
-                  <TextField fx:id="fAmount" alignment="CENTER" maxHeight="-Infinity" maxWidth="80.0" minHeight="-Infinity" minWidth="80.0" prefHeight="31.0" prefWidth="40.0" />
-               </children>
-               <padding>
-                  <Insets right="10.0" />
-               </padding>
-            </HBox>
-            <HBox maxHeight="30.0" maxWidth="220.0" prefHeight="30.0" spacing="20.0" style="-fx-background-color: white; -fx-alignment: CENTER;">
-               <children>
-                  <CheckBox fx:id="cWeekdays" maxHeight="-Infinity" maxWidth="100.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="21.0" prefWidth="100.0" text="Weekends">
-                     <HBox.margin>
-                        <Insets left="5.0" />
-                     </HBox.margin>
-                  </CheckBox>
-                  <CheckBox fx:id="cHolidays" maxHeight="-Infinity" maxWidth="100.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="21.0" prefWidth="100.0" text="Holidays">
-                     <HBox.margin>
-                        <Insets />
-                     </HBox.margin>
-                  </CheckBox>
-               </children>
-            </HBox>
-            <HBox layoutX="588.0" layoutY="20.0" maxHeight="30.0" maxWidth="500.0" prefHeight="30.0" prefWidth="600.0" spacing="10.0" style="-fx-alignment: CENTER;">
-               <children>
-                  <Button maxHeight="31.0" maxWidth="50.0" minHeight="-Infinity" minWidth="50.0" mnemonicParsing="false" onAction="#goDown" prefHeight="31.0" prefWidth="50.0" text="&lt;&lt;" />
-                  <ComboBox fx:id="comboMonth" maxWidth="200.0" minWidth="200.0" onAction="#newDate" prefHeight="31.0" prefWidth="200.0" />
-                  <ComboBox fx:id="comboYear" maxWidth="120.0" minWidth="-Infinity" onAction="#newDate" prefHeight="31.0" prefWidth="120.0" />
-                <Button maxHeight="-Infinity" maxWidth="50.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#goUp" prefHeight="31.0" prefWidth="50.0" text="&gt;&gt;" />
-               </children>
-            </HBox>
+            <Button maxHeight="31.0" maxWidth="50.0" minHeight="-Infinity" minWidth="50.0" mnemonicParsing="false" onAction="#goDown" prefHeight="31.0" prefWidth="50.0" text="&lt;&lt;" />
+            <ComboBox fx:id="comboMonth" maxWidth="200.0" minWidth="200.0" onAction="#newDate" prefHeight="31.0" prefWidth="200.0" />
+            <ComboBox fx:id="comboYear" maxWidth="120.0" minWidth="-Infinity" onAction="#newDate" prefHeight="31.0" prefWidth="120.0" />
+          <Button maxHeight="-Infinity" maxWidth="50.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#goUp" prefHeight="31.0" prefWidth="50.0" text="&gt;&gt;" />
         </buttons>
          <padding>
             <Insets right="10.0" />
          </padding>
       </ButtonBar>
+      <HBox fx:id="rosterControls" prefHeight="40.0" spacing="10.0" style="-fx-alignment: CENTER-LEFT;">
+         <children>
+            <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" maxWidth="50.0" minWidth="50.0" prefWidth="50.0" text="Title" />
+            <TextField fx:id="fTitle" maxHeight="-Infinity" maxWidth="200.0" minHeight="-Infinity" minWidth="200.0" prefHeight="31.0" prefWidth="200.0" />
+            <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" maxWidth="60.0" minWidth="60.0" prefWidth="60.0" text="Interval" />
+            <TextField fx:id="fInterval" alignment="CENTER" maxHeight="-Infinity" maxWidth="80.0" minHeight="-Infinity" minWidth="80.0" prefHeight="31.0" prefWidth="40.0" />
+            <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" maxWidth="60.0" minWidth="60.0" prefHeight="21.0" prefWidth="60.0" text="Amount" />
+            <TextField fx:id="fAmount" alignment="CENTER" maxHeight="-Infinity" maxWidth="80.0" minHeight="-Infinity" minWidth="80.0" prefHeight="31.0" prefWidth="40.0" />
+            <CheckBox fx:id="cWeekends" maxHeight="-Infinity" maxWidth="100.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="21.0" prefWidth="100.0" text="Weekends" />
+            <CheckBox fx:id="cHolidays" maxHeight="-Infinity" maxWidth="100.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="21.0" prefWidth="100.0" text="Holidays" />
+         </children>
+      </HBox>
       <ScrollPane>
          <content>
             <TableView fx:id="tableView" style="-fx-background-color: transparent;">
