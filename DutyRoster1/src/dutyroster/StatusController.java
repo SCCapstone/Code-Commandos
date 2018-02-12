@@ -345,7 +345,7 @@ public class StatusController implements Initializable {
           throw new IllegalArgumentException("No status entered");
         }
         
-       statusList.add(new Status(status, title ));
+       //statusList.add(new Status(status, title ));
              
     } 
     

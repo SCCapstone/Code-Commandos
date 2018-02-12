@@ -34,7 +34,13 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.DragEvent;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.input.TransferMode;
 import javafx.scene.layout.HBox;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 
@@ -441,8 +447,15 @@ public class MainController implements Initializable {
     
     public void newRoster() {
         int nextPriority = rosterArray.size();
-        rosterArray.add(new Roster("Roster " + ( nextPriority + 1), nextPriority));
-        createTab("Roster " + (nextPriority + 1), nextPriority);
+        String title = "Roster " + ( nextPriority + 1);
+        
+        int i = 1;
+        while (tabTitleExists(title)) {
+          title =  "Roster " + ( nextPriority + 1) + "_" + (i++);  
+        }
+        
+        rosterArray.add(new Roster(title, nextPriority));
+        createTab(title, nextPriority);
     }
 
     public void  createTab(String title, int priority){
@@ -458,7 +471,17 @@ public class MainController implements Initializable {
                                 + " Do you wish to continue?",
                         ButtonType.YES,
                         ButtonType.NO);
-              alert.setTitle("Remove " + currentRoster.getTitle());
+                alert.setTitle("Remove " + currentRoster.getTitle());
+              
+                //Deactivate Defaultbehavior for yes-Button:
+                Button yesButton = (Button) alert.getDialogPane().lookupButton( ButtonType.YES );
+                yesButton.setDefaultButton( false );
+
+                //Activate Defaultbehavior for no-Button:
+                Button noButton = (Button) alert.getDialogPane().lookupButton( ButtonType.NO );
+                noButton.setDefaultButton( true );
+              
+              
               Optional<ButtonType> result = alert.showAndWait();
               if (result.get() == ButtonType.YES) {
                   deleteRoster(currentRoster.getPriority());
@@ -470,10 +493,19 @@ public class MainController implements Initializable {
               }  
            }
         });
-        
+ 
         rosterTabs.getTabs().add(tab);
         rosterTabs.getSelectionModel().select(tab);
         selectedRoster(priority); 
+    }
+   
+    public boolean tabTitleExists(String chkTitle){
+        
+        for(int i = 0; i < rosterArray.size(); i++) 
+            if(chkTitle.equals(rosterArray.get(i).getTitle()))
+                return true;
+        return false;
+
     }
     
     public void deleteRoster(int index){
@@ -488,11 +520,7 @@ public class MainController implements Initializable {
         
         for(int i = 0; i < rosterArray.size(); i++) 
                 rosterArray.get(i).setPriority(i);
-              
-        /*int i = 0;
-        for (Tab tab : rosterTabs.getTabs()) 
-	tab.setId(Integer.toString(i++));
-        */
+
     }
     
     public void setCurrentRoster(){
