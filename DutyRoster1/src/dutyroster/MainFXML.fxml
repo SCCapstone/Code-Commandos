@@ -34,6 +34,7 @@
               <items>
                 <MenuItem fx:id="menu_nameEditor" onAction="#openEmployeeEditor" text="_Employees" />
                 <MenuItem fx:id="menu_rankEditor" onAction="#openRankEditor" text="_Ranks" />
+                <MenuItem fx:id="menu_statusEditor" onAction="#openStatusEditor" text="_Status" />
               </items>
             </Menu>
             <Menu text="_Help">
@@ -88,6 +89,7 @@
                      <columns>
                       <TableColumn prefWidth="75.0" text="Rank" />
                         <TableColumn prefWidth="75.0" text="Name" />
+                        <TableColumn prefWidth="75.0" text="Status" />
                      </columns>
                   </TableColumn>
                   <TableColumn prefWidth="75.0" text="Increment">

@@ -58,6 +58,7 @@ public class MainController implements Initializable {
     private ObservableList<Integer> yearList = FXCollections.observableArrayList();
     private ObservableList<ObservableList<String>> rosterList = FXCollections
             .observableArrayList();
+    private Scene sceneStatus;
    
     private ArrayList<Roster> rosterArray = new ArrayList<>(); 
     private Roster currentRoster = new Roster();
@@ -194,9 +195,32 @@ public class MainController implements Initializable {
             stage.setTitle("Rank Editor");
             stage.setResizable(false);
             Scene sceneRank = new Scene(root1);
-            //sceneRank.getStylesheets().add("stylesheet.css");
+            
 
             stage.setScene(sceneRank);
+            stage.setOnHidden(e -> eController.shutDown());
+            stage.show(); 
+          
+        }
+        catch(Exception e){
+           System.out.println("Can't load new scene: " + e); 
+        }
+    }  
+    
+    @FXML
+    private void openStatusEditor(ActionEvent event) {
+         
+        try{
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("StatusFXML.fxml")); 
+            Parent root1 = loader.load();
+            StatusController eController = loader.getController();
+            Stage stage = new Stage();
+            stage.setTitle("Status Editor");
+            stage.setResizable(false);
+            Scene sceneStatus = new Scene(root1);
+            //sceneRank.getStylesheets().add("stylesheet.css");
+
+            stage.setScene(sceneStatus);
             stage.setOnHidden(e -> eController.shutDown());
             stage.show(); 
           
@@ -288,6 +312,11 @@ public class MainController implements Initializable {
         colRank.setPrefWidth(150);
         colRank.setMaxWidth(300);
         tableView.getColumns().add(colRank);
+        
+        TableColumn<ObservableList<StringProperty>, String> colStatus = createColumn(0, "Status");
+        colStatus.setPrefWidth(150);
+        colStatus.setMaxWidth(300);
+        tableView.getColumns().add(colStatus);
      
         TableColumn<ObservableList<StringProperty>, String> colName = createColumn(1, "Name");
         colName.setPrefWidth(300);

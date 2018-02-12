@@ -6,6 +6,12 @@
 package dutyroster;
 
 
+import java.net.URL;
+import java.util.ResourceBundle;
+import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -23,11 +29,19 @@ public class RankControllerTest{
     public static void setUpClass() throws Exception {
         
     }
+
+    @AfterClass
+    public static void tearDownClass() throws Exception {
+    }
     
     @Before
     public void setUp() throws Exception {
         count = instance.countRanks();
         
+    }
+
+    @After
+    public void tearDown() throws Exception {
     }
 
 
@@ -75,6 +89,176 @@ public class RankControllerTest{
         System.out.println("countRanks");
         assertTrue(count== instance.countRanks());
         
+    }
+
+    /**
+     * Test of startUp method, of class RankController.
+     */
+    @Test
+    public void testStartUp() {
+        System.out.println("startUp");
+        RankController instance = new RankController();
+        instance.startUp();
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of initialize method, of class RankController.
+     */
+    @Test
+    public void testInitialize() {
+        System.out.println("initialize");
+        URL url = null;
+        ResourceBundle rb = null;
+        RankController instance = new RankController();
+        instance.initialize(url, rb);
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of shutDown method, of class RankController.
+     */
+    @Test
+    public void testShutDown() {
+        System.out.println("shutDown");
+        RankController instance = new RankController();
+        instance.shutDown();
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of storeData method, of class RankController.
+     */
+    @Test
+    public void testStoreData() {
+        System.out.println("storeData");
+        RankController instance = new RankController();
+        instance.storeData();
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of retrieveData method, of class RankController.
+     */
+    @Test
+    public void testRetrieveData() {
+        System.out.println("retrieveData");
+        RankController instance = new RankController();
+        instance.retrieveData();
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of addRank method, of class RankController.
+     */
+    @Test
+    public void testAddRank() {
+        System.out.println("addRank");
+        ActionEvent event = null;
+        RankController instance = new RankController();
+        instance.addRank(event);
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of highestIndexRank method, of class RankController.
+     */
+    @Test
+    public void testHighestIndexRank() {
+        System.out.println("highestIndexRank");
+        RankController instance = new RankController();
+        int expResult = 0;
+        int result = instance.highestIndexRank();
+        assertEquals(expResult, result);
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of moveSortDown method, of class RankController.
+     */
+    @Test
+    public void testMoveSortDown() {
+        System.out.println("moveSortDown");
+        ActionEvent event = null;
+        RankController instance = new RankController();
+        instance.moveSortDown(event);
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of rankExists method, of class RankController.
+     */
+    @Test
+    public void testRankExists() {
+        System.out.println("rankExists");
+        String strIn = "";
+        RankController instance = new RankController();
+        boolean expResult = false;
+        boolean result = instance.rankExists(strIn);
+        assertEquals(expResult, result);
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of deleteRank method, of class RankController.
+     */
+    @Test
+    public void testDeleteRank() {
+        System.out.println("deleteRank");
+        ObservableList<Rank> tmpList = null;
+        RankController instance = new RankController();
+        instance.deleteRank(tmpList);
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of countRanks method, of class RankController.
+     */
+    @Test
+    public void testCountRanks() {
+        System.out.println("countRanks");
+        RankController instance = new RankController();
+        int expResult = 0;
+        int result = instance.countRanks();
+        assertEquals(expResult, result);
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of addNewRank method, of class RankController.
+     */
+    @Test
+    public void testAddNewRank() {
+        System.out.println("addNewRank");
+        String rank = "";
+        RankController instance = new RankController();
+        instance.addNewRank(rank);
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of delRanks method, of class RankController.
+     */
+    @Test
+    public void testDelRanks() {
+        System.out.println("delRanks");
+        String[] ranks = null;
+        RankController instance = new RankController();
+        instance.delRanks(ranks);
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
     }
     
 }
