@@ -5,8 +5,8 @@
  */
 
 /**
- * @version 1
- * 11/20/17
+ * @authors Austin Freed, Tanya Peyush, Harini Karnati
+ * 02/12/2017
  */
 package dutyroster;
 

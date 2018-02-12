@@ -8,7 +8,7 @@ package dutyroster;
 import javafx.beans.property.SimpleStringProperty;
 /**
  *
- * @author ISHU
+ * @authors Austin Freed, Tanya Peyush, Harini Karnati
  */
 public class Status {
     
