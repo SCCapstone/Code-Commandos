@@ -79,6 +79,7 @@
             <TextField fx:id="fAmount" alignment="CENTER" maxHeight="-Infinity" maxWidth="80.0" minHeight="-Infinity" minWidth="80.0" prefHeight="31.0" prefWidth="40.0" />
             <CheckBox fx:id="cWeekends" maxHeight="-Infinity" maxWidth="100.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="21.0" prefWidth="100.0" text="Weekends" />
             <CheckBox fx:id="cHolidays" maxHeight="-Infinity" maxWidth="100.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="21.0" prefWidth="100.0" text="Holidays" />
+            <Button fx:id="bSave" disable="true" mnemonicParsing="false" onAction="#saveFields" text="Save" />
          </children>
       </HBox>
       <ScrollPane>

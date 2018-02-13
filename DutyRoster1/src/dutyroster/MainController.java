@@ -3,13 +3,16 @@ package dutyroster;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.concurrent.atomic.AtomicLong;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
@@ -17,6 +20,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -25,6 +29,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.SingleSelectionModel;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
@@ -35,12 +40,9 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.ClipboardContent;
-import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.HBox;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 
@@ -55,10 +57,14 @@ public class MainController implements Initializable {
     @FXML private TextField fAmount;
     @FXML private CheckBox cWeekends;
     @FXML private CheckBox cHolidays;
-    
     @FXML private TabPane rosterTabs;
     @FXML private HBox rosterControls;
-    @FXML private Button bAddRoster;
+    @FXML private Button bAddRoster, bSave;
+    
+    private Tab currentDragTab ;
+    private static final AtomicLong idGenerator = new AtomicLong();
+    private final String draggingID = "DraggingTab-"+idGenerator.incrementAndGet() ;
+    private int dragIndex,dropIndex;
     
     private ObservableList<String> monthList = FXCollections.observableArrayList();
     private ObservableList<Integer> yearList = FXCollections.observableArrayList();
@@ -84,7 +90,8 @@ public class MainController implements Initializable {
  
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        
+       
+        addSupport(rosterTabs);
         Calendar now = Calendar.getInstance();
         int curYear = now.get(Calendar.YEAR);
         int curMonth = now.get(Calendar.MONTH);          
@@ -125,45 +132,39 @@ public class MainController implements Initializable {
         );
          
         //Form Controls
-        
-        fTitle.textProperty().addListener((observable, oldValue, newValue) -> {
-             currentRoster.setTitle(newValue);
-             rosterTabs.getSelectionModel().getSelectedItem().setText(newValue);
-            }
-        );
-        
-        fInterval.setTooltip(new Tooltip("The interval (in hours) for each shift"));
-        fInterval.textProperty().addListener((observable, oldValue, newValue) -> {
-             currentRoster.setInterval(Integer.parseInt(newValue));
-            }
-        );  
-        
+        fTitle.setOnKeyTyped(e -> {bSave.setDisable(false);});
+        fInterval.setOnKeyTyped(e -> {bSave.setDisable(false);});
+        fAmount.setOnKeyTyped(e -> {bSave.setDisable(false);});
+        cWeekends.setOnMouseClicked(e -> {bSave.setDisable(false);});
+        cHolidays.setOnMouseClicked(e -> {bSave.setDisable(false);});
+     
+        fInterval.setTooltip(new Tooltip("The interval (in hours) for each shift"));             
         fAmount.setTooltip(new Tooltip("The total number of employees assigned to each shift"));
-        fAmount.textProperty().addListener((observable, oldValue, newValue) -> {
-             currentRoster.setAmount(Integer.parseInt(newValue));
-            }
-        );  
-        
         cWeekends.setTooltip(new Tooltip("Check this to keep a separate rototion for weekends"));
-        cWeekends.selectedProperty().addListener(new ChangeListener<Boolean>() {
-            @Override
-            public void changed(ObservableValue<? extends Boolean> observable,
-                Boolean oldValue, Boolean newValue) {
-                currentRoster.setWeekends(newValue);
-            }
-        });
-        
-        cWeekends.setTooltip(new Tooltip("Check this to keep a separate rototion for holidays"));
-        cHolidays.selectedProperty().addListener(new ChangeListener<Boolean>() {
-            @Override
-            public void changed(ObservableValue<? extends Boolean> observable,
-                Boolean oldValue, Boolean newValue) {
-                currentRoster.setHolidays(newValue);
-            }
-        });
-
+        cHolidays.setTooltip(new Tooltip("Check this to keep a separate rototion for holidays"));
+ 
     }    
  
+    @FXML public void saveFields(){
+        
+        if (!fTitle.getText().equals(currentRoster.getTitle())){
+            currentRoster.setTitle(fTitle.getText());
+        
+            Tab newTab = new Tab(fTitle.getText());
+            Tab currentTab = rosterTabs.getSelectionModel().getSelectedItem();
+            int newIndex = rosterTabs.getSelectionModel().getSelectedIndex();
+            rosterTabs.getTabs().remove(currentTab);
+            rosterTabs.getTabs().add(newIndex, newTab);
+            rosterTabs.getSelectionModel().select(newTab);
+        }
+        
+        currentRoster.setInterval(Integer.parseInt(fInterval.getText()));
+        currentRoster.setAmount(Integer.parseInt(fAmount.getText()));
+        currentRoster.setWeekends(cWeekends.isSelected());
+        currentRoster.setHolidays(cHolidays.isSelected());
+        bSave.setDisable(true);
+    }
+    
     public void shutDown() {  
         storeData();
     }  
@@ -213,8 +214,7 @@ public class MainController implements Initializable {
         }
     }  
     
-    @FXML
-    private void openStatusEditor(ActionEvent event) {
+    @FXML private void openStatusEditor(ActionEvent event) {
          
         try{
             FXMLLoader loader = new FXMLLoader(getClass().getResource("StatusFXML.fxml")); 
@@ -458,13 +458,12 @@ public class MainController implements Initializable {
         createTab(title, nextPriority);
     }
 
-    public void  createTab(String title, int priority){
-        Tab tab = new Tab();
-        tab.setText(title);
+    public void  createTab(String title, int priority){  
+
+        Tab tab = new Tab(title);
         tab.setOnCloseRequest(new EventHandler<Event>(){
             @Override
-            public void handle(Event ev) 
-            {
+            public void handle(Event ev) {
                 Alert alert;
                 alert = new Alert(AlertType.WARNING, 
                         "This will permanently remove " + currentRoster.getTitle() + "."
@@ -481,19 +480,19 @@ public class MainController implements Initializable {
                 Button noButton = (Button) alert.getDialogPane().lookupButton( ButtonType.NO );
                 noButton.setDefaultButton( true );
               
-              
-              Optional<ButtonType> result = alert.showAndWait();
-              if (result.get() == ButtonType.YES) {
+                Optional<ButtonType> result = alert.showAndWait();
+                if (result.get() == ButtonType.YES) {
                   deleteRoster(currentRoster.getPriority());
                   if(rosterArray.isEmpty())
                         rosterControls.setVisible(false);
-              }
-              else{
-                  ev.consume();
-              }  
-           }
+                }
+                else{
+                    ev.consume();
+                }  
+            }
         });
- 
+        Tooltip tip = new Tooltip("Set roster priority by dragging tabs. The farest left tab has the highest priority");
+        tab.setTooltip(tip);
         rosterTabs.getTabs().add(tab);
         rosterTabs.getSelectionModel().select(tab);
         selectedRoster(priority); 
@@ -609,5 +608,99 @@ public class MainController implements Initializable {
         
     }   
 
+     public void addSupport(TabPane tabPane) {
+        
+        tabPane.getTabs().forEach(this::addDragHandlers);
+        tabPane.getTabs().addListener((ListChangeListener.Change<? extends Tab> c) -> {
+            while (c.next()) {
+                if (c.wasAdded()) {
+                    c.getAddedSubList().forEach(this::addDragHandlers);
+                }
+                if (c.wasRemoved()) {
+                    c.getRemoved().forEach(this::removeDragHandlers);
+                }
+            }
+        });
+
+         tabPane.setOnDragOver(e -> {
+            if (draggingID.equals(e.getDragboard().getString()) && 
+                    currentDragTab != null &&
+                    currentDragTab.getTabPane() != tabPane) {
+                e.acceptTransferModes(TransferMode.MOVE);
+            }
+        });
+        
+        tabPane.setOnDragDropped(e -> {
+            if (draggingID.equals(e.getDragboard().getString()) && 
+                    currentDragTab != null &&
+                    currentDragTab.getTabPane() != tabPane) {
+
+                currentDragTab.getTabPane().getTabs().remove(currentDragTab);
+                tabPane.getTabs().add(currentDragTab);
+                currentDragTab.getTabPane().getSelectionModel().select(currentDragTab);
+            }
+        });
+    }   
+    
+    private void addDragHandlers(Tab tab) {
+
+        // move text to label graphic:
+        if (tab.getText() != null && ! tab.getText().isEmpty()) {
+            Label label = new Label(tab.getText(), tab.getGraphic());
+            tab.setText(null);
+            tab.setGraphic(label);
+        }
+
+        Node graphic = tab.getGraphic();
+        graphic.setOnDragDetected(e -> {
+            Dragboard dragboard = graphic.startDragAndDrop(TransferMode.MOVE);
+            ClipboardContent content = new ClipboardContent();
+            content.putString(draggingID);
+            dragboard.setContent(content);
+            dragboard.setDragView(graphic.snapshot(null, null));
+            currentDragTab = tab ;
+           
+        });
+        graphic.setOnDragOver(e -> {
+            if (draggingID.equals(e.getDragboard().getString()) && 
+                    currentDragTab != null &&
+                    currentDragTab.getGraphic() != graphic) {
+                e.acceptTransferModes(TransferMode.MOVE);
+            }
+        });
+        graphic.setOnDragDropped(e -> {
+            if (draggingID.equals(e.getDragboard().getString()) && 
+                    currentDragTab != null &&
+                    currentDragTab.getGraphic() != graphic) {
+                
+                //Need both of these to do the swap;
+                dragIndex = tab.getTabPane().getTabs().indexOf(currentDragTab);
+                dropIndex = tab.getTabPane().getTabs().indexOf(tab);
+                
+                currentDragTab.getTabPane().getTabs().remove(currentDragTab);
+                tab.getTabPane().getTabs().add(dropIndex, currentDragTab);
+                
+                rosterArray.get(dragIndex).setPriority(dropIndex);
+                rosterArray.get(dropIndex).setPriority(dragIndex); 
+                Collections.swap(rosterArray, dragIndex, dropIndex);
+                
+                currentDragTab.getTabPane().getSelectionModel().select(currentDragTab);
+            }
+        });
+        graphic.setOnDragDone(e -> {
+            dragIndex=0;
+            dropIndex=0;
+            currentDragTab = null;
+        });
+    }
+
+    private void removeDragHandlers(Tab tab) {
+        tab.getGraphic().setOnDragDetected(null);
+        tab.getGraphic().setOnDragOver(null);
+        tab.getGraphic().setOnDragDropped(null);
+        tab.getGraphic().setOnDragDone(null);
+    }
 }
+   
+
 
