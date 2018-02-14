@@ -43,6 +43,7 @@ import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.HBox;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 
@@ -182,6 +183,7 @@ public class MainController implements Initializable {
          Stage stage = new Stage();
          stage.setTitle("Employee Editor");
          stage.setResizable(false);
+         stage.initModality(Modality.APPLICATION_MODAL);
          stage.setScene(new Scene(root1));
          stage.setOnHidden(e -> eController.shutDown());
          stage.show(); 
@@ -202,7 +204,7 @@ public class MainController implements Initializable {
             stage.setTitle("Rank Editor");
             stage.setResizable(false);
             Scene sceneRank = new Scene(root1);
-            
+            stage.initModality(Modality.APPLICATION_MODAL);
 
             stage.setScene(sceneRank);
             stage.setOnHidden(e -> eController.shutDown());
@@ -225,7 +227,7 @@ public class MainController implements Initializable {
             stage.setResizable(false);
             Scene sceneStatus = new Scene(root1);
             //sceneRank.getStylesheets().add("stylesheet.css");
-
+            stage.initModality(Modality.APPLICATION_MODAL);
             stage.setScene(sceneStatus);
             stage.setOnHidden(e -> eController.shutDown());
             stage.show(); 
@@ -236,6 +238,29 @@ public class MainController implements Initializable {
         }
     }  
 
+    @FXML private void openCrewEditor(ActionEvent event) {
+         
+        try{
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("CrewFXML.fxml")); 
+            Parent root1 = loader.load();
+            CrewController eController = loader.getController();
+            Stage stage = new Stage();
+            stage.setTitle("Select memebers for " + currentRoster.getTitle());
+            stage.setResizable(false);
+           
+            Scene sceneCrew = new Scene(root1);
+            //sceneRank.getStylesheets().add("stylesheet.css");
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setScene(sceneCrew);
+            stage.setOnHidden(e -> eController.shutDown());
+            stage.show(); 
+          
+        }
+        catch(Exception e){
+           System.out.println("Can't load new scene: " + e); 
+        }
+    }    
+    
     public void loadMonths(int curMonth){
     
         String[] monthArry = new String[] {"January", "Febuary", "March", "April", "May", "June",
@@ -319,11 +344,7 @@ public class MainController implements Initializable {
         colRank.setMaxWidth(300);
         tableView.getColumns().add(colRank);
         
-        TableColumn<ObservableList<StringProperty>, String> colStatus = createColumn(0, "Status");
-        colStatus.setPrefWidth(150);
-        colStatus.setMaxWidth(300);
-        tableView.getColumns().add(colStatus);
-     
+   
         TableColumn<ObservableList<StringProperty>, String> colName = createColumn(1, "Name");
         colName.setPrefWidth(300);
         colName.setMaxWidth(600);

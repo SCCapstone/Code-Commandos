@@ -19,7 +19,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dutyroster.MainController">
+<VBox minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dutyroster.MainController">
   <children>
         <MenuBar>
           <menus>
@@ -69,8 +69,13 @@
             <Insets right="10.0" />
          </padding>
       </ButtonBar>
-      <HBox fx:id="rosterControls" prefHeight="40.0" spacing="10.0" style="-fx-alignment: CENTER-LEFT;">
+      <HBox fx:id="rosterControls" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="50.0" spacing="10.0" style="-fx-alignment: CENTER-LEFT;">
          <children>
+            <Button mnemonicParsing="false" onAction="#openCrewEditor" text="Select Members">
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin>
+            </Button>
             <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" maxWidth="50.0" minWidth="50.0" prefWidth="50.0" text="Title" />
             <TextField fx:id="fTitle" maxHeight="-Infinity" maxWidth="200.0" minHeight="-Infinity" minWidth="200.0" prefHeight="31.0" prefWidth="200.0" />
             <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" maxWidth="60.0" minWidth="60.0" prefWidth="60.0" text="Interval" />
@@ -81,8 +86,14 @@
             <CheckBox fx:id="cHolidays" maxHeight="-Infinity" maxWidth="100.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="21.0" prefWidth="100.0" text="Holidays" />
             <Button fx:id="bSave" disable="true" mnemonicParsing="false" onAction="#saveFields" text="Save" />
          </children>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+         <padding>
+            <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
+         </padding>
       </HBox>
-      <ScrollPane>
+      <ScrollPane fitToHeight="true" fitToWidth="true">
          <content>
             <TableView fx:id="tableView" style="-fx-background-color: transparent;">
               <columns>
@@ -90,7 +101,6 @@
                      <columns>
                       <TableColumn prefWidth="75.0" text="Rank" />
                         <TableColumn prefWidth="75.0" text="Name" />
-                        <TableColumn prefWidth="75.0" text="Status" />
                      </columns>
                   </TableColumn>
                   <TableColumn prefWidth="75.0" text="Increment">
