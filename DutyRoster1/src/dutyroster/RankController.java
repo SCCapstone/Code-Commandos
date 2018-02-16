@@ -80,12 +80,12 @@ public class RankController implements Initializable {
     //Converting store data into an array string
     public void storeData(){
         
-        Tools tool = new Tools();
+        
         strData = "";
         rankList.forEach((rank) -> {  
             strData +=  rank.getSort() + "@" +  rank.getRank() + "|";    
         });
-            strData = tool.removeLastChar(strData);
+            strData = Tools.removeLastChar(strData);
         
         //Store string array into secure file
         sc.store(strData);

@@ -13,11 +13,7 @@ import org.junit.runners.Suite;
 
 /**
  *
-<<<<<<< Updated upstream
  * @author ISHU
-=======
- * @author tanya
->>>>>>> Stashed changes
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({dutyroster.DutyrosterSuite.class})

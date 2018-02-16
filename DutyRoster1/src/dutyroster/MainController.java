@@ -1,5 +1,6 @@
 package dutyroster;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -50,6 +51,9 @@ import javafx.util.Callback;
 
 public class MainController implements Initializable {
     
+    
+    public static String rosterName;
+    
     @FXML private TableView<ObservableList<StringProperty>> tableView = new TableView<>();
     @FXML private ComboBox comboMonth;
     @FXML private ComboBox comboYear;
@@ -62,7 +66,7 @@ public class MainController implements Initializable {
     @FXML private HBox rosterControls;
     @FXML private Button bAddRoster, bSave;
     
-    private Tab currentDragTab ;
+    private Tab currentDragTab;
     private static final AtomicLong idGenerator = new AtomicLong();
     private final String draggingID = "DraggingTab-"+idGenerator.incrementAndGet() ;
     private int dragIndex,dropIndex;
@@ -106,7 +110,7 @@ public class MainController implements Initializable {
         rosterControls.setVisible(false);
         if (rosterArray.size() > 0){
             rosterArray.forEach((roster) -> {
-                    createTab(roster.getTitle(), roster.getPriority());
+                    createTab(roster.getTitle());
             });
             rosterControls.setVisible(true);
             SingleSelectionModel<Tab> selectionModel = rosterTabs.getSelectionModel();
@@ -189,7 +193,7 @@ public class MainController implements Initializable {
          stage.show(); 
           
         }
-        catch(Exception e){
+        catch(IOException e){
            System.out.println("Can't load new scene: " + e); 
         }
     }
@@ -211,7 +215,7 @@ public class MainController implements Initializable {
             stage.show(); 
           
         }
-        catch(Exception e){
+        catch(IOException e){
            System.out.println("Can't load new scene: " + e); 
         }
     }  
@@ -225,15 +229,15 @@ public class MainController implements Initializable {
             Stage stage = new Stage();
             stage.setTitle("Status Editor");
             stage.setResizable(false);
-            Scene sceneStatus = new Scene(root1);
+            Scene sceneStatus2 = new Scene(root1);
             //sceneRank.getStylesheets().add("stylesheet.css");
             stage.initModality(Modality.APPLICATION_MODAL);
-            stage.setScene(sceneStatus);
+            stage.setScene(sceneStatus2);
             stage.setOnHidden(e -> eController.shutDown());
             stage.show(); 
           
         }
-        catch(Exception e){
+        catch(IOException e){
            System.out.println("Can't load new scene: " + e); 
         }
     }  
@@ -243,7 +247,8 @@ public class MainController implements Initializable {
         try{
             FXMLLoader loader = new FXMLLoader(getClass().getResource("CrewFXML.fxml")); 
             Parent root1 = loader.load();
-            CrewController eController = loader.getController();
+            CrewController controller = new CrewController();
+            loader.setController(controller);
             Stage stage = new Stage();
             stage.setTitle("Select memebers for " + currentRoster.getTitle());
             stage.setResizable(false);
@@ -252,7 +257,7 @@ public class MainController implements Initializable {
             //sceneRank.getStylesheets().add("stylesheet.css");
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setScene(sceneCrew);
-            stage.setOnHidden(e -> eController.shutDown());
+            stage.setOnHidden(e -> controller.shutDown());
             stage.show(); 
           
         }
@@ -445,18 +450,14 @@ public class MainController implements Initializable {
         TableColumn<ObservableList<StringProperty>, String> column = new TableColumn<>();
 
         column.setText(columnTitle);
-        column.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList<StringProperty>, String>, ObservableValue<String>>() {
-             @Override
-             public ObservableValue<String> call(
-                 CellDataFeatures<ObservableList<StringProperty>, String> cellDataFeatures) {
-               ObservableList<StringProperty> values = cellDataFeatures.getValue();
-               // Pad to current value if necessary:
-               for (int index = values.size(); index <= columnIndex; index++) {
-                   values.add(index, new SimpleStringProperty(""));
-               }
-               return cellDataFeatures.getValue().get(columnIndex);
-             }
-           });
+        column.setCellValueFactory((CellDataFeatures<ObservableList<StringProperty>, String> cellDataFeatures) -> {
+            ObservableList<StringProperty> values = cellDataFeatures.getValue();
+            // Pad to current value if necessary:
+            for (int index = values.size(); index <= columnIndex; index++) {
+                values.add(index, new SimpleStringProperty(""));
+            }
+            return cellDataFeatures.getValue().get(columnIndex);
+        });
         column.setCellFactory(TextFieldTableCell.<ObservableList<StringProperty>>forTableColumn());
         return column;
     }
@@ -475,11 +476,11 @@ public class MainController implements Initializable {
           title =  "Roster " + ( nextPriority + 1) + "_" + (i++);  
         }
         
-        rosterArray.add(new Roster(title, nextPriority));
-        createTab(title, nextPriority);
+        rosterArray.add(new Roster(title));
+        createTab(title);
     }
 
-    public void  createTab(String title, int priority){  
+    public void  createTab(String title){  
 
         Tab tab = new Tab(title);
         tab.setOnCloseRequest(new EventHandler<Event>(){
@@ -503,7 +504,8 @@ public class MainController implements Initializable {
               
                 Optional<ButtonType> result = alert.showAndWait();
                 if (result.get() == ButtonType.YES) {
-                  deleteRoster(currentRoster.getPriority());
+                    int index = rosterTabs.getSelectionModel().getSelectedIndex();
+                  deleteRoster(index);
                   if(rosterArray.isEmpty())
                         rosterControls.setVisible(false);
                 }
@@ -516,7 +518,8 @@ public class MainController implements Initializable {
         tab.setTooltip(tip);
         rosterTabs.getTabs().add(tab);
         rosterTabs.getSelectionModel().select(tab);
-        selectedRoster(priority); 
+        int index = rosterTabs.getSelectionModel().getSelectedIndex();
+        selectedRoster(index); 
     }
    
     public boolean tabTitleExists(String chkTitle){
@@ -529,42 +532,22 @@ public class MainController implements Initializable {
     }
     
     public void deleteRoster(int index){
-       int count = rosterArray.size();
+      
        rosterArray.remove(index);
-       updatePriority();
        selectedRoster(index - 1);
 
     }
  
-    public void updatePriority(){
+    public void selectedRoster(int xVal) {
         
-        for(int i = 0; i < rosterArray.size(); i++) 
-                rosterArray.get(i).setPriority(i);
-
-    }
-    
-    public void setCurrentRoster(){
-        if (currentRoster==null)
-            return;
-        
+        currentRoster = rosterArray.get(xVal);
+        rosterName = currentRoster.getTitle();
         rosterControls.setVisible(true);
-        
-        fTitle.setText(currentRoster.getTitle());
+        fTitle.setText(rosterName);
         fInterval.setText(Integer.toString(currentRoster.getInterval()));
         fAmount.setText(Integer.toString(currentRoster.getAmount()));
         cWeekends.setSelected(currentRoster.getWeekends());
         cHolidays.setSelected(currentRoster.getHolidays());
-    
-    }
-    
-    public void selectedRoster(int xVal) {
-       
-        for(int i = 0; i < rosterArray.size(); i++) 
-            if(rosterArray.get(i).getPriority() == xVal){
-                currentRoster = rosterArray.get(i);
-                setCurrentRoster();
-                return;
-            }
     }
     
     //retrieve data from secure file
@@ -585,9 +568,8 @@ public class MainController implements Initializable {
                         bArry[0],
                         Integer.parseInt(bArry[1]),
                         Integer.parseInt(bArry[2]),
-                        Integer.parseInt(bArry[3]),
-                        Boolean.parseBoolean(bArry[4]),
-                        Boolean.parseBoolean(bArry[5])    
+                        Boolean.parseBoolean(bArry[3]),
+                        Boolean.parseBoolean(bArry[4])    
                         ) 
                     
                     );
@@ -602,13 +584,10 @@ public class MainController implements Initializable {
   
      //Converting store data into an array string
     public void storeData(){
-        
-        Tools tools = new Tools();
+
         strData = "";
         rosterArray.forEach((roster) -> {  
             strData +=  roster.getTitle() 
-                    + "@" 
-                    +  roster.getPriority() 
                     + "@" 
                     +  roster.getInterval() 
                     + "@"  
@@ -619,7 +598,7 @@ public class MainController implements Initializable {
                     +  roster.getHolidays() 
                     + "|";    
         });
-            strData = tools.removeLastChar(strData);
+            strData = Tools.removeLastChar(strData);
         
         //Store string array into secure file
         sc.store(strData);
@@ -697,18 +676,26 @@ public class MainController implements Initializable {
                 //Need both of these to do the swap;
                 dragIndex = tab.getTabPane().getTabs().indexOf(currentDragTab);
                 dropIndex = tab.getTabPane().getTabs().indexOf(tab);
+                Roster tmpRoster = rosterArray.get(dragIndex);
                 
                 currentDragTab.getTabPane().getTabs().remove(currentDragTab);
                 tab.getTabPane().getTabs().add(dropIndex, currentDragTab);
-                
-                rosterArray.get(dragIndex).setPriority(dropIndex);
-                rosterArray.get(dropIndex).setPriority(dragIndex); 
-                Collections.swap(rosterArray, dragIndex, dropIndex);
+
+                if (Math.abs(dragIndex - dropIndex)==1)
+                    Collections.swap(rosterArray, dragIndex, dropIndex);
+                else 
+                    if (dragIndex < dropIndex)
+                        for (int i = dragIndex; i < dropIndex; i++)
+                            Collections.swap(rosterArray, i, (i+1) );         
+                    else
+                        for (int i = dragIndex; i > dropIndex; i--)
+                            Collections.swap(rosterArray, i, (i-1) );    
                 
                 currentDragTab.getTabPane().getSelectionModel().select(currentDragTab);
+                selectedRoster(dropIndex);
             }
         });
-        graphic.setOnDragDone(e -> {
+        graphic.setOnDragDone(e -> {   
             dragIndex=0;
             dropIndex=0;
             currentDragTab = null;

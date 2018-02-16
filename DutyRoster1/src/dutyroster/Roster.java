@@ -13,24 +13,22 @@ public class Roster {
 
     
     private String title;
-    private int priority, interval, amount;
+    private int interval, amount;
     private boolean weekends, holidays;
     private ArrayList<Employee> assigned = new ArrayList<>();;
    
     //Constructors
     public Roster() {
-      this("New Roster",0,24,1,true,true);
+      this("New Roster",24,1,true,true);
     }
     
-    public Roster(String title, int priority) {
-      this(title,priority,24,1,true,true);
+    public Roster(String title) {
+      this(title,24,1,true,true);
     } 
     
-    public Roster(String title, int priority,
-            int interval, int amount, boolean weekends, boolean holidays) {
+    public Roster(String title, int interval, int amount, boolean weekends, boolean holidays) {
         
         this.title = title;
-        this.priority = priority;
         this.interval = interval;
         this.amount = amount;
         this.weekends = weekends;
@@ -41,11 +39,7 @@ public class Roster {
     public void setTitle(String val) {
         title = val;
     }
-    
-    public void setPriority(int val) {
-        priority = val;
-    }
-        
+      
      public void setInterval(int val) {
         interval = val;
     }
@@ -66,10 +60,6 @@ public class Roster {
         return title;
     }
     
-    public int getPriority(){
-        return priority;
-    }
- 
     public int getInterval(){
         return interval;
     }

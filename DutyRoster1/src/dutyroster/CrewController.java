@@ -1,7 +1,7 @@
 /**
  * 
- * @author Harini
- * @version 5 12/5/17
+ * @author Harini, Othen
+ * @version 6 2/14/18
  */
 package dutyroster;
 
@@ -16,9 +16,6 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 
-
-
-
 public class CrewController implements Initializable {
  
     //for entering a new rank
@@ -32,17 +29,17 @@ public class CrewController implements Initializable {
     @FXML private TableColumn<Employee,Boolean> crew;
     
     // used to import and export data from employee data
-    private ObservableList<Employee> employeeList;
+    private ObservableList<Employee> crewList;
     // rankOptions is used to pull the rank information  
     private ObservableList<Rank> rankOptions;
     //rankListing is used to change it in the column box 
     private ObservableList<String> rankListing;
     // used to encrypt, decrypt and store the file.
+    private SecureFile scCrews;
     private SecureFile scEmployees;
     private SecureFile scRanks;
     private String strData;
-
-        
+    
     /**
      * This is used to before the GUI interface is initialize.
      * @param url
@@ -51,7 +48,7 @@ public class CrewController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) { 
         
-        employeeList = FXCollections.observableArrayList();
+        crewList = FXCollections.observableArrayList();
         rankOptions = FXCollections.observableArrayList();
         rankListing = FXCollections.observableArrayList();
         // using file name ranks for secure files
@@ -62,10 +59,8 @@ public class CrewController implements Initializable {
         //  load the rankListing into rankCombo
         rankCombo.getItems().setAll(rankListing);
         
-       // Creating a new secure files employees and load it into secure files.
-        scEmployees = new SecureFile("Employees");
         //pull the ranks from secureFile and loads it into employees.
-        loadEmployees();
+        loadCrews();
         
         //used to edit the tables.
         tableView.setEditable(true);
@@ -88,15 +83,15 @@ public class CrewController implements Initializable {
        
         strData = "";
         
-        if (employeeList == null)
+        if (crewList == null)
             return;
         
-        employeeList.forEach((employee) -> {  
+        crewList.forEach((employee) -> {  
             strData += employee.getRank() + "@" + employee.getName() + "|";    
         });
             strData = Tools.removeLastChar(strData);
             
-        scEmployees.store(strData);
+        scCrews.store(strData);
         
         strData = "";
         
@@ -106,9 +101,35 @@ public class CrewController implements Initializable {
     /**
      * This is used to load employees from secure files into the link listing array.
      */
-    public void loadEmployees(){
+    public void loadCrews(){
         
-        String a = scEmployees.retrieve();
+         
+        scCrews = new SecureFile("Crew_" + MainController.rosterName);      
+        setCrewData(scCrews);
+        scEmployees = new SecureFile("Employees");
+        setCrewData(scEmployees);
+        
+        crewList = removeDuplicates(crewList);
+       
+        tableView.setItems(crewList);  
+        tableView.sort();
+    }
+    
+    public ObservableList<Employee> removeDuplicates(ObservableList<Employee> tmpList) {
+        for(int i = 0; i < tmpList.size(); i++) {
+            for(int j = i + 1; j < tmpList.size(); j++) {
+                if(tmpList.get(i).equals(tmpList.get(j))){
+                    tmpList.remove(j);
+                    j--;
+                }
+            }
+        }
+        return tmpList;
+    }
+    
+    private void setCrewData(SecureFile sf){
+        
+        String a = sf.retrieve();
       
         String aArry[] = a.split("\\|", -1);
         for (String b : aArry){
@@ -119,13 +140,13 @@ public class CrewController implements Initializable {
                 
                 // getSortIndex pulls updated rank order index. 
                 if(bArry[0].length() > 0 && bArry[1].length() > 0){
-                    employeeList.add( new Employee( getSortIndex(bArry[0]), bArry[0], bArry[1]) );
+                    Boolean onCrew = false; //(bArry[2]!=null && bArry[2].equals("t"));
+                    crewList.add( new Employee( getSortIndex(bArry[0]), bArry[0], bArry[1]) );
                 }
             }    
-        }       
-        tableView.setItems(employeeList);  
-        tableView.sort();
+        } 
     }
+    
     
     /**
      * 
