@@ -13,52 +13,36 @@ import javafx.beans.property.SimpleStringProperty;
 
 public class Status {
     
-    
-    //private Integer sort = 0;
-     private Integer sort;
      
+     private final SimpleStringProperty code = new SimpleStringProperty("");
      private final SimpleStringProperty title = new SimpleStringProperty("");
-     private final SimpleStringProperty Code = new SimpleStringProperty("");
-     private final SimpleStringProperty status = new SimpleStringProperty("");
-
     
     //Constructors
     public Status() {
       this("", "");
     }
     
-    public Status(String status, String title) {
+    public Status(String code, String title) {
         
-        
-       // setSort(sort);
-        setStatus(status);
-        setCode(title);
+        setCode(code);
+        setTitle(title);
         
     }
     //getters and setters
-    public String getStatus() {
-        return status.get();
+    public String getCode() {
+        return code.get();
     }
     
-    public int getSort() {
-        return sort;
+    public String getTitle() {
+        return title.get();
     }
     
-     public String getCode() {
-        return Code.get();
+    public void setCode(String codeIn) {
+        code.set(codeIn);
     }
     
-    public void setStatus(String statusIn) {
-        title.set(statusIn);
+    public void setTitle(String titleIn) {
+        title.set(titleIn);
     }
-    
-    public void setCode(String code) {
-        title.set(code);
-    }
- 
-    public void setSort(int sortIn) {
-        sort = sortIn;
-    }
-        
+      
 }
-

@@ -19,7 +19,11 @@ import org.junit.runners.Suite;
  * 
  */
 @RunWith(Suite.class)
+<<<<<<< Updated upstream
 @Suite.SuiteClasses({dutyroster.RankControllerTest.class, dutyroster.RankGuiTest.class})
+=======
+@Suite.SuiteClasses({RankControllerTest.class, MainControllerTest.class, EmployeeTest.class, EmployeeControllerTest.class, RankTest.class, DriverTest.class, SecureFileTest.class, LoginControllerTest.class})
+>>>>>>> Stashed changes
 public class DutyrosterSuite {
 
     @BeforeClass

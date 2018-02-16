@@ -11,37 +11,34 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<GridPane alignment="CENTER" hgap="5.0" prefHeight="483.0" prefWidth="354.0" vgap="5.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dutyroster.StatusController">
+<GridPane alignment="CENTER" hgap="5.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="483.0" prefWidth="354.0" vgap="5.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dutyroster.StatusController">
     <padding>
         <Insets bottom="10.0" left="10.0" right="10.0" top="5.0" />
     </padding>
-    <TableView fx:id="tableView" prefHeight="406.0" prefWidth="334.0" GridPane.rowIndex="1">
-        <columns>
-               
-            <TableColumn fx:id="sort" editable="false" minWidth="-Infinity" prefWidth="97.0" resizable="false" sortable="true" text="Sort" visible="false">
-                <cellValueFactory><PropertyValueFactory property="sort" />
+  
+    <TableView fx:id="tableView" prefHeight="406.0" prefWidth="334.0" styleClass="table" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1">
+        <columns>   
+            <TableColumn fx:id="colCode" maxWidth="100.0" minWidth="100.0" prefWidth="100.0" resizable="false" sortable="true" text="Code">
+                <cellValueFactory>
+                    <PropertyValueFactory property="code" />
                 </cellValueFactory>
-          </TableColumn>
-          <TableColumn fx:id="status" minWidth="-Infinity" prefWidth="103.0" resizable="false" sortable="false" text="Code">
-                <cellValueFactory><PropertyValueFactory property="status" />
-                </cellValueFactory>
-          
-          </TableColumn>
-          <TableColumn fx:id="name" maxWidth="245.0" minWidth="-1.0" prefWidth="226.0" resizable="false" sortable="false" text="Title">
-                <cellValueFactory><PropertyValueFactory property="name" />
-                </cellValueFactory>
-          </TableColumn>
-
-     </columns>    
+            </TableColumn>
+            <TableColumn fx:id="colTitle" maxWidth="231.0" minWidth="-Infinity" prefWidth="231.0" resizable="false" sortable="true" text="Title">
+                <cellValueFactory>
+                    <PropertyValueFactory property="title" />
+                </cellValueFactory>    
+            </TableColumn>
+        </columns>    
   
     </TableView>
    
-   <HBox alignment="bottom_right" prefHeight="309.0" prefWidth="334.0" spacing="10" GridPane.rowIndex="2">
-          <TextField fx:id="statusField" prefHeight="31.0" prefWidth="46.0" promptText="Code" />
-      <TextField fx:id="statusField2" prefHeight="31.0" prefWidth="125.0" promptText="Title" />
-          <Button onAction="#addStatus" text="Add" />
+   <HBox alignment="bottom_right" prefHeight="309.0" prefWidth="334.0" spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="2">
+        <TextField fx:id="codeField" prefHeight="31.0" prefWidth="60.0" promptText="Code" />
+        <TextField fx:id="titleField" prefHeight="31.0" prefWidth="125.0" promptText="Title" />
+        <Button onAction="#addStatus" text="Add" />
      </HBox>
    <columnConstraints>
+      <ColumnConstraints />
       <ColumnConstraints />
    </columnConstraints>
    <rowConstraints>

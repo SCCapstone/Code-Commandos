@@ -27,27 +27,20 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 
 
-public class StatusController implements Initializable {
+public final class StatusController implements Initializable {
 
     //GUI
-     //@FXML private TextField statusField;
     //used for tableview 
-    @FXML private TableView<Status> tableView;
-   // @FXML private TableColumn<Status,String> rank;
-   // @FXML private TableColumn<Status,String> name;
-    @FXML private TableColumn<Status,Integer> sort;
-    //@FXML private TableView<Status> tableView;
-    @FXML private TextField statusField;
-    @FXML private TextField statusField2;
+     @FXML private TableView<Status> tableView;
+    @FXML private TableColumn<Status,String> colCode;
+    @FXML private TableColumn<Status,String> colTitle;
+    @FXML private TextField codeField;
     @FXML private TextField titleField;
-    //@FXML private TableColumn<Status,Integer> sort;
-     
+  
     //List of rankssor
     private ObservableList<Status> statusList;
-     private ObservableList<Status> titleList;
-     private ObservableList<String> statusListing;
     // used to encrypt, decrypt and store the file.
-  //  private SecureFile scStatus;
+    // private SecureFile scStatus;
     
     //Extracting Data from encrypted file
     private SecureFile sc;
@@ -56,8 +49,6 @@ public class StatusController implements Initializable {
     public StatusController(){
     startUp();
     }
-    
-    
     
     public void startUp(){
         statusList = FXCollections.observableArrayList();
@@ -71,24 +62,25 @@ public class StatusController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         
+        
         //Add multi select to table
         tableView.getSelectionModel().setSelectionMode(
                 SelectionMode.MULTIPLE
         );
+        
         //Create the Delete menu item
         MenuItem mi1 = new MenuItem("Delete");
             mi1.setOnAction((ActionEvent event) -> { 
                 ObservableList<Status> items = tableView.getSelectionModel().getSelectedItems();
                 deleteStatus(items);
-            });
-
+            });    
         ContextMenu menu = new ContextMenu();
         menu.getItems().add(mi1);
         tableView.setContextMenu(menu);
        
         startUp();
         
-//        updateSort();
+        updateSort();
     }    
 
     public void shutDown() {
@@ -104,9 +96,8 @@ public class StatusController implements Initializable {
         if (statusList == null)
             return;
         statusList.forEach((status) -> {  
-            strData +=  status.getSort() + "@" +  status.getStatus() + "|";    
-        });
-            strData = removeLastChar(strData);
+            strData +=  status.getCode() + "@" +  status.getTitle() + "|"; });
+            strData = Tools.removeLastChar(strData);
         
         //Store string array into secure file
         sc.store(strData);
@@ -114,13 +105,6 @@ public class StatusController implements Initializable {
         //clear strData
         strData = "";
         
-    }
-    
-    //remove last delimeter from storage array
-    private static String removeLastChar(String str) {
-        if(str.length() <= 1 )
-            return "";
-        return str.substring(0, str.length() - 1);
     }
     
     //retrieve data from secure file
@@ -136,7 +120,7 @@ public class StatusController implements Initializable {
                 String bArry[] = b.split("\\@", -1);
                 
                 if(bArry[0].length() > 0 && bArry[1].length() > 0)
-                    statusList.add( new Status((bArry[0]),bArry[1]) );
+                    statusList.add( new Status(bArry[0],bArry[1]) );
             }
             
         }
@@ -144,167 +128,42 @@ public class StatusController implements Initializable {
     }
       
     //The add rank action checks to make sure the rank doesn't already exits
-    @FXML
-    public void addStatus(ActionEvent event) {
+    @FXML public void addStatus(ActionEvent event) {
         
         Alert alert;
+       
+        if (codeField.getText().isEmpty()){
+            alert = new Alert(Alert.AlertType.ERROR, " Enter a status code.");
+            alert.setTitle("Missing Status");
+            alert.showAndWait();
+        return;
+        }  
         
-        if (statusExists(statusField.getText())){
-             alert = new Alert(Alert.AlertType.ERROR, "Each status must be a unique value.");
+        if (titleField.getText().isEmpty()){
+            alert = new Alert(Alert.AlertType.ERROR, " Enter a status title.");
+            alert.setTitle("Missing Status");
+            alert.showAndWait();
+        return;
+        }
+        
+        
+        if (titleExists(titleField.getText())){
+             alert = new Alert(Alert.AlertType.ERROR, "Each title must be a unique value.");
              alert.setTitle("Status Already Exists");
              alert.showAndWait();
           return;
         }
-        if (statusField.getText().isEmpty()){
-            alert = new Alert(Alert.AlertType.ERROR, " Enter a Status ");
-            alert.setTitle("Missing Status");
-            alert.showAndWait();
-        return;
-        }
+       
         
-        if (titleExists(statusField2.getText())){
-            alert = new Alert(Alert.AlertType.ERROR, "Each status must be a unique value.");
-            alert.setTitle("Title Already Exists");
-            alert.showAndWait();
-        return;
-        }
-        if (statusField2.getText().isEmpty()){
-            alert = new Alert(Alert.AlertType.ERROR, " Enter a Status ");
-            alert.setTitle("Missing Status");
-            alert.showAndWait();
-        return;
-        }
-        
-        statusList.add(new Status(statusField.getText(), statusField2.getText()
-        ));
+        statusList.add( new Status(codeField.getText(),titleField.getText()) );
          
-        // updateSort();
+       updateSort();
         
-        //statusField.setText("");
-        //statusField2.setText("");
+       codeField.setText("");
+       titleField.setText("");
     
     } 
-    /*
-    public void addTitle(ActionEvent event) {
-        
-        Alert alert;
-        
-        if (titleExists(statusField.getText())){
-             alert = new Alert(Alert.AlertType.ERROR, "Each status must be a unique value.");
-             alert.setTitle("Title Already Exists");
-             alert.showAndWait();
-          return;
-        }
-        if (statusField.getText().isEmpty()){
-         alert = new Alert(Alert.AlertType.ERROR, " Enter a Status ");
-         alert.setTitle("Missing Status");
-         alert.showAndWait();
-        return;
-        }
-        
-       // ObservableList<Status> add = titleList.add(new Title(highestIndexStatus(),titleField.getText()
-        //));
-        statusList.add(new Status(statusField.getText(), statusField2.getText()
-        )); 
-       //  updateSort();
-        
-        statusField.setText("");
-        statusField2.setText("");
-    
-    } 
-    */
-   /* //Returns highest Rank
-    public int highestIndexStatus(){
-            return tableView.getItems().size() + 1;
-    }
-  
-    //Changes index to the next higher value
-    @FXML
-    private void moveSortUp(ActionEvent event){
-        
-        Status selectedStatus = tableView.getSelectionModel().getSelectedItem();
-        
-        if (selectedStatus == null)
-            return;
-        
-        int oldSort = selectedStatus.getSort();
-        
-        //If already at the top of the list
-        if (oldSort == 1)
-            return;
-        
-        int currentSort = 0;
-        for(Status currentStatus : statusList) {
-
-            currentSort = currentStatus.getSort();
-
-            if(currentSort == (oldSort - 1) ) {
-               currentStatus.setSort(oldSort);
-               break;
-            }
-        }
-
-        if(currentSort > 0)
-            selectedStatus.setSort(currentSort);
-
-      
-        updateSort();
-    }
-    
-    //Change index to the next lower value
-    @FXML
-    public void moveSortDown(ActionEvent event){
-        
-        Status selectedStatus = tableView.getSelectionModel().getSelectedItem();
-        
-        if (selectedStatus == null)
-            return;
-        
-        int oldSort = selectedStatus.getSort();
-          
-        //At the bottom already
-        if (oldSort == tableView.getItems().size())
-            return;
-        
-        int currentSort = 0;
-        for(Status currentStatus : statusList) {
-
-            currentSort = currentStatus.getSort();
-
-            if(currentSort == (oldSort + 1) ) {
-                currentStatus.setSort(oldSort);
-                break;
-            }
-
-        }
-        if(currentSort > 0)
-            selectedStatus.setSort(currentSort);
-        
-  
-         updateSort();
-    }    
- */
-    //Check to see if the rank already exitst
-    public boolean statusExists (String strIn) {
-        
-        for(Status currentStatus : statusList)
-            if(currentStatus.getStatus().equalsIgnoreCase(strIn)) 
-                return true;
-        
-        return false;    
-        
-    }
-    
-     public boolean titleExists (String strIn) {
-        
-        for(Status currentStatus : titleList)
-            if(currentStatus.getStatus().equalsIgnoreCase(strIn)) 
-                return true;
-        
-        return false;    
-        
-    }
-    
+ 
     //Delete rank function
     public void deleteStatus(ObservableList<Status> tmpList){
                                    
@@ -316,49 +175,25 @@ public class StatusController implements Initializable {
                 if (tmpList.get(i).equals(statusList.get(j)))  
                     statusList.remove(j);
         
-      //  updateSort();
-    
+      updateSort();
     }
     
-  /*  private void updateSort(){
-        sort.setSortType(TableColumn.SortType.ASCENDING);
+    private void updateSort(){
+        colCode.setSortType(TableColumn.SortType.ASCENDING);
         tableView.setItems(statusList);
-        tableView.getSortOrder().add(sort);
+        tableView.getSortOrder().add(colCode);
         tableView.refresh();
         tableView.sort();
-    }*/
-    
-    
-   /*     //Returns highest Rank
-    public int countStatus(){
-            return statusList.size() + 1;
     }
-    */
-     public void addNewStatus(String status) {
-        
-        for(Status currentStatus : statusList)
-            if(currentStatus.getStatus().equalsIgnoreCase(status)) 
-                throw new IllegalArgumentException("Status already exists");
-        
-        
-        if (status.isEmpty()){
-          throw new IllegalArgumentException("No status entered");
-        }
-        
-       //statusList.add(new Status(status, title ));
-             
-    } 
     
-    //Delete rank function
-    public void delStatus(String[] status){
-                                   
-        if (status==null)
-            throw new IllegalArgumentException("No status entered");
+     public boolean titleExists (String strIn) {
         
-        for(int i = 0; i<status.length; i++)
-            for(int j = 0; j<statusList.size(); j++)  
-                if (status[i].equals(statusList.get(j)))  
-                    statusList.remove(j);
-
+        if(!statusList.isEmpty())
+            for(Status currentStatus : statusList)
+                if(currentStatus.getTitle().equalsIgnoreCase(strIn)) 
+                    return true;
+        
+        return false;      
     }
+ 
 }
