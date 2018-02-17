@@ -152,6 +152,13 @@ public class MainController implements Initializable {
  
     @FXML public void saveFields(){
         
+        
+        currentRoster.setInterval(Integer.parseInt(fInterval.getText()));
+        currentRoster.setAmount(Integer.parseInt(fAmount.getText()));
+        currentRoster.setWeekends(cWeekends.isSelected());
+        currentRoster.setHolidays(cHolidays.isSelected());
+        
+        
         if (!fTitle.getText().equals(currentRoster.getTitle())){
             currentRoster.setTitle(fTitle.getText());
         
@@ -163,10 +170,7 @@ public class MainController implements Initializable {
             rosterTabs.getSelectionModel().select(newTab);
         }
         
-        currentRoster.setInterval(Integer.parseInt(fInterval.getText()));
-        currentRoster.setAmount(Integer.parseInt(fAmount.getText()));
-        currentRoster.setWeekends(cWeekends.isSelected());
-        currentRoster.setHolidays(cHolidays.isSelected());
+       
         bSave.setDisable(true);
     }
     
@@ -250,7 +254,7 @@ public class MainController implements Initializable {
             CrewController controller = new CrewController();
             loader.setController(controller);
             Stage stage = new Stage();
-            stage.setTitle("Select memebers for " + currentRoster.getTitle());
+            stage.setTitle("Assign members to " + currentRoster.getTitle());
             stage.setResizable(false);
            
             Scene sceneCrew = new Scene(root1);

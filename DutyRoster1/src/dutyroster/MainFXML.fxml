@@ -71,7 +71,7 @@
       </ButtonBar>
       <HBox fx:id="rosterControls" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="50.0" spacing="10.0" style="-fx-alignment: CENTER-LEFT;">
          <children>
-            <Button mnemonicParsing="false" onAction="#openCrewEditor" text="Select Members">
+            <Button mnemonicParsing="false" onAction="#openCrewEditor" text="Assign Members">
                <HBox.margin>
                   <Insets />
                </HBox.margin>
