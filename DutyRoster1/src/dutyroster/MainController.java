@@ -227,6 +227,7 @@ public class MainController implements Initializable {
     @FXML private void openStatusEditor(ActionEvent event) {
          
         try{
+            
             FXMLLoader loader = new FXMLLoader(getClass().getResource("StatusFXML.fxml")); 
             Parent root1 = loader.load();
             StatusController eController = loader.getController();
@@ -251,19 +252,15 @@ public class MainController implements Initializable {
         try{
             FXMLLoader loader = new FXMLLoader(getClass().getResource("CrewFXML.fxml")); 
             Parent root1 = loader.load();
-            CrewController controller = new CrewController();
-            loader.setController(controller);
+            CrewController eController = loader.getController();
             Stage stage = new Stage();
             stage.setTitle("Assign members to " + currentRoster.getTitle());
             stage.setResizable(false);
-           
             Scene sceneCrew = new Scene(root1);
-            //sceneRank.getStylesheets().add("stylesheet.css");
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setScene(sceneCrew);
-            stage.setOnHidden(e -> controller.shutDown());
+            stage.setOnHidden(e -> eController.shutDown());
             stage.show(); 
-          
         }
         catch(Exception e){
            System.out.println("Can't load new scene: " + e); 

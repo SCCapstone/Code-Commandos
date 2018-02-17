@@ -51,8 +51,7 @@ public class EmployeeController implements Initializable {
     private SecureFile scEmployees;
     private SecureFile scRanks;
     private String strData;
-
-        
+    
     /**
      * This is used to before the GUI interface is initialize.
      * @param url
@@ -147,7 +146,7 @@ public class EmployeeController implements Initializable {
         employeeList.forEach((employee) -> {  
             strData += employee.getRank() + "@" + employee.getName() + "|";    
         });
-            strData = removeLastChar(strData);
+            strData = Tools.removeLastChar(strData);
             
         scEmployees.store(strData);
         
@@ -155,12 +154,7 @@ public class EmployeeController implements Initializable {
         
     }
     
-    private static String removeLastChar(String str) {
-        if(str.length() <= 1 )
-            return "";
-        return str.substring(0, str.length() - 1);
-    }
-    
+
     /**
      * This is used to load employees from secure files into the link listing array.
      */

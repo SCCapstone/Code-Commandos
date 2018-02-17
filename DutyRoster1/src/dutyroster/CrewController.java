@@ -6,6 +6,7 @@
 package dutyroster;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.fxml.Initializable;
@@ -20,7 +21,7 @@ public class CrewController implements Initializable {
  
     //for entering a new rank
     @FXML private ComboBox rankCombo;
-    @FXML private TextField nameField;
+    //@FXML private TextField nameField;
     //used for tableview 
     @FXML private TableView<Employee> tableView;
     @FXML private TableColumn<Employee,String> rank;
@@ -49,22 +50,22 @@ public class CrewController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) { 
         
         crewList = FXCollections.observableArrayList();
+        //Sync crewlist with tableview
+        tableView.setItems(crewList); 
         rankOptions = FXCollections.observableArrayList();
         rankListing = FXCollections.observableArrayList();
         // using file name ranks for secure files
         scRanks = new SecureFile("Ranks");  
         // pull ranks from secure file and place them into rank listing.
         loadRanks(); 
- 
         //  load the rankListing into rankCombo
         rankCombo.getItems().setAll(rankListing);
         
-        //pull the ranks from secureFile and loads it into employees.
+        //pull the employess from secureFile and loads it into crews.
         loadCrews();
         
         //used to edit the tables.
-        tableView.setEditable(true);
-        
+        tableView.setEditable(true); 
         //set proper sorting. 
         sort.setSortType(TableColumn.SortType.ASCENDING);
         tableView.getSortOrder().add(sort);
@@ -72,23 +73,27 @@ public class CrewController implements Initializable {
         name.setSortType(TableColumn.SortType.ASCENDING);
         tableView.getSortOrder().add(name);
         name.setSortable(true);
-   
     }  
     
     public void shutDown() {  
         storeData();
+        System.out.println("Closing");
     }
  
     public void storeData(){   
        
         strData = "";
-        
-        if (crewList == null)
+
+        if (crewList == null || crewList.isEmpty()) 
             return;
-        
-        crewList.forEach((employee) -> {  
-            strData += employee.getRank() + "@" + employee.getName() + "|";    
+
+        crewList.forEach((employee) -> { 
+            if( employee.getCrew() ){
+                strData += employee.getRank() + "@" + employee.getName() + "|"; 
+            }
         });
+        
+        if (!strData.isEmpty())
             strData = Tools.removeLastChar(strData);
             
         scCrews.store(strData);
@@ -103,53 +108,57 @@ public class CrewController implements Initializable {
      */
     public void loadCrews(){
         
-         
         scCrews = new SecureFile("Crew_" + MainController.rosterName);      
-        setCrewData(scCrews);
+        ArrayList<Employee> aCrews = setCrewData(scCrews);
         scEmployees = new SecureFile("Employees");
-        setCrewData(scEmployees);
+        ArrayList<Employee> aEmployees = setCrewData(scEmployees);
         
-        crewList = removeDuplicates(crewList);
-       
-        tableView.setItems(crewList);  
-        tableView.sort();
-    }
-    
-    public ObservableList<Employee> removeDuplicates(ObservableList<Employee> tmpList) {
-        for(int i = 0; i < tmpList.size(); i++) {
-            for(int j = i + 1; j < tmpList.size(); j++) {
-                if(tmpList.get(i).equals(tmpList.get(j))){
-                    tmpList.remove(j);
-                    j--;
+        //add members from crews who are not on the employeelist
+        boolean inList = false;
+        for(Employee e: aCrews){
+            for(Employee f: aEmployees){
+                if( e.getName().equals(f.getName()) ){
+                    inList = true;
+                    break;
                 }
             }
+            if(!inList){
+                aEmployees.add(e);
+            }
         }
-        return tmpList;
+        
+        //Now, check checkboxes
+        for(Employee f: aEmployees)
+            for(Employee e: aCrews)
+                if( f.getName().equals(e.getName()) )
+                    f.setCrew(true);
+     
+        crewList.addAll(aEmployees);
+        tableView.sort();
+        System.out.println();
     }
+
     
-    private void setCrewData(SecureFile sf){
+    public ArrayList<Employee> setCrewData(SecureFile sf){
         
         String a = sf.retrieve();
-      
+        
+        ArrayList<Employee> aReturn = new ArrayList<>();
+        
         String aArry[] = a.split("\\|", -1);
         for (String b : aArry){
-            
             if (b.length() > 2){
-                
                 String bArry[] = b.split("\\@", -1);
-                
                 // getSortIndex pulls updated rank order index. 
                 if(bArry[0].length() > 0 && bArry[1].length() > 0){
-                    Boolean onCrew = false; //(bArry[2]!=null && bArry[2].equals("t"));
-                    crewList.add( new Employee( getSortIndex(bArry[0]), bArry[0], bArry[1]) );
+                    aReturn.add( new Employee( getSortIndex(bArry[0]), bArry[0], bArry[1]));
                 }
             }    
         } 
+        return aReturn;
     }
     
-    
-    /**
-     * 
+    /** 
      * This is used to load ranks from secure files into the link listing array.
      */
     public void loadRanks(){
@@ -182,12 +191,9 @@ public class CrewController implements Initializable {
     private int getSortIndex(String strRank) {
             
         //pulling from the rank, in rankOption pull the current rank to get the index number.
-        for(Rank currentRank : rankOptions) {
-          
-            if (currentRank.getRank().equals(strRank) ){
+        for(Rank currentRank : rankOptions) 
+            if ( currentRank.getRank().equals(strRank) )
                     return currentRank.getSort();
-            }
-        }
         
         return 0;
     }
