@@ -1,5 +1,5 @@
 /**
- * @authors Austin Freed, Tanya 
+ * @authors Austin Freed, Tanya Peyush
  * @version 1
  * 11/20/17
  */
