@@ -41,6 +41,20 @@ public class CrewController implements Initializable {
     private SecureFile scRanks;
     private String strData;
     
+   
+    public CrewController(){
+        startUp();
+    }
+    
+    public void startUp(){
+        rankOptions = FXCollections.observableArrayList();
+        rankListing = FXCollections.observableArrayList();
+        //instantiates new file, use file name Ranks as storage
+        scRanks = new SecureFile("Ranks");
+        //pull encrypted info and load into ranked list
+        loadRanks();  
+    }
+    
     /**
      * This is used to before the GUI interface is initialize.
      * @param url
@@ -52,12 +66,8 @@ public class CrewController implements Initializable {
         crewList = FXCollections.observableArrayList();
         //Sync crewlist with tableview
         tableView.setItems(crewList); 
-        rankOptions = FXCollections.observableArrayList();
-        rankListing = FXCollections.observableArrayList();
-        // using file name ranks for secure files
-        scRanks = new SecureFile("Ranks");  
-        // pull ranks from secure file and place them into rank listing.
-        loadRanks(); 
+ 
+        startUp();
         //  load the rankListing into rankCombo
         rankCombo.getItems().setAll(rankListing);
         
@@ -76,18 +86,18 @@ public class CrewController implements Initializable {
     }  
     
     public void shutDown() {  
-        storeData();
+        storeData(crewList);
         System.out.println("Closing");
     }
  
-    public void storeData(){   
+    public void storeData(ObservableList<Employee> cList){   
        
         strData = "";
 
-        if (crewList == null || crewList.isEmpty()) 
+        if (cList == null || cList.isEmpty()) 
             return;
 
-        crewList.forEach((employee) -> { 
+        cList.forEach((employee) -> { 
             if( employee.getCrew() ){
                 strData += employee.getRank() + "@" + employee.getName() + "|"; 
             }
@@ -101,17 +111,16 @@ public class CrewController implements Initializable {
         strData = "";
         
     }
-    
-    
+     
     /**
      * This is used to load employees from secure files into the link listing array.
      */
     public void loadCrews(){
         
         scCrews = new SecureFile("Crew_" + MainController.rosterName);      
-        ArrayList<Employee> aCrews = setCrewData(scCrews);
+        ArrayList<Employee> aCrews = getCrewData(scCrews);
         scEmployees = new SecureFile("Employees");
-        ArrayList<Employee> aEmployees = setCrewData(scEmployees);
+        ArrayList<Employee> aEmployees = getCrewData(scEmployees);
         
         //add members from crews who are not on the employeelist
         boolean inList = false;
@@ -139,7 +148,7 @@ public class CrewController implements Initializable {
     }
 
     
-    public ArrayList<Employee> setCrewData(SecureFile sf){
+    public ArrayList<Employee> getCrewData(SecureFile sf){
         
         String a = sf.retrieve();
         

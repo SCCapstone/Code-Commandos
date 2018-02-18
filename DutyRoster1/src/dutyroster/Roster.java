@@ -15,8 +15,7 @@ public class Roster {
     private String title;
     private int interval, amount;
     private boolean weekends, holidays;
-    private ArrayList<Employee> assigned = new ArrayList<>();;
-   
+    
     //Constructors
     public Roster() {
       this("New Roster",24,1,true,true);
@@ -76,19 +75,7 @@ public class Roster {
         return holidays;
     }  
      
-    public void addMember(Employee ep){
-        assigned.add(ep);
-    }
-    
-    public void deleteMember(Employee ep){
-        assigned.remove(ep);
-    }
-    
-    public void assignedSort(){
-        Tools tools = new Tools();
-        Tools.EmployeeComparator eC = tools.new EmployeeComparator();
-        assigned.sort(eC);
-    }
+   
 }
 
 

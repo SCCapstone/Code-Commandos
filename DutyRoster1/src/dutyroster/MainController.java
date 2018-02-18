@@ -48,13 +48,11 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 
-
 public class MainController implements Initializable {
-    
-    
+      
     public static String rosterName;
     
-    @FXML private TableView<ObservableList<StringProperty>> tableView = new TableView<>();
+    @FXML private TableView<ObservableList<StringProperty>> tableView = new TableView();
     @FXML private ComboBox comboMonth;
     @FXML private ComboBox comboYear;
     @FXML private TextField fTitle;
@@ -70,11 +68,11 @@ public class MainController implements Initializable {
     private static final AtomicLong idGenerator = new AtomicLong();
     private final String draggingID = "DraggingTab-"+idGenerator.incrementAndGet() ;
     private int dragIndex,dropIndex;
-    
+    private int lastDayOfMonth;
+           
     private ObservableList<String> monthList = FXCollections.observableArrayList();
     private ObservableList<Integer> yearList = FXCollections.observableArrayList();
-    private ObservableList<ObservableList<String>> rosterList = FXCollections
-            .observableArrayList();
+    private ObservableList<ObservableList<StringProperty>> rowData = FXCollections.observableArrayList(); 
     private Scene sceneStatus;
    
     private ArrayList<Roster> rosterArray = new ArrayList<>(); 
@@ -96,6 +94,8 @@ public class MainController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
        
+        tableView.setItems(rowData);
+        
         addSupport(rosterTabs);
         Calendar now = Calendar.getInstance();
         int curYear = now.get(Calendar.YEAR);
@@ -104,7 +104,7 @@ public class MainController implements Initializable {
         loadMonths(curMonth);
         loadYears(curYear);
         setDate(curYear, curMonth);
-        
+
         bAddRoster.setTooltip(new Tooltip("Click here to add a new roster"));
 
         rosterControls.setVisible(false);
@@ -148,16 +148,15 @@ public class MainController implements Initializable {
         cWeekends.setTooltip(new Tooltip("Check this to keep a separate rototion for weekends"));
         cHolidays.setTooltip(new Tooltip("Check this to keep a separate rototion for holidays"));
  
+        updateCrew();
     }    
  
     @FXML public void saveFields(){
         
-        
         currentRoster.setInterval(Integer.parseInt(fInterval.getText()));
         currentRoster.setAmount(Integer.parseInt(fAmount.getText()));
         currentRoster.setWeekends(cWeekends.isSelected());
-        currentRoster.setHolidays(cHolidays.isSelected());
-        
+        currentRoster.setHolidays(cHolidays.isSelected());    
         
         if (!fTitle.getText().equals(currentRoster.getTitle())){
             currentRoster.setTitle(fTitle.getText());
@@ -169,8 +168,7 @@ public class MainController implements Initializable {
             rosterTabs.getTabs().add(newIndex, newTab);
             rosterTabs.getSelectionModel().select(newTab);
         }
-        
-       
+              
         bSave.setDisable(true);
     }
     
@@ -259,7 +257,10 @@ public class MainController implements Initializable {
             Scene sceneCrew = new Scene(root1);
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setScene(sceneCrew);
-            stage.setOnHidden(e -> eController.shutDown());
+            stage.setOnHidden(e -> {
+                eController.shutDown();
+                updateCrew();
+                    });
             stage.show(); 
         }
         catch(Exception e){
@@ -339,67 +340,72 @@ public class MainController implements Initializable {
         
         Calendar selCal = Calendar.getInstance();
         selCal.set(intYear, intMonth, 1);
-        int lastDay = selCal.getActualMaximum(Calendar.DAY_OF_MONTH);
-        ObservableList<StringProperty> row = FXCollections.observableArrayList();
-        
+        lastDayOfMonth = selCal.getActualMaximum(Calendar.DAY_OF_MONTH);
+
         tableView.getColumns().clear();
-        tableView.getItems().clear();
         
-        TableColumn<ObservableList<StringProperty>, String> colRank = createColumn(0, "Rank");
+        
+        TableColumn colRank = createColumn(0, "Rank");
         colRank.setPrefWidth(150);
         colRank.setMaxWidth(300);
+        colRank.setEditable(false);
+        colRank.setSortable(false);
         tableView.getColumns().add(colRank);
         
-   
-        TableColumn<ObservableList<StringProperty>, String> colName = createColumn(1, "Name");
+        TableColumn colName = createColumn(1, "Name");
         colName.setPrefWidth(300);
         colName.setMaxWidth(600);
+        colName.setEditable(false);
+        colName.setSortable(false);
         tableView.getColumns().add(colName);
       
-        TableColumn<ObservableList<StringProperty>, String> colInc = createColumn(2, "Increment");
+        TableColumn colInc = createColumn(2, "Increment");
         colInc.setPrefWidth(150);
         colInc.setMaxWidth(150);
         colInc.setResizable(false);
+        colInc.setSortable(false);
   
-            TableColumn<ObservableList<StringProperty>, String> colN = createColumn(2, "N");
+            TableColumn colN = createColumn(2, "N");
             colN.setPrefWidth(35);
             colN.setMaxWidth(35);
             colN.setResizable(false);
+            colN.setSortable(false);
             colN.setStyle("-fx-alignment: CENTER;");
             colInc.getColumns().add(colN);  
-           
-            
-            TableColumn<ObservableList<StringProperty>, String> colW = createColumn(3, "W");
+                      
+            TableColumn colW = createColumn(3, "W");
             colW.setPrefWidth(35);
             colW.setMaxWidth(35);
             colW.setResizable(false);
+            colW.setSortable(false);
             colW.setStyle("-fx-alignment: CENTER;");
             colInc.getColumns().add(colW);
-            
-            
-            TableColumn<ObservableList<StringProperty>, String> colH = createColumn(4, "H");
+           
+            TableColumn colH = createColumn(4, "H");
             colH.setPrefWidth(35);
             colH.setMaxWidth(35);
             colH.setResizable(false);
+            colH.setSortable(false);
             colH.setStyle("-fx-alignment: CENTER;");
             colInc.getColumns().add(colH); 
-            
-            
+          
         tableView.getColumns().add(colInc); 
                     
-        for (int i = 1; i <= lastDay; i++) {
+        for (int i = 1; i <= lastDayOfMonth; i++) {
             final int finalIdx = i + 4;
             
-            TableColumn<ObservableList<StringProperty>, String> col = createColumn(finalIdx, Integer.toString(i));
+            TableColumn col = createColumn(finalIdx, Integer.toString(i));
             col.setResizable(false);
 
             selCal.set(Calendar.DAY_OF_MONTH, i);
             int  day = selCal.get(Calendar.DAY_OF_WEEK);
  
-            TableColumn<ObservableList<StringProperty>, String> colI = createColumn(finalIdx, weekDay[day]);
+            TableColumn colI = createColumn(finalIdx, weekDay[day]);
             colI.setPrefWidth(35);
             colI.setMaxWidth(35);
+            colI.setEditable(false);
             colI.setResizable(false);
+            colI.setSortable(false);
  
             col.getColumns().add(colI);           
 
@@ -416,18 +422,11 @@ public class MainController implements Initializable {
             
             tableView.getColumns().add(col);
             tableView.setEditable(true);
-        } 
-  
-    /*
-    row.add(new SimpleStringProperty("Black Belt"));
-    row.add(new SimpleStringProperty("Noris, Chuck"));
-    row.add(new SimpleStringProperty("1"));
-    row.add(new SimpleStringProperty("2"));
-    row.add(new SimpleStringProperty("3"));
+               
+        }
+        
+    updateCrew();    
 
-    tableView.getItems().add(row);
-    */
-    
     } 
     
     private int convertMonth(String month){
@@ -451,17 +450,22 @@ public class MainController implements Initializable {
         TableColumn<ObservableList<StringProperty>, String> column = new TableColumn<>();
 
         column.setText(columnTitle);
-        column.setCellValueFactory((CellDataFeatures<ObservableList<StringProperty>, String> cellDataFeatures) -> {
-            ObservableList<StringProperty> values = cellDataFeatures.getValue();
-            // Pad to current value if necessary:
-            for (int index = values.size(); index <= columnIndex; index++) {
-                values.add(index, new SimpleStringProperty(""));
-            }
-            return cellDataFeatures.getValue().get(columnIndex);
-        });
+        column.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList<StringProperty>, String>, ObservableValue<String>>() {
+             @Override
+             public ObservableValue<String> call(
+                 CellDataFeatures<ObservableList<StringProperty>, String> cellDataFeatures) {
+               ObservableList<StringProperty> values = cellDataFeatures.getValue();
+               // Pad to current value if necessary:
+               for (int index = values.size(); index <= columnIndex; index++) {
+                   values.add(index, new SimpleStringProperty(""));
+               }
+               return cellDataFeatures.getValue().get(columnIndex);
+             }
+           });
         column.setCellFactory(TextFieldTableCell.<ObservableList<StringProperty>>forTableColumn());
         return column;
     }
+
     
     //Added for Roster operations
     @FXML public void addRoster(ActionEvent event) {
@@ -481,6 +485,27 @@ public class MainController implements Initializable {
         createTab(title);
     }
 
+    public void updateCrew(){
+        CrewController cController = new CrewController();
+        
+        SecureFile scCrews = new SecureFile("Crew_" + MainController.rosterName);      
+        ArrayList<Employee> aCrews = cController.getCrewData(scCrews);
+        
+        rowData.clear();
+        for(Employee crew: aCrews){
+            ObservableList<StringProperty> row = FXCollections.observableArrayList();
+            row.add(new SimpleStringProperty(crew.getRank()));
+            row.add(new SimpleStringProperty(crew.getName()));
+            row.add(new SimpleStringProperty("0"));
+            row.add(new SimpleStringProperty("0"));
+            row.add(new SimpleStringProperty("0"));
+            for (int i = 1; i <= lastDayOfMonth; i++) 
+                row.add(new SimpleStringProperty("_"));
+            rowData.add(row);
+        }
+
+    }
+    
     public void  createTab(String title){  
 
         Tab tab = new Tab(title);
@@ -549,6 +574,8 @@ public class MainController implements Initializable {
         fAmount.setText(Integer.toString(currentRoster.getAmount()));
         cWeekends.setSelected(currentRoster.getWeekends());
         cHolidays.setSelected(currentRoster.getHolidays());
+        
+        updateCrew();
     }
     
     //retrieve data from secure file
@@ -583,7 +610,7 @@ public class MainController implements Initializable {
 
     }
   
-     //Converting store data into an array string
+    //Converting store data into an array string
     public void storeData(){
 
         strData = "";
@@ -609,7 +636,7 @@ public class MainController implements Initializable {
         
     }   
 
-     public void addSupport(TabPane tabPane) {
+    public void addSupport(TabPane tabPane) {
         
         tabPane.getTabs().forEach(this::addDragHandlers);
         tabPane.getTabs().addListener((ListChangeListener.Change<? extends Tab> c) -> {
