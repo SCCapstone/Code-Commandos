@@ -1,5 +1,11 @@
+/**
+ * This is the main screen of the program. Plus, it handles roster data
+ * @author Othen Prock
+ * @version 8, 2/18/2018
+ */
 package dutyroster;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -50,7 +56,7 @@ import javafx.util.Callback;
 
 public class MainController implements Initializable {
       
-    public static String rosterName;
+    public static String rosterName = "";
     
     @FXML private TableView<ObservableList<StringProperty>> tableView = new TableView();
     @FXML private ComboBox comboMonth;
@@ -65,17 +71,16 @@ public class MainController implements Initializable {
     @FXML private Button bAddRoster, bSave;
     
     private Tab currentDragTab;
-    private static final AtomicLong idGenerator = new AtomicLong();
-    private final String draggingID = "DraggingTab-"+idGenerator.incrementAndGet() ;
+    private static final AtomicLong ID = new AtomicLong();
+    private final String draggingID = "DraggingTab-"+ID.incrementAndGet() ;
     private int dragIndex,dropIndex;
-    private int lastDayOfMonth;
+    private int lastDayOfMonth,curMonth,curYear;
            
-    private ObservableList<String> monthList = FXCollections.observableArrayList();
-    private ObservableList<Integer> yearList = FXCollections.observableArrayList();
-    private ObservableList<ObservableList<StringProperty>> rowData = FXCollections.observableArrayList(); 
-    private Scene sceneStatus;
+    private final ObservableList<String> monthList = FXCollections.observableArrayList();
+    private final ObservableList<Integer> yearList = FXCollections.observableArrayList();
+    private final ObservableList<ObservableList<StringProperty>> rowData = FXCollections.observableArrayList(); 
    
-    private ArrayList<Roster> rosterArray = new ArrayList<>(); 
+    private final ArrayList<Roster> rosterArray = new ArrayList(); 
     private Roster currentRoster = new Roster();
     //Extracting Data from encrypted file
     private SecureFile sc;
@@ -148,7 +153,6 @@ public class MainController implements Initializable {
         cWeekends.setTooltip(new Tooltip("Check this to keep a separate rototion for weekends"));
         cHolidays.setTooltip(new Tooltip("Check this to keep a separate rototion for holidays"));
  
-        updateCrew();
     }    
  
     @FXML public void saveFields(){
@@ -173,6 +177,7 @@ public class MainController implements Initializable {
     }
     
     public void shutDown() {  
+        storeRosterData();
         storeData();
     }  
     
@@ -273,19 +278,16 @@ public class MainController implements Initializable {
         String[] monthArry = new String[] {"January", "Febuary", "March", "April", "May", "June",
                     "July", "August", "September", "October", "November", "December"}; 
  
-        for(String month : monthArry){
-            
+        for(String month : monthArry)
             monthList.add(month);   
-        }
-        
+       
         comboMonth.getItems().setAll(monthList);
         comboMonth.getSelectionModel().select(curMonth);
-
     }
  
     private void loadYears(int curYear) {
         
-        for(int i = curYear - 3; i < curYear + 5; i++)
+        for(int i = curYear - 1; i < curYear + 4; i++)
             yearList.add(i);
     
         comboYear.getItems().setAll(yearList);
@@ -327,8 +329,6 @@ public class MainController implements Initializable {
             month = month + a;
        }
 
-       setDate(year,month);
-       
        comboMonth.getSelectionModel().select(month);
        comboYear.getSelectionModel().select(Integer.toString(year));
 
@@ -339,12 +339,18 @@ public class MainController implements Initializable {
         String[] weekDay = new String[] {null, "SU", "MO", "TU", "WE", "TH", "FR", "SA"};
         
         Calendar selCal = Calendar.getInstance();
+        
+        //!!!Before switching to another month, store the current data!
+        storeRosterData();
+        //========================================
+        
         selCal.set(intYear, intMonth, 1);
         lastDayOfMonth = selCal.getActualMaximum(Calendar.DAY_OF_MONTH);
-
+        curMonth = intMonth+1;//actual months starts at 0
+        curYear = intYear;
+        
         tableView.getColumns().clear();
-        
-        
+ 
         TableColumn colRank = createColumn(0, "Rank");
         colRank.setPrefWidth(150);
         colRank.setMaxWidth(300);
@@ -466,7 +472,6 @@ public class MainController implements Initializable {
         return column;
     }
 
-    
     //Added for Roster operations
     @FXML public void addRoster(ActionEvent event) {
         newRoster();
@@ -486,21 +491,39 @@ public class MainController implements Initializable {
     }
 
     public void updateCrew(){
-        CrewController cController = new CrewController();
         
-        SecureFile scCrews = new SecureFile("Crew_" + MainController.rosterName);      
-        ArrayList<Employee> aCrews = cController.getCrewData(scCrews);
+        if(rosterName.isEmpty())
+            return;
+        
+        CrewController cController = new CrewController();
+
+        SecureFile scCrews = new SecureFile("Crew_" + rosterName);      
+        ArrayList<Employee> aCrews = new ArrayList();
+        aCrews = cController.getCrewData(scCrews);
+                
+        //This will pull daily data for each roster member        
+        RosterData rd = new RosterData(
+                        "Crew_"+ rosterName+"_"+curYear+"_"+curMonth);
         
         rowData.clear();
+        
         for(Employee crew: aCrews){
             ObservableList<StringProperty> row = FXCollections.observableArrayList();
             row.add(new SimpleStringProperty(crew.getRank()));
             row.add(new SimpleStringProperty(crew.getName()));
-            row.add(new SimpleStringProperty("0"));
-            row.add(new SimpleStringProperty("0"));
-            row.add(new SimpleStringProperty("0"));
-            for (int i = 1; i <= lastDayOfMonth; i++) 
-                row.add(new SimpleStringProperty("_"));
+            
+         ArrayList<String> rdArray = rd.getRow(crew.getName());
+            
+          if(rdArray==null || rdArray.isEmpty())
+                for (int i = -2; i <= lastDayOfMonth; i++)
+                    if(i<1)
+                        row.add(new SimpleStringProperty("0"));
+                    else
+                        row.add(new SimpleStringProperty("_"));    
+                else
+                    for (int i = 2; i < rdArray.size();i++)
+                        row.add(new SimpleStringProperty(rdArray.get(i)));
+            
             rowData.add(row);
         }
 
@@ -543,9 +566,7 @@ public class MainController implements Initializable {
         Tooltip tip = new Tooltip("Set roster priority by dragging tabs. The farest left tab has the highest priority");
         tab.setTooltip(tip);
         rosterTabs.getTabs().add(tab);
-        rosterTabs.getSelectionModel().select(tab);
-        int index = rosterTabs.getSelectionModel().getSelectedIndex();
-        selectedRoster(index); 
+ 
     }
    
     public boolean tabTitleExists(String chkTitle){
@@ -558,13 +579,26 @@ public class MainController implements Initializable {
     }
     
     public void deleteRoster(int index){
-      
+    
+        /*
+        File dir = new File("");
+        for (File f : dir.listFiles()) 
+            if (f.getName().startsWith("Crew_"+ MainController.rosterName)) 
+                f.delete();
+                */
+       
        rosterArray.remove(index);
-       selectedRoster(index - 1);
+       int nextIndex = (index==0)? 0: index - 1;
+       if(index==0)
+           rosterControls.setVisible(true);
+       selectedRoster(nextIndex);
 
     }
  
     public void selectedRoster(int xVal) {
+        
+        //Store roster data before it changes
+        storeRosterData();
         
         currentRoster = rosterArray.get(xVal);
         rosterName = currentRoster.getTitle();
@@ -578,6 +612,22 @@ public class MainController implements Initializable {
         updateCrew();
     }
     
+    public void storeRosterData(){
+        
+        if(rosterName.isEmpty() 
+                || rowData==null
+                || rowData.isEmpty())
+            return;
+        
+        //This will pull daily data for each roster member        
+        RosterData dr = new RosterData(
+                        "Crew_"
+                        + rosterName
+                        +"_"+curYear
+                        +"_"+curMonth
+        );
+        dr.storeData(rowData);
+    }
     //retrieve data from secure file
     public void retrieveData(){
         
