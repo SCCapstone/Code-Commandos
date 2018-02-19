@@ -6,11 +6,6 @@ nbbuild/
 dist/
 nbdist/
 .nb-gradle/
-Employees
-Settings
-Ranks
-Status
-Crew_*
 
 # Compiled class file
 *.class
@@ -35,3 +30,14 @@ Crew_*
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 
+Employees
+Settings
+Ranks
+Status
+Crew_*
+DutyRoster1/Employees 
+DutyRoster1/Rosters 
+DutyRoster1/Ranks 
+DutyRoster1/Settings 
+DutyRoster1/Crew_* 
+DutyRoster1/Status 
