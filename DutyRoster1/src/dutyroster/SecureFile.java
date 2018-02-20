@@ -83,7 +83,6 @@ public class SecureFile {
             Files.write(path, outputBytes,TRUNCATE_EXISTING); //creates, overwrites
         }
         else{          
-             System.out.println("Made it here " + strIn );
            Files.newBufferedWriter(path , TRUNCATE_EXISTING);   
         }
     } 

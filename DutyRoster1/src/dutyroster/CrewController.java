@@ -87,7 +87,6 @@ public class CrewController implements Initializable {
     
     public void shutDown() {  
         storeData(crewList);
-        System.out.println("Closing");
     }
  
     public void storeData(ObservableList<Employee> cList){   
@@ -144,7 +143,7 @@ public class CrewController implements Initializable {
      
         crewList.addAll(aEmployees);
         tableView.sort();
-        System.out.println();
+       
     }
 
     

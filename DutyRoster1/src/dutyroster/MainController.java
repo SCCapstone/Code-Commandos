@@ -492,37 +492,39 @@ public class MainController implements Initializable {
 
     public void updateCrew(){
         
-        if(rosterName.isEmpty())
+        if(rosterName.isEmpty() || rosterArray.isEmpty())
             return;
         
         CrewController cController = new CrewController();
 
         SecureFile scCrews = new SecureFile("Crew_" + rosterName);      
-        ArrayList<Employee> aCrews = new ArrayList();
-        aCrews = cController.getCrewData(scCrews);
-                
+        ArrayList<Employee> aCrews = cController.getCrewData(scCrews);
+        ArrayList<String> rdArray = new ArrayList();
+        String crewName;
+        
         //This will pull daily data for each roster member        
         RosterData rd = new RosterData(
                         "Crew_"+ rosterName+"_"+curYear+"_"+curMonth);
-        
+            
         rowData.clear();
-        
         for(Employee crew: aCrews){
+            crewName = crew.getName();
             ObservableList<StringProperty> row = FXCollections.observableArrayList();
             row.add(new SimpleStringProperty(crew.getRank()));
-            row.add(new SimpleStringProperty(crew.getName()));
-            
-         ArrayList<String> rdArray = rd.getRow(crew.getName());
-            
-          if(rdArray==null || rdArray.isEmpty())
+            row.add(new SimpleStringProperty(crewName));
+         
+            if (!crewName.isEmpty())
+            rdArray = rd.getRow(crewName);
+           
+            if(rdArray==null || rdArray.isEmpty() || rdArray.size()!= lastDayOfMonth + 5)
                 for (int i = -2; i <= lastDayOfMonth; i++)
                     if(i<1)
                         row.add(new SimpleStringProperty("0"));
                     else
                         row.add(new SimpleStringProperty("_"));    
-                else
-                    for (int i = 2; i < rdArray.size();i++)
-                        row.add(new SimpleStringProperty(rdArray.get(i)));
+            else
+                for (int i = 2; i < rdArray.size();i++)
+                    row.add(new SimpleStringProperty(rdArray.get(i)));
             
             rowData.add(row);
         }
@@ -581,22 +583,32 @@ public class MainController implements Initializable {
     public void deleteRoster(int index){
     
         /*
-        File dir = new File("");
+        try{
+        File dir = new File(".");
         for (File f : dir.listFiles()) 
-            if (f.getName().startsWith("Crew_"+ MainController.rosterName)) 
+            if (f.getName().startsWith("Crew_"+ rosterName)) 
                 f.delete();
-                */
-       
+        }
+        catch(Exception e){}
+       */
+        
        rosterArray.remove(index);
        int nextIndex = (index==0)? 0: index - 1;
-       if(index==0)
-           rosterControls.setVisible(true);
-       selectedRoster(nextIndex);
+       
+       if(rosterArray.isEmpty()){
+           rosterControls.setVisible(false);
+           rowData.clear();
+       }
+       else{
+            selectedRoster(nextIndex);
+        }
 
     }
  
     public void selectedRoster(int xVal) {
         
+        if(rosterArray.isEmpty())
+            return;
         //Store roster data before it changes
         storeRosterData();
         
@@ -614,9 +626,11 @@ public class MainController implements Initializable {
     
     public void storeRosterData(){
         
-        if(rosterName.isEmpty() 
-                || rowData==null
-                || rowData.isEmpty())
+        if(rosterName.isEmpty()) 
+            return;
+        if (rowData.isEmpty())
+            return;
+        if(rosterName.isEmpty())
             return;
         
         //This will pull daily data for each roster member        

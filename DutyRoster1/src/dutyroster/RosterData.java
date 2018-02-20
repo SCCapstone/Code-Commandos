@@ -14,8 +14,9 @@ import javafx.collections.ObservableList;
 
 public class RosterData {
 
-    private final SecureFile scf; 
-
+    private SecureFile scf; 
+    private final String FOLDER ="Crews";
+     
     public RosterData(String filePath){
         scf = new SecureFile(filePath);
     }
@@ -30,16 +31,17 @@ public class RosterData {
         String a = scf.retrieve();
         ArrayList<ArrayList<String>> returnArray = new ArrayList();
         String[] aArry = a.split("\\|", -1);
-        int i;
         
-        for (String b : aArry){
-            
-            ArrayList<String> innerArray = new ArrayList();
-            String[] bArry = b.split("\\@", -1);
+      
+            for (String b : aArry){
 
-            innerArray.addAll(Arrays.asList(bArry));
-            returnArray.add(innerArray);
-        }
+                ArrayList<String> innerArray = new ArrayList();
+                String[] bArry = b.split("\\@", -1);
+
+                innerArray.addAll(Arrays.asList(bArry));
+                returnArray.add(innerArray);
+            }
+  
         return returnArray;
     }
   
@@ -63,18 +65,24 @@ public class RosterData {
         //Store string array into secure file
         scf.store(strData);
 
+
     }
     
     public ArrayList<String> getRow(String s){
         
         ArrayList<ArrayList<String>> sArray = retrieveData();
-        ArrayList<String> returnRow = new ArrayList();
-       /*
-        for(ArrayList<String> row : sArray){
-            if(row!=null && row.get(1).equals(s))
-                returnRow = row;
+       
+        try{
+            for(ArrayList<String> row : sArray)
+                if(row!=null && row.get(1).equals(s))
+                    return row;
         }
-        */
-        return returnRow;
+        catch (Exception ex){/*Just let it die. Its better this way...*/}
+
+
+        return null;
+        
     }
+
+
 }
