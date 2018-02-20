@@ -209,6 +209,7 @@ public class EmployeeController implements Initializable {
         
     @FXML
     public void importEmployee() {
+        //Still need to handle csv file
         ImportFile importF = new ImportFile();
         fileAddress .setText(importF.getFilePath());
         
