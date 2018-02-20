@@ -162,15 +162,19 @@ public class MainController implements Initializable {
         currentRoster.setWeekends(cWeekends.isSelected());
         currentRoster.setHolidays(cHolidays.isSelected());    
         
-        if (!fTitle.getText().equals(currentRoster.getTitle())){
-            currentRoster.setTitle(fTitle.getText());
+        String newTitle = fTitle.getText();
+        String oldTitle = currentRoster.getTitle();
         
-            Tab newTab = new Tab(fTitle.getText());
+        if (!newTitle.equals(currentRoster.getTitle())){
+            
+            currentRoster.setTitle(newTitle);           
+            Tab newTab = new Tab(newTitle);
             Tab currentTab = rosterTabs.getSelectionModel().getSelectedItem();
             int newIndex = rosterTabs.getSelectionModel().getSelectedIndex();
             rosterTabs.getTabs().remove(currentTab);
             rosterTabs.getTabs().add(newIndex, newTab);
             rosterTabs.getSelectionModel().select(newTab);
+            
         }
               
         bSave.setDisable(true);
@@ -582,29 +586,33 @@ public class MainController implements Initializable {
     
     public void deleteRoster(int index){
     
-        /*
-        try{
-        File dir = new File(".");
-        for (File f : dir.listFiles()) 
-            if (f.getName().startsWith("Crew_"+ rosterName)) 
-                f.delete();
-        }
-        catch(Exception e){}
-       */
+        String removeName = currentRoster.getTitle();
         
        rosterArray.remove(index);
        int nextIndex = (index==0)? 0: index - 1;
-       
-       if(rosterArray.isEmpty()){
+     
+        if(rosterArray.isEmpty()){
            rosterControls.setVisible(false);
            rowData.clear();
        }
        else{
             selectedRoster(nextIndex);
-        }
+       }
+        
+       removeData(removeName); 
 
     }
  
+    public void removeData(String fName){
+       
+        File dir = new File(".");
+        File[] files = dir.listFiles();
+        for (File f : files) 
+            if (f.getName().startsWith("Crew_"+fName)) 
+            f.delete();
+       
+    }
+    
     public void selectedRoster(int xVal) {
         
         if(rosterArray.isEmpty())
