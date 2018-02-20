@@ -35,11 +35,13 @@ public class EmployeeController implements Initializable {
     //for entering a new rank
     @FXML private ComboBox rankCombo;
     @FXML private TextField nameField;
+    @FXML private TextField fileAddress;
     //used for tableview 
     @FXML private TableView<Employee> tableView;
     @FXML private TableColumn<Employee,String> rank;
     @FXML private TableColumn<Employee,String> name;
     @FXML private TableColumn<Employee,Integer> sort;
+    
     
     // used to import and export data from employee data
     private ObservableList<Employee> employeeList;
@@ -205,6 +207,14 @@ public class EmployeeController implements Initializable {
         
     }
         
+    @FXML
+    public void importEmployee() {
+        ImportFile importF = new ImportFile();
+        fileAddress .setText(importF.getFilePath());
+        
+        
+    }
+    
     @FXML
     protected void addEmployee(ActionEvent event) {
        Alert alert;
