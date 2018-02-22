@@ -5,7 +5,15 @@
  */
 package dutyroster;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.fxml.Initializable;
@@ -213,8 +221,23 @@ public class EmployeeController implements Initializable {
         ImportFile importF = new ImportFile();
         fileAddress .setText(importF.getFilePath());
         
+       
         
+        ArrayList<Employee> importList = new ArrayList<>();
+
+        try{
+            importList = importF.getData();
+        }
+        catch (Exception e) {
+            System.out.print(e);
+        }
+        
+        for (Employee e : importList){
+            System.out.println(e.getSort() + " " + e.getRank() + " " + e.getName());
+        }
     }
+    
+    
     
     @FXML
     protected void addEmployee(ActionEvent event) {
