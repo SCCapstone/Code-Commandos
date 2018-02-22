@@ -8,12 +8,16 @@ package dutyroster;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Files;
+import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
@@ -85,6 +89,7 @@ public class MainController implements Initializable {
     //Extracting Data from encrypted file
     private SecureFile sc;
     private String strData;
+    private boolean updateLock;
     
     public MainController(){
         startUp();   
@@ -165,16 +170,17 @@ public class MainController implements Initializable {
         String newTitle = fTitle.getText();
         String oldTitle = currentRoster.getTitle();
         
-        if (!newTitle.equals(currentRoster.getTitle())){
-            
+        if (!newTitle.equals(oldTitle)){
+
             currentRoster.setTitle(newTitle);           
             Tab newTab = new Tab(newTitle);
             Tab currentTab = rosterTabs.getSelectionModel().getSelectedItem();
             int newIndex = rosterTabs.getSelectionModel().getSelectedIndex();
             rosterTabs.getTabs().remove(currentTab);
             rosterTabs.getTabs().add(newIndex, newTab);
+            renameData(oldTitle, newTitle);
             rosterTabs.getSelectionModel().select(newTab);
-            
+
         }
               
         bSave.setDisable(true);
@@ -496,7 +502,7 @@ public class MainController implements Initializable {
 
     public void updateCrew(){
         
-        if(rosterName.isEmpty() || rosterArray.isEmpty())
+        if(rosterName.isEmpty() || rosterArray.isEmpty() || updateLock)
             return;
         
         CrewController cController = new CrewController();
@@ -520,16 +526,17 @@ public class MainController implements Initializable {
             if (!crewName.isEmpty())
             rdArray = rd.getRow(crewName);
            
-            if(rdArray==null || rdArray.isEmpty() || rdArray.size()!= lastDayOfMonth + 5)
+            if(rdArray==null || rdArray.isEmpty() || rdArray.size()!= lastDayOfMonth + 5){
                 for (int i = -2; i <= lastDayOfMonth; i++)
                     if(i<1)
                         row.add(new SimpleStringProperty("0"));
                     else
                         row.add(new SimpleStringProperty("_"));    
-            else
+           }
+           else{
                 for (int i = 2; i < rdArray.size();i++)
                     row.add(new SimpleStringProperty(rdArray.get(i)));
-            
+           }
             rowData.add(row);
         }
 
@@ -594,30 +601,82 @@ public class MainController implements Initializable {
         if(rosterArray.isEmpty()){
            rosterControls.setVisible(false);
            rowData.clear();
-       }
-       else{
+        }
+        else{
             selectedRoster(nextIndex);
-       }
+        }
         
-       removeData(removeName); 
-
+        removeData(removeName); 
+        
     }
  
     public void removeData(String fName){
-       
+        updateLock = true;
+           
         File dir = new File(".");
         File[] files = dir.listFiles();
         for (File f : files) 
             if (f.getName().startsWith("Crew_"+fName)) 
-            f.delete();
+                f.delete();
+        
+        updateLock = false;
+    }
+   
+    public void renameData(String oldName, String newName){
        
+        updateLock = true;
+        String[][] tempArry = new String[5][2];
+        String newFile;
+        int a=0;
+        
+        File dir = new File(".");
+        File[] files = dir.listFiles();
+        for (File f : files){ 
+            if (f.getName().startsWith("Crew_"+oldName)){
+                String oldFile = f.getName();
+               tempArry[a][0] = oldFile;
+               String fArry[] = oldFile.split("\\_", -1);
+               fArry[1] = newName;
+                    newFile = "";
+                    for(int i = 0; i < fArry.length; i++)
+                        newFile += (i==0)? fArry[i] : "_" + fArry[i] ;
+               tempArry[a++][1] = newFile;
+            }
+        }
+        for (String[] address : tempArry){
+            if(address[0]!=null){
+                File source = new File(address[0]);
+                File dest = new File(address[1]);
+                
+                try {
+                    Files.copy(
+                            source.toPath(),
+                            dest.toPath(),
+                            REPLACE_EXISTING);
+                } catch (IOException ex) {
+                    Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            
+                
+            }
+        }    
+            
+        updateLock = false;
+        
+        updateCrew();
+        
+        removeData(oldName);
+  
     }
     
+
+     
     public void selectedRoster(int xVal) {
         
         if(rosterArray.isEmpty())
             return;
         //Store roster data before it changes
+        
         storeRosterData();
         
         currentRoster = rosterArray.get(xVal);
@@ -638,7 +697,7 @@ public class MainController implements Initializable {
             return;
         if (rowData.isEmpty())
             return;
-        if(rosterName.isEmpty())
+        if(updateLock)
             return;
         
         //This will pull daily data for each roster member        
