@@ -11,6 +11,7 @@ import java.net.URL;
 import java.nio.file.Files;
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Optional;
@@ -65,6 +66,7 @@ public class MainController implements Initializable {
     @FXML private TableView<ObservableList<StringProperty>> tableView = new TableView();
     @FXML private ComboBox comboMonth;
     @FXML private ComboBox comboYear;
+    @FXML private Label lowerOutput;
     @FXML private TextField fTitle;
     @FXML private TextField fInterval;
     @FXML private TextField fAmount;
@@ -288,8 +290,7 @@ public class MainController implements Initializable {
         String[] monthArry = new String[] {"January", "Febuary", "March", "April", "May", "June",
                     "July", "August", "September", "October", "November", "December"}; 
  
-        for(String month : monthArry)
-            monthList.add(month);   
+        monthList.addAll(Arrays.asList(monthArry));   
        
         comboMonth.getItems().setAll(monthList);
         comboMonth.getSelectionModel().select(curMonth);
@@ -668,8 +669,6 @@ public class MainController implements Initializable {
         removeData(oldName);
   
     }
-    
-
      
     public void selectedRoster(int xVal) {
         
@@ -681,6 +680,7 @@ public class MainController implements Initializable {
         
         currentRoster = rosterArray.get(xVal);
         rosterName = currentRoster.getTitle();
+        lowerOutput.setText(rosterName + " is set to priority " + (xVal+1) + ". Drag and drop tabs to change.");
         rosterControls.setVisible(true);
         fTitle.setText(rosterName);
         fInterval.setText(Integer.toString(currentRoster.getInterval()));
