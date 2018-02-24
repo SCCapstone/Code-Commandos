@@ -20,16 +20,16 @@
         
         <columns>
                
-            <TableColumn fx:id="sort" editable="false" minWidth="-Infinity" prefWidth="97.0" resizable="false" sortable="true" text="Sort" visible="false">
+            <TableColumn fx:id="sort" editable="false" minWidth="-Infinity" prefWidth="36.0" resizable="false" sortable="true" text="Sort" visible="false">
                 <cellValueFactory><PropertyValueFactory property="sort" />
                 </cellValueFactory>
           </TableColumn>
-          <TableColumn fx:id="rank" minWidth="-Infinity" prefWidth="103.0" resizable="false" sortable="false" text="Rank">
+          <TableColumn fx:id="rank" minWidth="-Infinity" prefWidth="91.0" resizable="false" sortable="false" text="Rank">
                 <cellValueFactory><PropertyValueFactory property="rank" />
                 </cellValueFactory>
           
           </TableColumn>
-          <TableColumn fx:id="name" maxWidth="245.0" minWidth="-1.0" prefWidth="226.0" resizable="false" sortable="false" text="Name">
+          <TableColumn fx:id="name" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="240.0" resizable="false" sortable="false" text="Name">
                 <cellValueFactory><PropertyValueFactory property="name" />
                 </cellValueFactory>
           </TableColumn>

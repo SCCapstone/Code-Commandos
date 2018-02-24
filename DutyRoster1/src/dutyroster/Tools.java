@@ -4,20 +4,37 @@
 */
 package dutyroster;
 
-import java.io.File;
 import java.util.Comparator;
+import javafx.collections.ObservableList;
 
 public class Tools {
    
-    //remove last delimeter from storage array
+    /**
+     * remove last delimeter from storage array
+     * @param str
+     * @return 
+     */
     public static String removeLastChar(String str) {
         if(str.length() <= 1 )
             return "";
         return str.substring(0, str.length() - 1);
-    }    
-  
-
+    }  
     
+    /**
+     * getSortIndex pulls the index number for the rank.
+     * @param rankOptions
+     * @param strRank
+     * @return 
+     */
+    public static int getSortIndex(ObservableList<Rank> rankOptions, String strRank) {
+          
+        //pulling from the rank, in rankOption pull the current rank to get the index number.
+        for(Rank c : rankOptions)
+            if (c.getRank().equalsIgnoreCase(strRank) )
+                    return c.getSort();
+        return -1;
+    }
+  
     public class EmployeeComparator implements Comparator<Employee>{
 
         @Override
@@ -28,7 +45,6 @@ public class Tools {
             int rankResult = e1.getRank().compareTo(e2.getRank());
             if (rankResult != 0)
                 return rankResult;
-
 
             // Next by name
             int nameResult = e1.getName().compareTo(e2.getName());
