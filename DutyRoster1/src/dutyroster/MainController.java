@@ -11,7 +11,6 @@ import java.net.URL;
 import java.nio.file.Files;
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Optional;
@@ -63,7 +62,7 @@ public class MainController implements Initializable {
       
     public static String rosterName = "";
     
-    @FXML private TableView<ObservableList<StringProperty>> tableView = new TableView();
+    @FXML private TableView<ObservableList<StringProperty>>tableView;
     @FXML private ComboBox comboMonth;
     @FXML private ComboBox comboYear;
     @FXML private Label lowerOutput;
@@ -98,6 +97,7 @@ public class MainController implements Initializable {
     }
     
     public void startUp(){
+        tableView = new TableView();
         //instantiates new file, use file name Ranks as storage
         sc = new SecureFile("Rosters");
         retrieveData();
@@ -105,17 +105,16 @@ public class MainController implements Initializable {
  
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-       
-        tableView.setItems(rowData);
         
+        tableView.setItems(rowData);
         addSupport(rosterTabs);
         Calendar now = Calendar.getInstance();
-        int curYear = now.get(Calendar.YEAR);
-        int curMonth = now.get(Calendar.MONTH);          
-
-        loadMonths(curMonth);
-        loadYears(curYear);
-        setDate(curYear, curMonth);
+        int tmpMonth = now.get(Calendar.MONTH);          
+        int tmpYear = now.get(Calendar.YEAR);
+        
+        loadMonths(tmpMonth);
+        loadYears(tmpYear);
+        setDate(tmpYear, tmpMonth);
 
         bAddRoster.setTooltip(new Tooltip("Click here to add a new roster"));
 
@@ -130,23 +129,13 @@ public class MainController implements Initializable {
             selectedRoster(0);
         }
         
-         rosterTabs.getSelectionModel().selectedItemProperty().addListener(
-            new ChangeListener<Tab>() {
-                @Override
-                public void changed(ObservableValue<? extends Tab> ov, Tab t, Tab t1) {
-
-                    if (t1!=null){
-       
-                        int id = rosterTabs.getSelectionModel().getSelectedIndex();
-                        selectedRoster(id);
-
-                    }
-                    
+       rosterTabs.getSelectionModel().selectedItemProperty().addListener((
+        ObservableValue<? extends Tab> ov, Tab t, Tab t1) -> {
+                if (t1!=null){
+                 int id = rosterTabs.getSelectionModel().getSelectedIndex();
+                 selectedRoster(id); 
                 }
-            
-            }
-        
-        );
+        });
          
         //Form Controls
         fTitle.setOnKeyTyped(e -> {bSave.setDisable(false);});
@@ -290,7 +279,8 @@ public class MainController implements Initializable {
         String[] monthArry = new String[] {"January", "Febuary", "March", "April", "May", "June",
                     "July", "August", "September", "October", "November", "December"}; 
  
-        monthList.addAll(Arrays.asList(monthArry));   
+        for(String month : monthArry)
+            monthList.add(month);   
        
         comboMonth.getItems().setAll(monthList);
         comboMonth.getSelectionModel().select(curMonth);
@@ -606,16 +596,15 @@ public class MainController implements Initializable {
         else{
             selectedRoster(nextIndex);
         }
-        
-        removeData(removeName); 
-        
+ 
+        removeData(removeName);    
     }
  
     public void removeData(String fName){
         updateLock = true;
-           
-        File dir = new File(".");
-        File[] files = dir.listFiles();
+        File dir = new File(".");   
+        File dir2 = new File(dir,SecureFile.DIR);
+        File[] files = dir2.listFiles();
         for (File f : files) 
             if (f.getName().startsWith("Crew_"+fName)) 
                 f.delete();
@@ -630,8 +619,9 @@ public class MainController implements Initializable {
         String newFile;
         int a=0;
         
-        File dir = new File(".");
-        File[] files = dir.listFiles();
+        File dir = new File(".");   
+        File dir2 = new File(dir,SecureFile.DIR);
+        File[] files = dir2.listFiles();
         for (File f : files){ 
             if (f.getName().startsWith("Crew_"+oldName)){
                 String oldFile = f.getName();
@@ -646,8 +636,8 @@ public class MainController implements Initializable {
         }
         for (String[] address : tempArry){
             if(address[0]!=null){
-                File source = new File(address[0]);
-                File dest = new File(address[1]);
+                File source = new File(dir2,address[0]);
+                File dest = new File(dir2,address[1]);
                 
                 try {
                     Files.copy(
@@ -655,10 +645,10 @@ public class MainController implements Initializable {
                             dest.toPath(),
                             REPLACE_EXISTING);
                 } catch (IOException ex) {
-                    Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(MainController.class.getName()).log(Level.SEVERE,
+                            null, ex + " copyig roster data.");
                 }
-            
-                
+
             }
         }    
             
