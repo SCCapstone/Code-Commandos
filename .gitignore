@@ -1,10 +1,11 @@
 #NetBeans
 
-nbproject/private/
-build/
-nbbuild/
-dist/
-nbdist/
+DutyRoster1/nbproject/private/
+DutyRoster1/build/
+DutyRoster1/Data
+DutyRoster1/nbbuild/
+DutyRoster1/dist/
+DutyRoster1/nbdist/
 .nb-gradle/
 
 # Compiled class file
@@ -30,16 +31,3 @@ nbdist/
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 
-Employees
-Settings
-Ranks
-Status
-Crew_*
-DutyRoster1/Employees 
-DutyRoster1/Rosters 
-DutyRoster1/Ranks 
-DutyRoster1/Settings 
-DutyRoster1/Crew_* 
-DutyRoster1/Status 
-
-DutyRoster1/nbproject/private/
