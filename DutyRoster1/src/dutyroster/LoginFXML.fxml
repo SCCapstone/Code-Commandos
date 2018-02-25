@@ -2,15 +2,15 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" styleClass="anchor" prefHeight="200.0" prefWidth="420.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dutyroster.LoginController">
+<AnchorPane id="AnchorPane" prefHeight="200.0" prefWidth="420.0" styleClass="anchor" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dutyroster.LoginController">
    <children>
-      <TextField fx:id="fieldPass1" layoutX="33.0" layoutY="47.0" prefHeight="31.0" prefWidth="253.0" promptText="Password" />
+      <PasswordField fx:id="fieldPass1" layoutX="33.0" layoutY="47.0" prefHeight="31.0" prefWidth="253.0" promptText="Password" />
       <Button fx:id="buttonPass1" layoutX="297.0" layoutY="47.0" mnemonicParsing="false" onAction="#userLogin" prefHeight="31.0" prefWidth="87.0" text="Login" />
-      <TextField fx:id="fieldPass2" layoutX="33.0" layoutY="118.0" prefHeight="31.0" prefWidth="253.0" promptText="Re-enter new password" />
+      <PasswordField fx:id="fieldPass2" layoutX="33.0" layoutY="118.0" prefHeight="31.0" prefWidth="253.0" promptText="Re-enter new password" />
       <Button fx:id="buttonPass2" layoutX="297.0" layoutY="118.0" mnemonicParsing="false" onAction="#createPassword" prefHeight="31.0" prefWidth="87.0" text="Create" />
       <Label fx:id="labelPass1" layoutX="34.0" layoutY="87.0" prefHeight="21.0" prefWidth="356.0" text="Password must be between 5 and 16 characters" textFill="#e04922" />
       <Label fx:id="labelPass2" layoutX="30.0" layoutY="19.0" prefHeight="21.0" prefWidth="356.0" text="Create New Password">
