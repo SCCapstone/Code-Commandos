@@ -78,8 +78,7 @@ public class RankController implements Initializable {
     
     //Converting store data into an array string
     public void storeData(){
-        
-        
+
         strData = "";
         rankList.forEach((rank) -> {  
             strData +=  rank.getSort() + "@" +  rank.getRank() + "|";    

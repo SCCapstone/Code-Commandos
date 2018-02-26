@@ -20,7 +20,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
@@ -88,7 +87,7 @@ public class MainController implements Initializable {
     private final ArrayList<Roster> rosterArray = new ArrayList(); 
     private Roster currentRoster = new Roster();
     //Extracting Data from encrypted file
-    private SecureFile sc;
+
     private String strData;
     private boolean updateLock;
     
@@ -99,7 +98,7 @@ public class MainController implements Initializable {
     public void startUp(){
         tableView = new TableView();
         //instantiates new file, use file name Ranks as storage
-        sc = new SecureFile("Rosters");
+        
         retrieveData();
     }  
  
@@ -502,10 +501,9 @@ public class MainController implements Initializable {
         ArrayList<Employee> aCrews = cController.getCrewData(scCrews);
         ArrayList<String> rdArray = new ArrayList();
         String crewName;
-        
+        String pathName = "Crew_"+ rosterName+"_"+curYear+"_"+curMonth;
         //This will pull daily data for each roster member        
-        RosterData rd = new RosterData(
-                        "Crew_"+ rosterName+"_"+curYear+"_"+curMonth);
+        RosterData rd = new RosterData();
             
         rowData.clear();
         for(Employee crew: aCrews){
@@ -515,7 +513,7 @@ public class MainController implements Initializable {
             row.add(new SimpleStringProperty(crewName));
          
             if (!crewName.isEmpty())
-            rdArray = rd.getRow(crewName);
+            rdArray = rd.getRow(pathName,crewName);
            
             if(rdArray==null || rdArray.isEmpty() || rdArray.size()!= lastDayOfMonth + 5){
                 for (int i = -2; i <= lastDayOfMonth; i++)
@@ -690,18 +688,14 @@ public class MainController implements Initializable {
         if(updateLock)
             return;
         
+        String pathName = "Crew_"+ rosterName+"_"+curYear+"_"+curMonth;
         //This will pull daily data for each roster member        
-        RosterData dr = new RosterData(
-                        "Crew_"
-                        + rosterName
-                        +"_"+curYear
-                        +"_"+curMonth
-        );
-        dr.storeData(rowData);
+        RosterData dr = new RosterData();
+        dr.storeData(pathName, rowData);
     }
     //retrieve data from secure file
     public void retrieveData(){
-        
+        SecureFile sc = new SecureFile("Rosters");
         String a = sc.retrieve();
       
         String aArry[] = a.split("\\|", -1);
@@ -733,7 +727,7 @@ public class MainController implements Initializable {
   
     //Converting store data into an array string
     public void storeData(){
-
+        SecureFile sc = new SecureFile("Rosters");
         strData = "";
         rosterArray.forEach((roster) -> {  
             strData +=  roster.getTitle() 

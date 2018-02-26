@@ -14,25 +14,18 @@ import javafx.collections.ObservableList;
 
 public class RosterData {
 
-    private SecureFile scf; 
-    private final String FOLDER ="Crews";
-     
-    public RosterData(String filePath){
-        scf = new SecureFile(filePath);
-    }
-    
     /**
      * This function will retrieve all stored data for each roster based
      * on a specific month and year.
      * @return 
      */
-    public ArrayList<ArrayList<String>> retrieveData(){
+    public ArrayList<ArrayList<String>> retrieveData(String filePath){
         
+        SecureFile scf = new SecureFile(filePath);
         String a = scf.retrieve();
         ArrayList<ArrayList<String>> returnArray = new ArrayList();
         String[] aArry = a.split("\\|", -1);
         
-      
             for (String b : aArry){
 
                 ArrayList<String> innerArray = new ArrayList();
@@ -48,10 +41,14 @@ public class RosterData {
     /**
      * This function will store all stored data for each roster based
      * on a specific month and year.
+     * @param filePath
      * @param rosterArray
      */
-    public void storeData(ObservableList<ObservableList<StringProperty>> rosterArray){
-
+    public void storeData(String filePath,
+            ObservableList<ObservableList<StringProperty>> rosterArray){
+        
+        SecureFile scf = new SecureFile(filePath);
+        
         String strData = "";
         for(ObservableList<StringProperty> innerList: rosterArray){
             for(StringProperty sp: innerList){
@@ -64,13 +61,16 @@ public class RosterData {
         strData = Tools.removeLastChar(strData);
         //Store string array into secure file
         scf.store(strData);
-
-
     }
-    
-    public ArrayList<String> getRow(String s){
+    /**
+     * This function will get a specific row from the crew table. 
+     * @param filePath
+     * @param s
+     * @return 
+     */
+    public ArrayList<String> getRow(String filePath, String s){
         
-        ArrayList<ArrayList<String>> sArray = retrieveData();
+        ArrayList<ArrayList<String>> sArray = retrieveData(filePath);
        
         try{
             for(ArrayList<String> row : sArray)
@@ -79,8 +79,7 @@ public class RosterData {
         }
         catch (Exception ex){/*Just let it die. Its better this way...*/}
 
-
-        return null;
+    return null;
         
     }
 
