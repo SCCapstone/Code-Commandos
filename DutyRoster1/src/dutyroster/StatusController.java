@@ -153,6 +153,13 @@ public final class StatusController implements Initializable {
              alert.showAndWait();
           return;
         }
+        
+        if (codeField.getText().length() > 1){
+             alert = new Alert(Alert.AlertType.ERROR, "Code Field can only contain one value");
+             alert.setTitle("Code Length Too Long");
+             alert.showAndWait();
+          return;
+        }
        
         
         statusList.add( new Status(codeField.getText(),titleField.getText()) );
