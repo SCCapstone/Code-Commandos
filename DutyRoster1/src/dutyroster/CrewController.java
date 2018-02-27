@@ -12,9 +12,12 @@ import javafx.collections.FXCollections;
 import javafx.fxml.Initializable;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javax.swing.event.ChangeListener;
 
 public class CrewController implements Initializable {
  
@@ -27,6 +30,9 @@ public class CrewController implements Initializable {
     @FXML private TableColumn<Employee,String> name;
     @FXML private TableColumn<Employee,Integer> sort;
     @FXML private TableColumn<Employee,Boolean> crew;
+    @FXML private CheckBox selectAll;
+    @FXML private Label ratio;
+    
     
     // used to import and export data from employee data
     private ObservableList<Employee> crewList;
@@ -79,7 +85,30 @@ public class CrewController implements Initializable {
         name.setSortType(TableColumn.SortType.ASCENDING);
         tableView.getSortOrder().add(name);
         name.setSortable(true);
+        selectAll.setOnAction((event) -> {
+            boolean selected = selectAll.isSelected();
+            checkAll(selected);
+        });
+        statusBar();
     }  
+    @FXML public void statusBar()
+    {
+        ratio.setText("# " + getSelected() + "/" + crewList.size() + " are selected.");
+    }
+    public int getSelected(){
+           int x=0;
+            for(Employee f: crewList){
+                if(f.getCrew())
+                    x++;
+            }
+            return x;
+    }
+    
+    public void checkAll(boolean val){
+           
+            for(Employee f: crewList)
+                f.setCrew(val);
+    }
     
     public void shutDown() {  
         storeData(crewList);
@@ -132,7 +161,7 @@ public class CrewController implements Initializable {
             }
         }
         
-        //Now, check checkboxes
+        //Now, check checkboxes for those already in the roster
         for(Employee f: aEmployees)
             for(Employee e: aCrews)
                 if( f.getName().equals(e.getName()) )
@@ -140,8 +169,11 @@ public class CrewController implements Initializable {
      
         crewList.addAll(aEmployees);
         tableView.sort();
-       
+        //if(a);
     }
+    
+    
+    
 
     public ArrayList<Employee> getCrewData(SecureFile sf){
         
