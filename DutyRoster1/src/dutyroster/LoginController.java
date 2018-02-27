@@ -1,33 +1,33 @@
 /**
  * This class control the login screen. 
  * @author Michael Harlow
- * @version 1 November 22nd, 2017
+ * @version 2 February 22th, 2018
 */
 package dutyroster;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.PasswordField;
+import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
-
 
 public class LoginController implements Initializable {
     
-    private SecureFile sc = new SecureFile("Settings");
+    private final SecureFile sc = new SecureFile("Settings");
     String pass;
     @FXML private Label labelPass1,labelPass2;
-    @FXML private TextField fieldPass1, fieldPass2;
+    @FXML private PasswordField fieldPass1, fieldPass2;
     @FXML private Button buttonPass1, buttonPass2;
     
     @Override
@@ -35,51 +35,67 @@ public class LoginController implements Initializable {
         retrievepassword(); 
     }    
 
-    @FXML
-    private void showPassword(){
-       buttonPass1.setVisible(true);
-       buttonPass2.setVisible(false); 
-       fieldPass1.setVisible(true);
-       fieldPass2.setVisible(false);
-       labelPass1.setVisible(false);
-       labelPass2.setVisible(false);     
+    @FXML private void showPassword(){
+        buttonPass1.setVisible(true);
+        buttonPass2.setVisible(false); 
+        fieldPass1.setVisible(true);
+        fieldPass2.setVisible(false);
+        labelPass1.setVisible(false);
+        labelPass2.setVisible(false); 
+      
+        fieldPass1.setOnKeyPressed((event) -> { 
+            if(event.getCode() == KeyCode.ENTER) checkPass(); 
+            event.consume();
+        }); 
+          
     }
     
-    @FXML
-    private void showNewPassword(){
-       buttonPass1.setVisible(false);
-       buttonPass2.setVisible(true); 
-       fieldPass1.setVisible(true);
-       fieldPass1.setPromptText("Enter a new Password");
-       fieldPass2.setVisible(true);
-       labelPass1.setVisible(true);
-       labelPass2.setVisible(true);  
-    }
-
-    
-    @FXML
-    private void userLogin(ActionEvent event){
+    @FXML private void showNewPassword(){
+        buttonPass1.setVisible(false);
+        buttonPass2.setVisible(true); 
+        fieldPass1.setVisible(true);
+        fieldPass1.setPromptText("Enter a new Password");
+        fieldPass2.setVisible(true);
+        labelPass1.setVisible(true);
+        labelPass2.setVisible(true);  
+        fieldPass1.setOnKeyPressed((event) -> { 
+            if(event.getCode() == KeyCode.ENTER)         
+                fieldPass2.requestFocus();
+                event.consume();
+        });
         
+        fieldPass2.setOnKeyPressed((event) -> { 
+            if(event.getCode() == KeyCode.ENTER || event.getCode() == KeyCode.TAB)
+                newPassword();
+                event.consume();
+        }); 
+    }
+    
+    @FXML private void userLogin(ActionEvent event){
+        checkPass();
+    }
+    
+    private void checkPass(){
         String testPass = fieldPass1.getText();
-       
         fieldPass1.clear();
         
         if (!testPass.equals(pass) ) {
             Alert alert = new Alert(AlertType.WARNING, "Wrong password. Please try again.");
             alert.showAndWait();
-            return;
         }
-        
-        final Node source = (Node) event.getSource();
-        final Stage stage = (Stage) source.getScene().getWindow();
-        stage.close();
-        
-         openMainScene();   
+        else{
+            Stage stage = (Stage) fieldPass1.getScene().getWindow();
+            stage.close();
+
+            openMainScene();
+        }
     }
     
-    
-    @FXML
-    private void createPassword(ActionEvent event){
+    @FXML private void createPassword(ActionEvent event){
+        newPassword();
+    }
+  
+    private void newPassword(){
         
         if ( !(fieldPass1.getText().equals(fieldPass2.getText())) ){
             Alert alert = new Alert(AlertType.ERROR, "Passords didn't match."
@@ -90,7 +106,6 @@ public class LoginController implements Initializable {
             return;
         }
         
-        
         sc.store(fieldPass1.getText());
         fieldPass1.clear();
         fieldPass2.clear();
@@ -98,16 +113,13 @@ public class LoginController implements Initializable {
         Alert alert = new Alert(AlertType.INFORMATION, "Password Saved");
         alert.showAndWait();
 
-        final Node source = (Node) event.getSource();
-        final Stage stage = (Stage) source.getScene().getWindow();
+        Stage stage = (Stage) fieldPass2.getScene().getWindow();
         stage.close();
         
         openMainScene();
     }
     
-    
-    @FXML
-    private void exitProgram(ActionEvent event) {   
+    @FXML private void exitProgram(ActionEvent event) {   
         System.exit(0);
     }   
     
@@ -125,8 +137,7 @@ public class LoginController implements Initializable {
         }
 
     }
-    
-    
+      
     public void openMainScene(){
 
          try{
@@ -142,7 +153,7 @@ public class LoginController implements Initializable {
             stage.show(); 
           
         }
-        catch(Exception e){
+        catch(IOException e){
            System.out.println("Can't load new scene: " + e); 
         }   
         

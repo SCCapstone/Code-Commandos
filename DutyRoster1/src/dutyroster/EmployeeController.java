@@ -5,7 +5,11 @@
  */
 package dutyroster;
 
+
 import java.net.URL;
+
+import java.util.Comparator;
+
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.fxml.Initializable;
@@ -26,26 +30,25 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
-//import javafx.stage.WindowEvent;
 import javafx.util.converter.DefaultStringConverter;
-
 
 public class EmployeeController implements Initializable {
  
     //for entering a new rank
     @FXML private ComboBox rankCombo;
     @FXML private TextField nameField;
+    @FXML private TextField fileAddress;
     //used for tableview 
     @FXML private TableView<Employee> tableView;
     @FXML private TableColumn<Employee,String> rank;
     @FXML private TableColumn<Employee,String> name;
     @FXML private TableColumn<Employee,Integer> sort;
-    
+     
     // used to import and export data from employee data
     private ObservableList<Employee> employeeList;
     // rankOptions is used to pull the rank information  
     private ObservableList<Rank> rankOptions;
-    //rankListing is used to change it in the column box 
+    //rankListing is used to change it in the column  
     private ObservableList<String> rankListing;
     // used to encrypt, decrypt and store the file.
     private SecureFile scEmployees;
@@ -81,7 +84,7 @@ public class EmployeeController implements Initializable {
 
                     Employee fieldRow = items.get(tablePosition.getRow());
                     fieldRow.setRank(newName);
-                    fieldRow.setSort( getSortIndex(newName) );
+                    fieldRow.setSort( Tools.getSortIndex(rankOptions, newName) );
                     tableView.sort();
             }
         });
@@ -154,7 +157,6 @@ public class EmployeeController implements Initializable {
         
     }
     
-
     /**
      * This is used to load employees from secure files into the link listing array.
      */
@@ -171,7 +173,7 @@ public class EmployeeController implements Initializable {
                 
                 // getSortIndex pulls updated rank order index. 
                 if(bArry[0].length() > 0 && bArry[1].length() > 0){
-                    employeeList.add( new Employee( getSortIndex(bArry[0]), bArry[0], bArry[1]) );
+                    employeeList.add( new Employee(  Tools.getSortIndex(rankOptions, bArry[0]), bArry[0], bArry[1]) );
                 }
             }    
         }       
@@ -206,6 +208,80 @@ public class EmployeeController implements Initializable {
     }
         
     @FXML
+    public void importEmployee() {
+        //Still need to handle csv file
+        ImportFile importF = new ImportFile(rankOptions);
+        fileAddress.setText(importF.getFilePath());
+        
+        ObservableList<Employee> importList = FXCollections.observableArrayList();
+
+        try{
+            importList = importF.getData();
+        }
+        catch (Exception e) {
+            System.out.print(e);
+        }
+
+        if(importList==null)
+            return;
+
+        boolean eExists;
+        
+        for(Employee eThis: importList ){ //Cycle trough current import list
+            
+            eExists = false;
+            for(Employee eThat: employeeList){ //Cycle trough current employee list
+            
+                if(eThis.getName().equals(eThat.getName())){
+                    eExists = true;
+                    break;
+                }
+                    
+            }
+            
+            if(!eExists){
+                employeeList.add(
+                        new Employee(
+                        eThis.getSort(),
+                        eThis.getRank(),
+                        eThis.getName()
+                ));
+            }
+
+        }
+       
+        Comparator<Employee> comparator; 
+        comparator = Comparator.comparingInt(Employee::getSort);
+        FXCollections.sort(employeeList, comparator);
+        
+        ObservableList<Employee> errorList;
+        
+        errorList = importF.getErrors();
+                
+        if (!errorList.isEmpty()){
+
+            String message1 = ( importList.size() > 0)? "Imort complete with" : "There was ";
+            String message2 = ( errorList.size() == 1 )? "an error" : "some  errors";
+            String message3 = "";
+            
+            Alert alert = new Alert(Alert.AlertType.WARNING,"");
+            alert.setTitle("Check Import List");
+                for(Employee e : errorList)
+                    message3 += "\n" + e.getRank() + " " 
+                            + e.getName() + " (" + e.getRank() + " not in rank listing)";
+            alert.setContentText(message1 + " " + message2 + message3);
+            alert.showAndWait();
+        }
+        else{
+            String message1 = ( importList.size()==1)? "Employee" : "Employees";
+            Alert alert = new Alert(Alert.AlertType.INFORMATION,"Import file added to Employee list");
+            alert.setTitle(message1 + " Added");
+            alert.showAndWait();
+        }
+        fileAddress.clear();
+    }
+       
+    @FXML
     protected void addEmployee(ActionEvent event) {
        Alert alert;
         
@@ -225,7 +301,7 @@ public class EmployeeController implements Initializable {
         }
                 
         employeeList.add(new Employee(
-            getSortIndex(rankCombo.getValue().toString()),
+            Tools.getSortIndex(rankOptions,rankCombo.getValue().toString()),
             rankCombo.getValue().toString(),
             nameField.getText()
         ));
@@ -236,25 +312,6 @@ public class EmployeeController implements Initializable {
  
     }  
 
-    /**
-     * getSortIndex pulls the index number for the rank.
-     * @param strRank
-     * @return 
-     */
-    private int getSortIndex(String strRank) {
-            
-        //pulling from the rank, in rankOption pull the current rank to get the index number.
-        for(Rank currentRank : rankOptions) {
-          
-            if (currentRank.getRank().equals(strRank) ){
-                    return currentRank.getSort();
-            }
-        }
-        
-        return 0;
-    }
-    
-    
     //Change index to the next lower value
     private void deleteEmployee(ObservableList<Employee> tmpList){
                                    

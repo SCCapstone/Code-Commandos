@@ -1,16 +1,25 @@
+/**
+ * This is the main screen of the program. Plus, it handles roster data
+ * @author Othen Prock
+ * @version 8, 2/18/2018
+ */
 package dutyroster;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Files;
+import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
@@ -48,15 +57,14 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 
-
 public class MainController implements Initializable {
+      
+    public static String rosterName = "";
     
-    
-    public static String rosterName;
-    
-    @FXML private TableView<ObservableList<StringProperty>> tableView = new TableView<>();
+    @FXML private TableView<ObservableList<StringProperty>>tableView;
     @FXML private ComboBox comboMonth;
     @FXML private ComboBox comboYear;
+    @FXML private Label lowerOutput;
     @FXML private TextField fTitle;
     @FXML private TextField fInterval;
     @FXML private TextField fAmount;
@@ -67,44 +75,46 @@ public class MainController implements Initializable {
     @FXML private Button bAddRoster, bSave;
     
     private Tab currentDragTab;
-    private static final AtomicLong idGenerator = new AtomicLong();
-    private final String draggingID = "DraggingTab-"+idGenerator.incrementAndGet() ;
+    private static final AtomicLong ID = new AtomicLong();
+    private final String draggingID = "DraggingTab-"+ID.incrementAndGet() ;
     private int dragIndex,dropIndex;
-    
-    private ObservableList<String> monthList = FXCollections.observableArrayList();
-    private ObservableList<Integer> yearList = FXCollections.observableArrayList();
-    private ObservableList<ObservableList<String>> rosterList = FXCollections
-            .observableArrayList();
-    private Scene sceneStatus;
+    private int lastDayOfMonth,curMonth,curYear;
+           
+    private final ObservableList<String> monthList = FXCollections.observableArrayList();
+    private final ObservableList<Integer> yearList = FXCollections.observableArrayList();
+    private final ObservableList<ObservableList<StringProperty>> rowData = FXCollections.observableArrayList(); 
    
-    private ArrayList<Roster> rosterArray = new ArrayList<>(); 
+    private final ArrayList<Roster> rosterArray = new ArrayList(); 
     private Roster currentRoster = new Roster();
     //Extracting Data from encrypted file
-    private SecureFile sc;
+
     private String strData;
+    private boolean updateLock;
     
     public MainController(){
         startUp();   
     }
     
     public void startUp(){
+        tableView = new TableView();
         //instantiates new file, use file name Ranks as storage
-        sc = new SecureFile("Rosters");
+        
         retrieveData();
     }  
  
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-       
+        
+        tableView.setItems(rowData);
         addSupport(rosterTabs);
         Calendar now = Calendar.getInstance();
-        int curYear = now.get(Calendar.YEAR);
-        int curMonth = now.get(Calendar.MONTH);          
-
-        loadMonths(curMonth);
-        loadYears(curYear);
-        setDate(curYear, curMonth);
+        int tmpMonth = now.get(Calendar.MONTH);          
+        int tmpYear = now.get(Calendar.YEAR);
         
+        loadMonths(tmpMonth);
+        loadYears(tmpYear);
+        setDate(tmpYear, tmpMonth);
+
         bAddRoster.setTooltip(new Tooltip("Click here to add a new roster"));
 
         rosterControls.setVisible(false);
@@ -118,23 +128,13 @@ public class MainController implements Initializable {
             selectedRoster(0);
         }
         
-         rosterTabs.getSelectionModel().selectedItemProperty().addListener(
-            new ChangeListener<Tab>() {
-                @Override
-                public void changed(ObservableValue<? extends Tab> ov, Tab t, Tab t1) {
-
-                    if (t1!=null){
-       
-                        int id = rosterTabs.getSelectionModel().getSelectedIndex();
-                        selectedRoster(id);
-
-                    }
-                    
+       rosterTabs.getSelectionModel().selectedItemProperty().addListener((
+        ObservableValue<? extends Tab> ov, Tab t, Tab t1) -> {
+                if (t1!=null){
+                 int id = rosterTabs.getSelectionModel().getSelectedIndex();
+                 selectedRoster(id); 
                 }
-            
-            }
-        
-        );
+        });
          
         //Form Controls
         fTitle.setOnKeyTyped(e -> {bSave.setDisable(false);});
@@ -152,29 +152,32 @@ public class MainController implements Initializable {
  
     @FXML public void saveFields(){
         
-        
         currentRoster.setInterval(Integer.parseInt(fInterval.getText()));
         currentRoster.setAmount(Integer.parseInt(fAmount.getText()));
         currentRoster.setWeekends(cWeekends.isSelected());
-        currentRoster.setHolidays(cHolidays.isSelected());
+        currentRoster.setHolidays(cHolidays.isSelected());    
         
+        String newTitle = fTitle.getText();
+        String oldTitle = currentRoster.getTitle();
         
-        if (!fTitle.getText().equals(currentRoster.getTitle())){
-            currentRoster.setTitle(fTitle.getText());
-        
-            Tab newTab = new Tab(fTitle.getText());
+        if (!newTitle.equals(oldTitle)){
+
+            currentRoster.setTitle(newTitle);           
+            Tab newTab = new Tab(newTitle);
             Tab currentTab = rosterTabs.getSelectionModel().getSelectedItem();
             int newIndex = rosterTabs.getSelectionModel().getSelectedIndex();
             rosterTabs.getTabs().remove(currentTab);
             rosterTabs.getTabs().add(newIndex, newTab);
+            renameData(oldTitle, newTitle);
             rosterTabs.getSelectionModel().select(newTab);
+
         }
-        
-       
+              
         bSave.setDisable(true);
     }
     
     public void shutDown() {  
+        storeRosterData();
         storeData();
     }  
     
@@ -259,7 +262,10 @@ public class MainController implements Initializable {
             Scene sceneCrew = new Scene(root1);
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setScene(sceneCrew);
-            stage.setOnHidden(e -> eController.shutDown());
+            stage.setOnHidden(e -> {
+                eController.shutDown();
+                updateCrew();
+                    });
             stage.show(); 
         }
         catch(Exception e){
@@ -272,19 +278,16 @@ public class MainController implements Initializable {
         String[] monthArry = new String[] {"January", "Febuary", "March", "April", "May", "June",
                     "July", "August", "September", "October", "November", "December"}; 
  
-        for(String month : monthArry){
-            
+        for(String month : monthArry)
             monthList.add(month);   
-        }
-        
+       
         comboMonth.getItems().setAll(monthList);
         comboMonth.getSelectionModel().select(curMonth);
-
     }
  
     private void loadYears(int curYear) {
         
-        for(int i = curYear - 3; i < curYear + 5; i++)
+        for(int i = curYear - 1; i < curYear + 4; i++)
             yearList.add(i);
     
         comboYear.getItems().setAll(yearList);
@@ -326,8 +329,6 @@ public class MainController implements Initializable {
             month = month + a;
        }
 
-       setDate(year,month);
-       
        comboMonth.getSelectionModel().select(month);
        comboYear.getSelectionModel().select(Integer.toString(year));
 
@@ -338,68 +339,79 @@ public class MainController implements Initializable {
         String[] weekDay = new String[] {null, "SU", "MO", "TU", "WE", "TH", "FR", "SA"};
         
         Calendar selCal = Calendar.getInstance();
+        
+        //!!!Before switching to another month, store the current data!
+        storeRosterData();
+        //========================================
+        
         selCal.set(intYear, intMonth, 1);
-        int lastDay = selCal.getActualMaximum(Calendar.DAY_OF_MONTH);
-        ObservableList<StringProperty> row = FXCollections.observableArrayList();
+        lastDayOfMonth = selCal.getActualMaximum(Calendar.DAY_OF_MONTH);
+        curMonth = intMonth+1;//actual months starts at 0
+        curYear = intYear;
         
         tableView.getColumns().clear();
-        tableView.getItems().clear();
-        
-        TableColumn<ObservableList<StringProperty>, String> colRank = createColumn(0, "Rank");
+ 
+        TableColumn colRank = createColumn(0, "Rank");
         colRank.setPrefWidth(150);
         colRank.setMaxWidth(300);
+        colRank.setEditable(false);
+        colRank.setSortable(false);
         tableView.getColumns().add(colRank);
         
-   
-        TableColumn<ObservableList<StringProperty>, String> colName = createColumn(1, "Name");
+        TableColumn colName = createColumn(1, "Name");
         colName.setPrefWidth(300);
         colName.setMaxWidth(600);
+        colName.setEditable(false);
+        colName.setSortable(false);
         tableView.getColumns().add(colName);
       
-        TableColumn<ObservableList<StringProperty>, String> colInc = createColumn(2, "Increment");
+        TableColumn colInc = createColumn(2, "Increment");
         colInc.setPrefWidth(150);
         colInc.setMaxWidth(150);
         colInc.setResizable(false);
+        colInc.setSortable(false);
   
-            TableColumn<ObservableList<StringProperty>, String> colN = createColumn(2, "N");
+            TableColumn colN = createColumn(2, "N");
             colN.setPrefWidth(35);
             colN.setMaxWidth(35);
             colN.setResizable(false);
+            colN.setSortable(false);
             colN.setStyle("-fx-alignment: CENTER;");
             colInc.getColumns().add(colN);  
-           
-            
-            TableColumn<ObservableList<StringProperty>, String> colW = createColumn(3, "W");
+                      
+            TableColumn colW = createColumn(3, "W");
             colW.setPrefWidth(35);
             colW.setMaxWidth(35);
             colW.setResizable(false);
+            colW.setSortable(false);
             colW.setStyle("-fx-alignment: CENTER;");
             colInc.getColumns().add(colW);
-            
-            
-            TableColumn<ObservableList<StringProperty>, String> colH = createColumn(4, "H");
+           
+            TableColumn colH = createColumn(4, "H");
             colH.setPrefWidth(35);
             colH.setMaxWidth(35);
             colH.setResizable(false);
+            colH.setSortable(false);
             colH.setStyle("-fx-alignment: CENTER;");
             colInc.getColumns().add(colH); 
-            
-            
+          
         tableView.getColumns().add(colInc); 
                     
-        for (int i = 1; i <= lastDay; i++) {
+        for (int i = 1; i <= lastDayOfMonth; i++) {
             final int finalIdx = i + 4;
             
-            TableColumn<ObservableList<StringProperty>, String> col = createColumn(finalIdx, Integer.toString(i));
+            TableColumn col = createColumn(finalIdx, Integer.toString(i));
             col.setResizable(false);
 
             selCal.set(Calendar.DAY_OF_MONTH, i);
             int  day = selCal.get(Calendar.DAY_OF_WEEK);
  
-            TableColumn<ObservableList<StringProperty>, String> colI = createColumn(finalIdx, weekDay[day]);
+            TableColumn colI = createColumn(finalIdx, weekDay[day]);
             colI.setPrefWidth(35);
             colI.setMaxWidth(35);
+            colI.setEditable(false);
             colI.setResizable(false);
+            colI.setSortable(false);
  
             col.getColumns().add(colI);           
 
@@ -416,18 +428,11 @@ public class MainController implements Initializable {
             
             tableView.getColumns().add(col);
             tableView.setEditable(true);
-        } 
-  
-    /*
-    row.add(new SimpleStringProperty("Black Belt"));
-    row.add(new SimpleStringProperty("Noris, Chuck"));
-    row.add(new SimpleStringProperty("1"));
-    row.add(new SimpleStringProperty("2"));
-    row.add(new SimpleStringProperty("3"));
+               
+        }
+        
+    updateCrew();    
 
-    tableView.getItems().add(row);
-    */
-    
     } 
     
     private int convertMonth(String month){
@@ -451,18 +456,22 @@ public class MainController implements Initializable {
         TableColumn<ObservableList<StringProperty>, String> column = new TableColumn<>();
 
         column.setText(columnTitle);
-        column.setCellValueFactory((CellDataFeatures<ObservableList<StringProperty>, String> cellDataFeatures) -> {
-            ObservableList<StringProperty> values = cellDataFeatures.getValue();
-            // Pad to current value if necessary:
-            for (int index = values.size(); index <= columnIndex; index++) {
-                values.add(index, new SimpleStringProperty(""));
-            }
-            return cellDataFeatures.getValue().get(columnIndex);
-        });
+        column.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList<StringProperty>, String>, ObservableValue<String>>() {
+             @Override
+             public ObservableValue<String> call(
+                 CellDataFeatures<ObservableList<StringProperty>, String> cellDataFeatures) {
+               ObservableList<StringProperty> values = cellDataFeatures.getValue();
+               // Pad to current value if necessary:
+               for (int index = values.size(); index <= columnIndex; index++) {
+                   values.add(index, new SimpleStringProperty(""));
+               }
+               return cellDataFeatures.getValue().get(columnIndex);
+             }
+           });
         column.setCellFactory(TextFieldTableCell.<ObservableList<StringProperty>>forTableColumn());
         return column;
     }
-    
+
     //Added for Roster operations
     @FXML public void addRoster(ActionEvent event) {
         newRoster();
@@ -481,6 +490,47 @@ public class MainController implements Initializable {
         createTab(title);
     }
 
+    public void updateCrew(){
+        
+        if(rosterName.isEmpty() || rosterArray.isEmpty() || updateLock)
+            return;
+        
+        CrewController cController = new CrewController();
+
+        SecureFile scCrews = new SecureFile("Crew_" + rosterName);      
+        ArrayList<Employee> aCrews = cController.getCrewData(scCrews);
+        ArrayList<String> rdArray = new ArrayList();
+        String crewName;
+        String pathName = "Crew_"+ rosterName+"_"+curYear+"_"+curMonth;
+        //This will pull daily data for each roster member        
+        RosterData rd = new RosterData();
+            
+        rowData.clear();
+        for(Employee crew: aCrews){
+            crewName = crew.getName();
+            ObservableList<StringProperty> row = FXCollections.observableArrayList();
+            row.add(new SimpleStringProperty(crew.getRank()));
+            row.add(new SimpleStringProperty(crewName));
+         
+            if (!crewName.isEmpty())
+            rdArray = rd.getRow(pathName,crewName);
+           
+            if(rdArray==null || rdArray.isEmpty() || rdArray.size()!= lastDayOfMonth + 5){
+                for (int i = -2; i <= lastDayOfMonth; i++)
+                    if(i<1)
+                        row.add(new SimpleStringProperty("0"));
+                    else
+                        row.add(new SimpleStringProperty("_"));    
+           }
+           else{
+                for (int i = 2; i < rdArray.size();i++)
+                    row.add(new SimpleStringProperty(rdArray.get(i)));
+           }
+            rowData.add(row);
+        }
+
+    }
+    
     public void  createTab(String title){  
 
         Tab tab = new Tab(title);
@@ -518,9 +568,7 @@ public class MainController implements Initializable {
         Tooltip tip = new Tooltip("Set roster priority by dragging tabs. The farest left tab has the highest priority");
         tab.setTooltip(tip);
         rosterTabs.getTabs().add(tab);
-        rosterTabs.getSelectionModel().select(tab);
-        int index = rosterTabs.getSelectionModel().getSelectedIndex();
-        selectedRoster(index); 
+ 
     }
    
     public boolean tabTitleExists(String chkTitle){
@@ -533,27 +581,121 @@ public class MainController implements Initializable {
     }
     
     public void deleteRoster(int index){
-      
+    
+        String removeName = currentRoster.getTitle();
+        
        rosterArray.remove(index);
-       selectedRoster(index - 1);
-
+       int nextIndex = (index==0)? 0: index - 1;
+     
+        if(rosterArray.isEmpty()){
+           rosterControls.setVisible(false);
+           rowData.clear();
+        }
+        else{
+            selectedRoster(nextIndex);
+        }
+ 
+        removeData(removeName);    
     }
  
+    public void removeData(String fName){
+        updateLock = true;
+        File dir = new File(".");   
+        File dir2 = new File(dir,SecureFile.DIR);
+        File[] files = dir2.listFiles();
+        for (File f : files) 
+            if (f.getName().startsWith("Crew_"+fName)) 
+                f.delete();
+        
+        updateLock = false;
+    }
+   
+    public void renameData(String oldName, String newName){
+       
+        updateLock = true;
+        String[][] tempArry = new String[5][2];
+        String newFile;
+        int a=0;
+        
+        File dir = new File(".");   
+        File dir2 = new File(dir,SecureFile.DIR);
+        File[] files = dir2.listFiles();
+        for (File f : files){ 
+            if (f.getName().startsWith("Crew_"+oldName)){
+                String oldFile = f.getName();
+               tempArry[a][0] = oldFile;
+               String fArry[] = oldFile.split("\\_", -1);
+               fArry[1] = newName;
+                    newFile = "";
+                    for(int i = 0; i < fArry.length; i++)
+                        newFile += (i==0)? fArry[i] : "_" + fArry[i] ;
+               tempArry[a++][1] = newFile;
+            }
+        }
+        for (String[] address : tempArry){
+            if(address[0]!=null){
+                File source = new File(dir2,address[0]);
+                File dest = new File(dir2,address[1]);
+                
+                try {
+                    Files.copy(
+                            source.toPath(),
+                            dest.toPath(),
+                            REPLACE_EXISTING);
+                } catch (IOException ex) {
+                    Logger.getLogger(MainController.class.getName()).log(Level.SEVERE,
+                            null, ex + " copyig roster data.");
+                }
+
+            }
+        }    
+            
+        updateLock = false;
+        
+        updateCrew();
+        
+        removeData(oldName);
+  
+    }
+     
     public void selectedRoster(int xVal) {
+        
+        if(rosterArray.isEmpty())
+            return;
+        //Store roster data before it changes
+        
+        storeRosterData();
         
         currentRoster = rosterArray.get(xVal);
         rosterName = currentRoster.getTitle();
+        lowerOutput.setText(rosterName + " is set to priority " + (xVal+1) + ". Drag and drop tabs to change.");
         rosterControls.setVisible(true);
         fTitle.setText(rosterName);
         fInterval.setText(Integer.toString(currentRoster.getInterval()));
         fAmount.setText(Integer.toString(currentRoster.getAmount()));
         cWeekends.setSelected(currentRoster.getWeekends());
         cHolidays.setSelected(currentRoster.getHolidays());
+        
+        updateCrew();
     }
     
+    public void storeRosterData(){
+        
+        if(rosterName.isEmpty()) 
+            return;
+        if (rowData.isEmpty())
+            return;
+        if(updateLock)
+            return;
+        
+        String pathName = "Crew_"+ rosterName+"_"+curYear+"_"+curMonth;
+        //This will pull daily data for each roster member        
+        RosterData dr = new RosterData();
+        dr.storeData(pathName, rowData);
+    }
     //retrieve data from secure file
     public void retrieveData(){
-        
+        SecureFile sc = new SecureFile("Rosters");
         String a = sc.retrieve();
       
         String aArry[] = a.split("\\|", -1);
@@ -583,9 +725,9 @@ public class MainController implements Initializable {
 
     }
   
-     //Converting store data into an array string
+    //Converting store data into an array string
     public void storeData(){
-
+        SecureFile sc = new SecureFile("Rosters");
         strData = "";
         rosterArray.forEach((roster) -> {  
             strData +=  roster.getTitle() 
@@ -609,7 +751,7 @@ public class MainController implements Initializable {
         
     }   
 
-     public void addSupport(TabPane tabPane) {
+    public void addSupport(TabPane tabPane) {
         
         tabPane.getTabs().forEach(this::addDragHandlers);
         tabPane.getTabs().addListener((ListChangeListener.Change<? extends Tab> c) -> {

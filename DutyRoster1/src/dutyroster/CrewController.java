@@ -15,7 +15,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
 
 public class CrewController implements Initializable {
  
@@ -36,10 +35,21 @@ public class CrewController implements Initializable {
     //rankListing is used to change it in the column box 
     private ObservableList<String> rankListing;
     // used to encrypt, decrypt and store the file.
-    private SecureFile scCrews;
-    private SecureFile scEmployees;
-    private SecureFile scRanks;
     private String strData;
+    private final String rosterName;
+   
+    public CrewController(){
+        startUp();
+        this.rosterName = MainController.rosterName;
+    }
+    
+    public void startUp(){
+        rankOptions = FXCollections.observableArrayList();
+        rankListing = FXCollections.observableArrayList();
+        //instantiates new file, use file name Ranks as storage
+        //pull encrypted info and load into ranked list
+        loadRanks();  
+    }
     
     /**
      * This is used to before the GUI interface is initialize.
@@ -52,12 +62,8 @@ public class CrewController implements Initializable {
         crewList = FXCollections.observableArrayList();
         //Sync crewlist with tableview
         tableView.setItems(crewList); 
-        rankOptions = FXCollections.observableArrayList();
-        rankListing = FXCollections.observableArrayList();
-        // using file name ranks for secure files
-        scRanks = new SecureFile("Ranks");  
-        // pull ranks from secure file and place them into rank listing.
-        loadRanks(); 
+ 
+        startUp();
         //  load the rankListing into rankCombo
         rankCombo.getItems().setAll(rankListing);
         
@@ -76,18 +82,19 @@ public class CrewController implements Initializable {
     }  
     
     public void shutDown() {  
-        storeData();
-        System.out.println("Closing");
+        storeData(crewList);
     }
  
-    public void storeData(){   
-       
+    public void storeData(ObservableList<Employee> cList){   
+        
+        SecureFile scCrews = new SecureFile("Crew_" + rosterName);      
+
         strData = "";
 
-        if (crewList == null || crewList.isEmpty()) 
+        if (cList == null || cList.isEmpty()) 
             return;
 
-        crewList.forEach((employee) -> { 
+        cList.forEach((employee) -> { 
             if( employee.getCrew() ){
                 strData += employee.getRank() + "@" + employee.getName() + "|"; 
             }
@@ -101,17 +108,15 @@ public class CrewController implements Initializable {
         strData = "";
         
     }
-    
-    
+     
     /**
      * This is used to load employees from secure files into the link listing array.
      */
     public void loadCrews(){
-        
-        scCrews = new SecureFile("Crew_" + MainController.rosterName);      
-        ArrayList<Employee> aCrews = setCrewData(scCrews);
-        scEmployees = new SecureFile("Employees");
-        ArrayList<Employee> aEmployees = setCrewData(scEmployees);
+        SecureFile scCrews = new SecureFile("Crew_" + rosterName);      
+        ArrayList<Employee> aCrews = getCrewData(scCrews);
+        SecureFile scEmployees = new SecureFile("Employees");
+        ArrayList<Employee> aEmployees = getCrewData(scEmployees);
         
         //add members from crews who are not on the employeelist
         boolean inList = false;
@@ -135,11 +140,10 @@ public class CrewController implements Initializable {
      
         crewList.addAll(aEmployees);
         tableView.sort();
-        System.out.println();
+       
     }
 
-    
-    public ArrayList<Employee> setCrewData(SecureFile sf){
+    public ArrayList<Employee> getCrewData(SecureFile sf){
         
         String a = sf.retrieve();
         
@@ -151,7 +155,7 @@ public class CrewController implements Initializable {
                 String bArry[] = b.split("\\@", -1);
                 // getSortIndex pulls updated rank order index. 
                 if(bArry[0].length() > 0 && bArry[1].length() > 0){
-                    aReturn.add( new Employee( getSortIndex(bArry[0]), bArry[0], bArry[1]));
+                    aReturn.add( new Employee( Tools.getSortIndex(rankOptions,bArry[0]), bArry[0], bArry[1]));
                 }
             }    
         } 
@@ -162,7 +166,7 @@ public class CrewController implements Initializable {
      * This is used to load ranks from secure files into the link listing array.
      */
     public void loadRanks(){
-        
+        SecureFile scRanks = new SecureFile("Ranks");
         String a = scRanks.retrieve();
       
         String aArry[] = a.split("\\|", -1);
@@ -177,25 +181,11 @@ public class CrewController implements Initializable {
                    rankOptions.add( new Rank(Integer.parseInt(bArry[0]), bArry[1] ) );
                    rankListing.add(bArry[1]);
                 }
+            
             }
  
         }   
         
     }
-        
-    /**
-     * getSortIndex pulls the index number for the rank.
-     * @param strRank
-     * @return 
-     */
-    private int getSortIndex(String strRank) {
-            
-        //pulling from the rank, in rankOption pull the current rank to get the index number.
-        for(Rank currentRank : rankOptions) 
-            if ( currentRank.getRank().equals(strRank) )
-                    return currentRank.getSort();
-        
-        return 0;
-    }
-      
+    
 }

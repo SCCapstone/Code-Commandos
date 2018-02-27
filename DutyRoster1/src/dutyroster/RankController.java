@@ -38,8 +38,7 @@ public class RankController implements Initializable {
     startUp();
     }
     
-    
-    
+ 
     public void startUp(){
         rankList = FXCollections.observableArrayList();
         //instantiates new file, use file name Ranks as storage
@@ -79,8 +78,7 @@ public class RankController implements Initializable {
     
     //Converting store data into an array string
     public void storeData(){
-        
-        
+
         strData = "";
         rankList.forEach((rank) -> {  
             strData +=  rank.getSort() + "@" +  rank.getRank() + "|";    
@@ -212,7 +210,6 @@ public class RankController implements Initializable {
         if(currentSort > 0)
             selectedRank.setSort(currentSort);
         
-  
          updateSort();
     }    
  

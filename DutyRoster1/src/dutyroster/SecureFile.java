@@ -1,7 +1,7 @@
 /**
  * This class is used to encrypt and decrypt any type of string data. 
  * @author Othen W. Prock
- * @version 3 October 31st, 2017
+ * @version 4 February 24th, 2018
 */
 package dutyroster;
 
@@ -17,33 +17,37 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import static java.nio.file.StandardOpenOption.TRUNCATE_EXISTING;
-import javafx.scene.control.Alert;
 
 
 public class SecureFile {
 
-    private static String ENCODING = "UTF-8";
-    private static String KEY = "Sprays0123456789";
-    private static String IVKEY = "0123456789Sprays"; 
+    private static final String ENCODING = "UTF-8";
+    private static final String KEY = "Sprays0123456789";
+    private static final String IVKEY = "0123456789Sprays"; 
     private String filePath;
+    public static final String DIR = "Data";
 
     //Constructor
     public SecureFile(String inPath){
-     
-        filePath = inPath;
-        File file=new File(filePath);
-        Path path = file.toPath();
+        
+        filePath = DIR+"/"+inPath;
+        File dir=new File(".");
+        File file=new File(dir,filePath);
+        //Path path = file.toPath();
                      
         if (!file.exists()){
 
             try { 
+                 file.getParentFile().mkdir();
                  file.createNewFile();
-                 Files.setAttribute(path, "dos:hidden", true);
+                 //Files.setAttribute(path, "dos:hidden", true);
             } 
             catch (IOException ex) {
-                 Logger.getLogger(SecureFile.class.getName()).log(Level.SEVERE, null, ex);
+               //  Logger.getLogger(SecureFile.class.getName()).log(Level.SEVERE, null, ex);
             }
-        
+            catch (Exception e) {
+               //  Logger.getLogger(SecureFile.class.getName()).log(Level.SEVERE, null, e);
+            }        
         }
            
     }
@@ -71,7 +75,6 @@ public class SecureFile {
      * @param strIn
      * @throws Exception 
      */
-    
     private void encrypt(String strIn) throws Exception {        
         Cipher cipher = getCipher(Cipher.ENCRYPT_MODE);  
         Path path = Paths.get(filePath);
@@ -83,7 +86,6 @@ public class SecureFile {
             Files.write(path, outputBytes,TRUNCATE_EXISTING); //creates, overwrites
         }
         else{          
-             System.out.println("Made it here " + strIn );
            Files.newBufferedWriter(path , TRUNCATE_EXISTING);   
         }
     } 
@@ -155,12 +157,13 @@ public class SecureFile {
         
         String passKey = "";
          
-        if (filePath.equals("Settings"))
+        if (filePath.equals(DIR+"/Settings"))
             return inKey;
         
         try {
             passKey = getPassword();
-        } catch (Exception ex) {
+        } 
+        catch (Exception ex) {
             Logger.getLogger(SecureFile.class.getName()).log(Level.SEVERE, null, ex);
         }  
         
@@ -168,7 +171,6 @@ public class SecureFile {
 
     }
  
-    
     /**
      * This function retrieves store password from file 
      * @return
@@ -184,7 +186,7 @@ public class SecureFile {
         IvParameterSpec ivParameterSpec = new IvParameterSpec(ivKey);
         cipher.init(Cipher.DECRYPT_MODE, secretKeySpec, ivParameterSpec);
         
-        Path path = Paths.get("Settings");
+        Path path = Paths.get(DIR+"/Settings");
         byte[] buffer =  Files.readAllBytes(path);
         buffer = cipher.doFinal(buffer);
         String a = new String(buffer,ENCODING);
@@ -198,5 +200,5 @@ public class SecureFile {
 
         return "";
     }    
-    
+
 }

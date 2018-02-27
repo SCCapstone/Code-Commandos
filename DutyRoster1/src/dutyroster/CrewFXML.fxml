@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
@@ -58,10 +57,6 @@
      </columns>    
   
     </TableView>
-   
-   <HBox alignment="bottom_right" prefHeight="309.0" prefWidth="334.0" spacing="10" GridPane.rowIndex="3">
-          <Button text="Done" />
-     </HBox>
    <columnConstraints>
       <ColumnConstraints />
    </columnConstraints>
@@ -69,7 +64,6 @@
       <RowConstraints maxHeight="0.0" minHeight="0.0" prefHeight="0.0" />
       <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="60.0" />
       <RowConstraints maxHeight="724.0" minHeight="143.0" prefHeight="409.0" />
-      <RowConstraints maxHeight="617.0" minHeight="36.0" prefHeight="44.0" />
    </rowConstraints>
    
 </GridPane>

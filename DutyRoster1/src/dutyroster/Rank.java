@@ -37,9 +37,7 @@ public class Rank {
         rank.set(rankIn);
     }
     
- 
- 
-    public void setSort(int sortIn) {
+     public void setSort(int sortIn) {
         sort = sortIn;
     }
         

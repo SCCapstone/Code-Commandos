@@ -6,7 +6,6 @@
  */
 package dutyroster;
 
-import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 
@@ -18,7 +17,8 @@ public class Employee {
    private final SimpleStringProperty rank = new SimpleStringProperty("");
    private final SimpleStringProperty name = new SimpleStringProperty("");
    private final SimpleBooleanProperty crew = new SimpleBooleanProperty(false);
-   //Constructor 
+   
+    //Constructor 
     public Employee() {
       this(0,"", "");
     }

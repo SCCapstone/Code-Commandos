@@ -20,16 +20,16 @@
         
         <columns>
                
-            <TableColumn fx:id="sort" editable="false" minWidth="-Infinity" prefWidth="97.0" resizable="false" sortable="true" text="Sort" visible="false">
+            <TableColumn fx:id="sort" editable="false" minWidth="-Infinity" prefWidth="36.0" resizable="false" sortable="true" text="Sort" visible="false">
                 <cellValueFactory><PropertyValueFactory property="sort" />
                 </cellValueFactory>
           </TableColumn>
-          <TableColumn fx:id="rank" minWidth="-Infinity" prefWidth="103.0" resizable="false" sortable="false" text="Rank">
+          <TableColumn fx:id="rank" minWidth="-Infinity" prefWidth="91.0" resizable="false" sortable="false" text="Rank">
                 <cellValueFactory><PropertyValueFactory property="rank" />
                 </cellValueFactory>
           
           </TableColumn>
-          <TableColumn fx:id="name" maxWidth="245.0" minWidth="-1.0" prefWidth="226.0" resizable="false" sortable="false" text="Name">
+          <TableColumn fx:id="name" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="240.0" resizable="false" sortable="false" text="Name">
                 <cellValueFactory><PropertyValueFactory property="name" />
                 </cellValueFactory>
           </TableColumn>
@@ -43,12 +43,19 @@
           <TextField fx:id="nameField" prefHeight="31.0" prefWidth="153.0" promptText="Name" />
           <Button onAction="#addEmployee" text="Add" />
      </HBox>
+   <HBox alignment="bottom_right" layoutX="20.0" layoutY="437.0" prefHeight="309.0" prefWidth="334.0" spacing="10" GridPane.rowIndex="3">
+      <children>
+         <TextField fx:id="fileAddress" editable="false" prefHeight="31.0" prefWidth="208.0" promptText="CSV File" />
+         <Button onAction="#importEmployee" prefHeight="25.0" prefWidth="113.0" text="Import From .csv" />
+      </children>
+   </HBox>
    <columnConstraints>
       <ColumnConstraints />
    </columnConstraints>
    <rowConstraints>
       <RowConstraints maxHeight="0.0" minHeight="0.0" prefHeight="0.0" />
       <RowConstraints maxHeight="724.0" minHeight="143.0" prefHeight="409.0" />
+      <RowConstraints maxHeight="617.0" minHeight="36.0" prefHeight="44.0" />
       <RowConstraints maxHeight="617.0" minHeight="36.0" prefHeight="44.0" />
    </rowConstraints>
    
