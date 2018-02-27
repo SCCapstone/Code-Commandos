@@ -45,7 +45,6 @@ public class LoginController implements Initializable {
       
         fieldPass1.setOnKeyPressed((event) -> { 
             if(event.getCode() == KeyCode.ENTER) checkPass(); 
-            event.consume();
         }); 
           
     }
@@ -61,13 +60,11 @@ public class LoginController implements Initializable {
         fieldPass1.setOnKeyPressed((event) -> { 
             if(event.getCode() == KeyCode.ENTER)         
                 fieldPass2.requestFocus();
-                event.consume();
         });
         
         fieldPass2.setOnKeyPressed((event) -> { 
             if(event.getCode() == KeyCode.ENTER || event.getCode() == KeyCode.TAB)
                 newPassword();
-                event.consume();
         }); 
     }
     
@@ -97,8 +94,16 @@ public class LoginController implements Initializable {
   
     private void newPassword(){
         
+        if ( fieldPass1.getText().length()<5 || fieldPass1.getText().length()>16){
+            Alert alert = new Alert(AlertType.ERROR, "Password is not between 5-16 characters");
+            alert.showAndWait();
+            fieldPass1.clear();
+            fieldPass2.clear();
+            return;
+        }
+        
         if ( !(fieldPass1.getText().equals(fieldPass2.getText())) ){
-            Alert alert = new Alert(AlertType.ERROR, "Passords didn't match."
+            Alert alert = new Alert(AlertType.ERROR, "Passwords didn't match."
             + fieldPass1.getText() + " != " + fieldPass2.getText());
             alert.showAndWait();
             fieldPass1.clear();
