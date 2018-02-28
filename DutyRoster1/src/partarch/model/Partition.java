@@ -186,7 +186,5 @@ public class Partition {
         this.compression = new SimpleStringProperty(compression);
     }
     
-    
-    
 
 }

@@ -56,6 +56,7 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
+import javafx.util.StringConverter;
 
 public class MainController implements Initializable {
       
@@ -64,6 +65,7 @@ public class MainController implements Initializable {
     @FXML private TableView<ObservableList<StringProperty>>tableView;
     @FXML private ComboBox comboMonth;
     @FXML private ComboBox comboYear;
+    @FXML private ComboBox<Interval> cInterval;
     @FXML private Label lowerOutput;
     @FXML private TextField fTitle;
     @FXML private TextField fInterval;
@@ -82,6 +84,7 @@ public class MainController implements Initializable {
            
     private final ObservableList<String> monthList = FXCollections.observableArrayList();
     private final ObservableList<Integer> yearList = FXCollections.observableArrayList();
+    private final ObservableList<Interval> intervalList = FXCollections.observableArrayList();
     private final ObservableList<ObservableList<StringProperty>> rowData = FXCollections.observableArrayList(); 
    
     private final ArrayList<Roster> rosterArray = new ArrayList(); 
@@ -136,6 +139,50 @@ public class MainController implements Initializable {
                 }
         });
          
+        
+
+        intervalList.addAll(
+                new Interval(1, "1 hour"), 
+                new Interval(2, "2 hours"),
+                new Interval(3, "3 hours"),
+                new Interval(4, "4 hours"),
+                new Interval(6, "6 hours"),
+                new Interval(8, "8 hours"),
+                new Interval(12, "12 hours"),
+                new Interval(24, "1 day"),
+                new Interval(48, "2 days"),
+                new Interval(168, "1 week"),
+                new Interval(336, "2 weeks"),
+                new Interval(-1, "1 month")
+        
+        );
+       
+        cInterval.setItems(intervalList); 
+
+        cInterval.setConverter(new StringConverter<Interval>() {
+
+            @Override
+            public String toString(Interval object) {
+                return object.getTitle();
+            }
+
+            @Override
+            public Interval fromString(String s) {
+                return (Interval) cInterval.getItems().stream().filter(ap -> 
+                    ap.getTitle().equals(s)).findFirst().orElse(null);
+            }
+        });      
+    
+        cInterval.valueProperty().addListener((obs, oldval, newval) -> {
+            if(newval != null)
+                fInterval.setText(Integer.toString(newval.getHour()));
+                currentRoster.setInterval(newval.getHour());
+             
+        });
+
+       setInterval();
+        
+
         //Form Controls
         fTitle.setOnKeyTyped(e -> {bSave.setDisable(false);});
         fInterval.setOnKeyTyped(e -> {bSave.setDisable(false);});
@@ -150,6 +197,19 @@ public class MainController implements Initializable {
  
     }    
  
+
+    public void setInterval(){
+        
+        int selected = -1;
+
+        for(int i = 0; i < intervalList.size(); i++)
+            if (!fInterval.getText().isEmpty() && intervalList.get(i).getHour() == Integer.parseInt(fInterval.getText()) )
+                selected = i;
+
+        if(selected >= 0)
+            cInterval.getSelectionModel().select(selected);
+    } 
+    
     @FXML public void saveFields(){
         
         currentRoster.setInterval(Integer.parseInt(fInterval.getText()));
@@ -672,6 +732,7 @@ public class MainController implements Initializable {
         rosterControls.setVisible(true);
         fTitle.setText(rosterName);
         fInterval.setText(Integer.toString(currentRoster.getInterval()));
+        setInterval();
         fAmount.setText(Integer.toString(currentRoster.getAmount()));
         cWeekends.setSelected(currentRoster.getWeekends());
         cHolidays.setSelected(currentRoster.getHolidays());
