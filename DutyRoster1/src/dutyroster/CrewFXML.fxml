@@ -41,7 +41,7 @@
         <cellValueFactory><PropertyValueFactory property="crew" /></cellValueFactory>
         <cellFactory><partarch.fx.CheckBoxCellFactory /></cellFactory>
             <graphic>
-               <CheckBox mnemonicParsing="false" text="All" />
+               <CheckBox fx:id="selectAll" mnemonicParsing="false" text="All" />
             </graphic>
          </TableColumn>
           <TableColumn fx:id="rank" maxWidth="100.0" minWidth="-Infinity" prefWidth="100.0" resizable="false" text="Rank">

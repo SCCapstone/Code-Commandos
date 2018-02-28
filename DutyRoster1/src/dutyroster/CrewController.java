@@ -17,7 +17,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javax.swing.event.ChangeListener;
+
 
 public class CrewController implements Initializable {
  
@@ -30,8 +30,8 @@ public class CrewController implements Initializable {
     @FXML private TableColumn<Employee,String> name;
     @FXML private TableColumn<Employee,Integer> sort;
     @FXML private TableColumn<Employee,Boolean> crew;
+    @FXML private Label outputText;
     @FXML private CheckBox selectAll;
-    @FXML private Label ratio;
     
     
     // used to import and export data from employee data
@@ -41,18 +41,21 @@ public class CrewController implements Initializable {
     //rankListing is used to change it in the column box 
     private ObservableList<String> rankListing;
     // used to encrypt, decrypt and store the file.
+    private SecureFile scCrews;
+    private SecureFile scEmployees;
+    private SecureFile scRanks;
     private String strData;
-    private final String rosterName;
+    
    
     public CrewController(){
         startUp();
-        this.rosterName = MainController.rosterName;
     }
     
     public void startUp(){
         rankOptions = FXCollections.observableArrayList();
         rankListing = FXCollections.observableArrayList();
         //instantiates new file, use file name Ranks as storage
+        scRanks = new SecureFile("Ranks");
         //pull encrypted info and load into ranked list
         loadRanks();  
     }
@@ -85,39 +88,35 @@ public class CrewController implements Initializable {
         name.setSortType(TableColumn.SortType.ASCENDING);
         tableView.getSortOrder().add(name);
         name.setSortable(true);
+        
+       // selectAll = new CheckBox();
         selectAll.setOnAction((event) -> {
             boolean selected = selectAll.isSelected();
             checkAll(selected);
         });
         statusBar();
+        
     }  
-    @FXML public void statusBar()
-    {
-        ratio.setText("# " + getSelected() + "/" + crewList.size() + " are selected.");
-    }
-    public int getSelected(){
-           int x=0;
-            for(Employee f: crewList){
-                if(f.getCrew())
-                    x++;
-            }
-            return x;
-    }
     
-    public void checkAll(boolean val){
-           
-            for(Employee f: crewList)
-                f.setCrew(val);
-    }
     
     public void shutDown() {  
         storeData(crewList);
     }
  
+   
+    public void checkAll(boolean val){
+           
+        for(Employee f: crewList)
+            f.setCrew(val);
+    } 
+    
+    public void statusBar(){
+       // outputText.setText("Total employees: " + crewList.size());
+    }
+    
+    
     public void storeData(ObservableList<Employee> cList){   
-        
-        SecureFile scCrews = new SecureFile("Crew_" + rosterName);      
-
+       
         strData = "";
 
         if (cList == null || cList.isEmpty()) 
@@ -142,9 +141,10 @@ public class CrewController implements Initializable {
      * This is used to load employees from secure files into the link listing array.
      */
     public void loadCrews(){
-        SecureFile scCrews = new SecureFile("Crew_" + rosterName);      
+        
+        scCrews = new SecureFile("Crew_" + MainController.rosterName);      
         ArrayList<Employee> aCrews = getCrewData(scCrews);
-        SecureFile scEmployees = new SecureFile("Employees");
+        scEmployees = new SecureFile("Employees");
         ArrayList<Employee> aEmployees = getCrewData(scEmployees);
         
         //add members from crews who are not on the employeelist
@@ -161,7 +161,7 @@ public class CrewController implements Initializable {
             }
         }
         
-        //Now, check checkboxes for those already in the roster
+        //Now, check checkboxes
         for(Employee f: aEmployees)
             for(Employee e: aCrews)
                 if( f.getName().equals(e.getName()) )
@@ -169,12 +169,10 @@ public class CrewController implements Initializable {
      
         crewList.addAll(aEmployees);
         tableView.sort();
-        //if(a);
+       
     }
-    
-    
-    
 
+    
     public ArrayList<Employee> getCrewData(SecureFile sf){
         
         String a = sf.retrieve();
@@ -187,7 +185,7 @@ public class CrewController implements Initializable {
                 String bArry[] = b.split("\\@", -1);
                 // getSortIndex pulls updated rank order index. 
                 if(bArry[0].length() > 0 && bArry[1].length() > 0){
-                    aReturn.add( new Employee( Tools.getSortIndex(rankOptions,bArry[0]), bArry[0], bArry[1]));
+                    aReturn.add( new Employee( getSortIndex(bArry[0]), bArry[0], bArry[1]));
                 }
             }    
         } 
@@ -198,7 +196,7 @@ public class CrewController implements Initializable {
      * This is used to load ranks from secure files into the link listing array.
      */
     public void loadRanks(){
-        SecureFile scRanks = new SecureFile("Ranks");
+        
         String a = scRanks.retrieve();
       
         String aArry[] = a.split("\\|", -1);
@@ -213,11 +211,25 @@ public class CrewController implements Initializable {
                    rankOptions.add( new Rank(Integer.parseInt(bArry[0]), bArry[1] ) );
                    rankListing.add(bArry[1]);
                 }
-            
             }
  
         }   
         
     }
-    
+        
+    /**
+     * getSortIndex pulls the index number for the rank.
+     * @param strRank
+     * @return 
+     */
+    private int getSortIndex(String strRank) {
+            
+        //pulling from the rank, in rankOption pull the current rank to get the index number.
+        for(Rank currentRank : rankOptions) 
+            if ( currentRank.getRank().equals(strRank) )
+                    return currentRank.getSort();
+        
+        return 0;
+    }
+      
 }

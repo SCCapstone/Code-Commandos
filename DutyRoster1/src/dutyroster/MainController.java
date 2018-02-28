@@ -328,7 +328,7 @@ public class MainController implements Initializable {
                     });
             stage.show(); 
         }
-        catch(Exception e){
+        catch(IOException e){
            System.out.println("Can't load new scene: " + e); 
         }
     }    
