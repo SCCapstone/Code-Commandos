@@ -89,7 +89,6 @@ public class CrewController implements Initializable {
         tableView.getSortOrder().add(name);
         name.setSortable(true);
         
-       // selectAll = new CheckBox();
         selectAll.setOnAction((event) -> {
             boolean selected = selectAll.isSelected();
             checkAll(selected);
@@ -111,7 +110,7 @@ public class CrewController implements Initializable {
     } 
     
     public void statusBar(){
-       // outputText.setText("Total employees: " + crewList.size());
+        //outputText.setText("Total employees: " + crewList.size());
     }
     
     
