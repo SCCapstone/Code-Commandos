@@ -43,7 +43,7 @@ public final class StatusController implements Initializable {
     // private SecureFile scStatus;
     
     //Extracting Data from encrypted file
-    private SecureFile sc;
+    
     private String strData;
     
     public StatusController(){
@@ -53,7 +53,6 @@ public final class StatusController implements Initializable {
     public void startUp(){
         statusList = FXCollections.observableArrayList();
         //instantiates new file, use file name Ranks as storage
-        sc = new SecureFile("Status");
 
         //pull encrypted info and load into ranked list
         retrieveData();
@@ -90,7 +89,7 @@ public final class StatusController implements Initializable {
     
     //Converting store data into an array string
     public void storeData(){
-        
+        SecureFile sc = new SecureFile("Status");
         strData = "";
         
         if (statusList == null)
@@ -109,7 +108,7 @@ public final class StatusController implements Initializable {
     
     //retrieve data from secure file
     public void retrieveData(){
-        
+        SecureFile sc = new SecureFile("Status");
         String a = sc.retrieve();
       
         String aArry[] = a.split("\\|", -1);

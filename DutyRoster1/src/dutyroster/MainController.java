@@ -308,7 +308,31 @@ public class MainController implements Initializable {
         catch(IOException e){
            System.out.println("Can't load new scene: " + e); 
         }
+    } 
+      
+    @FXML private void openBlockout(ActionEvent event) {
+         
+        try{
+            
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("BlockoutFXML.fxml")); 
+            Parent root1 = loader.load();
+            BlockoutController BOController = loader.getController();
+            Stage stage = new Stage();
+            stage.setTitle("Blockout Editor");
+            stage.setResizable(false);
+            Scene sceneStatus2 = new Scene(root1);
+            //sceneRank.getStylesheets().add("stylesheet.css");
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setScene(sceneStatus2);
+            stage.setOnHidden(e -> BOController.shutDown());
+            stage.show(); 
+          
+        }
+        catch(IOException e){
+           System.out.println("Can't load new scene: " + e); 
+        }
     }  
+
 
     @FXML private void openCrewEditor(ActionEvent event) {
          
