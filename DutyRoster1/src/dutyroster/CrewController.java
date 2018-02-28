@@ -30,8 +30,8 @@ public class CrewController implements Initializable {
     @FXML private TableColumn<Employee,String> name;
     @FXML private TableColumn<Employee,Integer> sort;
     @FXML private TableColumn<Employee,Boolean> crew;
-    @FXML private Label outputText;
     @FXML private CheckBox selectAll;
+    @FXML private Label ratio;
     
     
     // used to import and export data from employee data
@@ -92,6 +92,7 @@ public class CrewController implements Initializable {
         selectAll.setOnAction((event) -> {
             boolean selected = selectAll.isSelected();
             checkAll(selected);
+            statusBar();
         });
         statusBar();
         
@@ -110,9 +111,17 @@ public class CrewController implements Initializable {
     } 
     
     public void statusBar(){
-        //outputText.setText("Total employees: " + crewList.size());
+        ratio.setText("# " + getSelected() + "/" + crewList.size() + " are selected.");
     }
     
+    public int getSelected(){
+           int x=0;
+            for(Employee f: crewList){
+                if(f.getCrew())
+                    x++;
+            }
+            return x;
+    }
     
     public void storeData(ObservableList<Employee> cList){   
        
