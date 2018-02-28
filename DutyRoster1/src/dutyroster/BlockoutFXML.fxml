@@ -47,8 +47,8 @@
      </HBox>
    <HBox spacing="20.0" style="-fx-alignment: center;" GridPane.rowIndex="3">
       <children>
-         <DatePicker fx:id="dateFrom" prefHeight="18.0" prefWidth="91.0" promptText="From" />
-         <DatePicker fx:id="dateTo" prefHeight="18.0" prefWidth="94.0" promptText="To" />
+         <DatePicker fx:id="dateFrom" prefWidth="120.0" promptText="From" />
+         <DatePicker fx:id="dateTo" prefWidth="120.0" promptText="To" />
       </children>
    </HBox>
    <HBox alignment="bottom_right" layoutX="20.0" layoutY="437.0" prefWidth="334.0" spacing="10" GridPane.rowIndex="4">

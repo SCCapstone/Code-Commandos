@@ -2,12 +2,13 @@
  * This is an employee strut class
  * @author Austin Freed
  * @assisted by Tanya Peyush
- * @version 4 2/17/2018
+ * @version 5 2/28/2018
  */
 package dutyroster;
 
 
 //import javafx.beans.property.SimpleBooleanProperty;
+import java.time.LocalDate;
 import javafx.beans.property.SimpleStringProperty;
 
 
@@ -17,8 +18,8 @@ public class Blockout {
    //SimipleString is a string. It works better with tableview
    private final SimpleStringProperty name = new SimpleStringProperty("");
    private final SimpleStringProperty status = new SimpleStringProperty("");
-   private final SimpleStringProperty fromDate = new SimpleStringProperty("");
-   private final SimpleStringProperty toDate = new SimpleStringProperty("");
+   private LocalDate fromDate;
+   private LocalDate toDate;
 
 
    
@@ -28,16 +29,16 @@ public class Blockout {
          
         status.set(null);
         name.set(null); 
-        fromDate.set(null);
-        toDate.set(null);
+        fromDate = LocalDate.now();
+        toDate = LocalDate.now();
     }
  
-    public Blockout(String nameIn,String statusIn,String from, String to) {
+    public Blockout(String nameIn, String statusIn, LocalDate from, LocalDate to) {
        
         name.set(nameIn); 
         status.set(statusIn);
-        fromDate.set(from);
-        toDate.set(to);
+        fromDate = from;
+        toDate = to;
        
     }
 
@@ -51,13 +52,13 @@ public class Blockout {
         return status.get();
     }
     
-    public String getFromDate() {
+    public LocalDate getFromDate() {
         
-        return fromDate.get();
+        return fromDate;
     }
-    public String getToDate() {
+    public LocalDate getToDate() {
         
-        return toDate.get();
+        return toDate;
     }
   
     
@@ -71,17 +72,14 @@ public class Blockout {
         status.set(statusIn);
     }
     
-    public void setFromDate(String from) {
-       fromDate.set(from);
+    public void setFromDate(LocalDate from) {
+       fromDate = from;
               
     }
     
-    
-    public void setToDate(String to) {
-       toDate.set(to);
+    public void setToDate(LocalDate to) {
+       toDate = to;
               
     }
     
-    
-
 }
