@@ -1,11 +1,11 @@
 #NetBeans
 
-DutyRoster1/nbproject/private/
-DutyRoster1/build/
-DutyRoster1/Data
-DutyRoster1/nbbuild/
-DutyRoster1/dist/
-DutyRoster1/nbdist/
+nbproject/private/
+build/
+Data/
+nbbuild/
+dist/
+nbdist/
 .nb-gradle/
 
 # Compiled class file
