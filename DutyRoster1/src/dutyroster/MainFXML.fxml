@@ -44,6 +44,13 @@
                 </MenuItem>
               </items>
             </Menu>
+            <Menu mnemonicParsing="false" text="Settings">
+              <items>
+                <MenuItem mnemonicParsing="false" text="Defaults" />
+                  <MenuItem mnemonicParsing="false" text="Exports" />
+                  <MenuItem mnemonicParsing="false" text="Themes" />
+              </items>
+            </Menu>
           </menus>
         </MenuBar>
       <HBox maxHeight="-Infinity" minWidth="-Infinity" prefHeight="44.0" prefWidth="200.0">
@@ -61,7 +68,7 @@
       </HBox>
       <ButtonBar buttonMinWidth="50.0" minHeight="50.0" prefHeight="50.0">
         <buttons>
-            <Button layoutX="830.0" layoutY="20.0" maxHeight="31.0" maxWidth="114.0" minHeight="-Infinity" minWidth="50.0" mnemonicParsing="false"  prefHeight="31.0" prefWidth="50.0" text="Update Rosters">
+            <Button layoutX="830.0" layoutY="20.0" maxHeight="31.0" maxWidth="114.0" minHeight="-Infinity" minWidth="50.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="50.0" text="Update Rosters">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>
@@ -85,7 +92,7 @@
             <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" maxWidth="50.0" minWidth="50.0" prefWidth="50.0" text="Title" />
             <TextField fx:id="fTitle" maxHeight="-Infinity" maxWidth="200.0" minHeight="-Infinity" minWidth="200.0" prefHeight="31.0" prefWidth="200.0" />
             <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" maxWidth="60.0" minWidth="60.0" prefWidth="60.0" text="Interval" />
-            <ComboBox fx:id="cInterval" maxWidth="200.0"></ComboBox>
+            <ComboBox fx:id="cInterval" maxWidth="200.0" />
             <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" maxWidth="60.0" minWidth="60.0" prefHeight="21.0" prefWidth="60.0" text="Amount" />
             <TextField fx:id="fAmount" alignment="CENTER" maxHeight="-Infinity" maxWidth="80.0" minHeight="-Infinity" minWidth="80.0" prefHeight="31.0" prefWidth="40.0" />
             <CheckBox fx:id="cWeekends" maxHeight="-Infinity" maxWidth="100.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="21.0" prefWidth="100.0" text="Weekends" />
