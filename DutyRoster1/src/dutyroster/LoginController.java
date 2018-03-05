@@ -121,7 +121,7 @@ public class LoginController implements Initializable {
         Stage stage = (Stage) fieldPass2.getScene().getWindow();
         stage.close();
         
-        openMainScene();
+        openWizard();
     }
     
     @FXML private void exitProgram(ActionEvent event) {   
@@ -142,7 +142,28 @@ public class LoginController implements Initializable {
         }
 
     }
-      
+    
+    public void openWizard(){
+
+         try{
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("MainFXML.fxml")); 
+            Parent root1 = loader.load();
+            MainController mController = loader.getController();
+            Stage stage = new Stage();
+            stage.setTitle("Duty Roster 1.0");
+            stage.setResizable(true);
+            stage.setScene(new Scene(root1));
+            stage.setMaximized(true);
+            stage.setOnHidden(e -> mController.shutDown());
+            stage.show(); 
+          
+        }
+        catch(IOException e){
+           System.out.println("Can't load new scene: " + e); 
+        }   
+        
+    } 
+    
     public void openMainScene(){
 
          try{
