@@ -49,7 +49,7 @@
       <HBox alignment="bottom_right" prefHeight="309.0" prefWidth="334.0" spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="2">
          <children>
             <TextField fx:id="rankField" prefHeight="31.0" prefWidth="145.0" promptText="Rank" />
-            <Button onAction="#addRank" text="Add" />
+            <Button fx:id="addButton" onAction="#addRank" text="Add" />
          </children>
       </HBox>
       <VBox alignment="CENTER" prefHeight="240.0" prefWidth="113.0" GridPane.rowIndex="1">
