@@ -11,6 +11,7 @@ import java.net.URL;
 import java.nio.file.Files;
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Optional;
@@ -55,7 +56,6 @@ import javafx.scene.input.TransferMode;
 import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.util.Callback;
 import javafx.util.StringConverter;
 
 public class MainController implements Initializable {
@@ -173,11 +173,10 @@ public class MainController implements Initializable {
             }
         });      
     
-        cInterval.valueProperty().addListener((obs, oldval, newval) -> {
+        cInterval.valueProperty().addListener((ObservableValue<? extends Interval> obs, Interval oldval, Interval newval) -> {
             if(newval != null)
                 fInterval.setText(Integer.toString(newval.getHour()));
-                currentRoster.setInterval(newval.getHour());
-             
+            currentRoster.setInterval(newval.getHour());             
         });
 
        setInterval();
@@ -197,7 +196,6 @@ public class MainController implements Initializable {
  
     }    
  
-
     public void setInterval(){
         
         int selected = -1;
@@ -324,16 +322,16 @@ public class MainController implements Initializable {
             //sceneRank.getStylesheets().add("stylesheet.css");
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setScene(sceneStatus2);
-           // stage.setOnHidden(e -> BOController.shutDown());
+            stage.setOnHidden(e -> BOController.shutDown());
             stage.show(); 
-          
         }
         catch(IOException e){
            System.out.println("Can't load new scene: " + e); 
         }
     }  
 
-    @FXML private void openHolidays(ActionEvent event) {
+    
+@FXML private void openHolidays(ActionEvent event) {
          
         try{
             
@@ -356,7 +354,7 @@ public class MainController implements Initializable {
         }
     }  
 
-    @FXML private void openCrewEditor(ActionEvent event) {
+@FXML private void openCrewEditor(ActionEvent event) {
          
         try{
             FXMLLoader loader = new FXMLLoader(getClass().getResource("CrewFXML.fxml")); 
@@ -379,14 +377,21 @@ public class MainController implements Initializable {
         }
     }    
     
+    @FXML private void assignDuty(){
+        storeRosterData();
+        
+        Assignment assign = new Assignment(rosterArray,curYear,curMonth);
+        assign.setAssingned();
+        
+        updateCrew();
+    }
+    
     public void loadMonths(int curMonth){
     
         String[] monthArry = new String[] {"January", "Febuary", "March", "April", "May", "June",
                     "July", "August", "September", "October", "November", "December"}; 
  
-        for(String month : monthArry)
-            monthList.add(month);   
-       
+        monthList.addAll(Arrays.asList(monthArry));        
         comboMonth.getItems().setAll(monthList);
         comboMonth.getSelectionModel().select(curMonth);
     }
@@ -562,18 +567,14 @@ public class MainController implements Initializable {
         TableColumn<ObservableList<StringProperty>, String> column = new TableColumn<>();
 
         column.setText(columnTitle);
-        column.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList<StringProperty>, String>, ObservableValue<String>>() {
-             @Override
-             public ObservableValue<String> call(
-                 CellDataFeatures<ObservableList<StringProperty>, String> cellDataFeatures) {
-               ObservableList<StringProperty> values = cellDataFeatures.getValue();
-               // Pad to current value if necessary:
-               for (int index = values.size(); index <= columnIndex; index++) {
-                   values.add(index, new SimpleStringProperty(""));
-               }
-               return cellDataFeatures.getValue().get(columnIndex);
-             }
-           });
+        column.setCellValueFactory((CellDataFeatures<ObservableList<StringProperty>, String> cellDataFeatures) -> {
+            ObservableList<StringProperty> values = cellDataFeatures.getValue();
+            // Pad to current value if necessary:
+            for (int index = values.size(); index <= columnIndex; index++) {
+                values.add(index, new SimpleStringProperty(""));
+            }
+            return cellDataFeatures.getValue().get(columnIndex);
+        });
         column.setCellFactory(TextFieldTableCell.<ObservableList<StringProperty>>forTableColumn());
         return column;
     }
@@ -624,7 +625,7 @@ public class MainController implements Initializable {
             if(rdArray==null || rdArray.isEmpty() || rdArray.size()!= lastDayOfMonth + 5){
                 for (int i = -2; i <= lastDayOfMonth; i++)
                     if(i<1)
-                        row.add(new SimpleStringProperty("0"));
+                        row.add(new SimpleStringProperty("1"));
                     else
                         row.add(new SimpleStringProperty("_"));    
            }
