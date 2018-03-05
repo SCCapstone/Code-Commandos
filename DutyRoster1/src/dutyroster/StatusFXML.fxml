@@ -35,7 +35,7 @@
    <HBox alignment="bottom_right" prefHeight="309.0" prefWidth="334.0" spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="2">
         <TextField fx:id="codeField" prefHeight="31.0" prefWidth="60.0" promptText="Code" />
         <TextField fx:id="titleField" prefHeight="31.0" prefWidth="125.0" promptText="Title" />
-        <Button onAction="#addStatus" text="Add" />
+        <Button fx:id="addButton" onAction="#addStatus" text="Add" />
      </HBox>
    <columnConstraints>
       <ColumnConstraints />

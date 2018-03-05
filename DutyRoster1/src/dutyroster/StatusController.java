@@ -19,23 +19,26 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
 
 
 public final class StatusController implements Initializable {
 
     //GUI
     //used for tableview 
-     @FXML private TableView<Status> tableView;
+    @FXML private TableView<Status> tableView;
     @FXML private TableColumn<Status,String> colCode;
     @FXML private TableColumn<Status,String> colTitle;
     @FXML private TextField codeField;
     @FXML private TextField titleField;
+    @FXML private Button addButton1;
   
     //List of rankssor
     private ObservableList<Status> statusList;
@@ -67,6 +70,12 @@ public final class StatusController implements Initializable {
                 SelectionMode.MULTIPLE
         );
         
+        titleField.setOnKeyPressed((event) -> { 
+            if(event.getCode() == KeyCode.ENTER)         
+                if ( !( codeField.getText().isEmpty() || titleField.getText().isEmpty()) ) 
+                    statusAdd();
+        }
+        );
         //Create the Delete menu item
         MenuItem mi1 = new MenuItem("Delete");
             mi1.setOnAction((ActionEvent event) -> { 
@@ -127,7 +136,17 @@ public final class StatusController implements Initializable {
     }
       
     //The add rank action checks to make sure the rank doesn't already exits
-    @FXML public void addStatus(ActionEvent event) {
+    @FXML 
+    protected void addStatus(ActionEvent event) {
+        statusAdd();
+    }
+    
+    @FXML
+    private void comboAdd(ActionEvent event) {
+        if ( !( codeField.getText().isEmpty() || titleField.getText().isEmpty()) ) 
+                    statusAdd();
+    }
+    public void statusAdd(){
         
         Alert alert;
        
