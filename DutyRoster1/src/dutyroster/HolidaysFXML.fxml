@@ -2,10 +2,10 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.cell.PropertyValueFactory?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
@@ -20,20 +20,16 @@
         <columns>
                
  
-          <TableColumn fx:id="name" maxWidth="170.0" minWidth="170.0" prefWidth="170.0" resizable="false" sortable="true" text="Name">
+          <TableColumn fx:id="name" maxWidth="170.0" minWidth="170.0" prefWidth="170.0" resizable="false" sortable="true" text="Holiday">
                 <cellValueFactory><PropertyValueFactory property="name" />
                 </cellValueFactory>
           
           </TableColumn>
-          <TableColumn fx:id="status" maxWidth="100.0" minWidth="100.0" prefWidth="100.0" resizable="false" sortable="true" text="Status">
-                <cellValueFactory><PropertyValueFactory property="status" />
-                </cellValueFactory>
-          </TableColumn>
-         <TableColumn fx:id="fromDate" maxWidth="100.0" minWidth="80.0" prefWidth="23.7" resizable="false" sortable="true" text="From Date">
+         <TableColumn fx:id="fromDate" maxWidth="140.66668701171875" minWidth="80.0" prefWidth="140.66668701171875" resizable="false" sortable="true" text="From Date">
           <cellValueFactory><PropertyValueFactory property="fromDate" />
                 </cellValueFactory>   
          </TableColumn>    
-         <TableColumn fx:id="toDate" maxWidth="100.0" minWidth="80.0" prefWidth="67.0" resizable="false" sortable="true" text="To Date">
+         <TableColumn fx:id="toDate" maxWidth="146.0" minWidth="80.0" prefWidth="118.33331298828125" resizable="false" sortable="true" text="To Date">
        <cellValueFactory><PropertyValueFactory property="toDate" />
                 </cellValueFactory>   
          </TableColumn>
@@ -42,8 +38,7 @@
     </TableView>
    
    <HBox alignment="bottom_right" spacing="10.0" style="-fx-alignment: center;" GridPane.rowIndex="2">
-      <ComboBox fx:id="statusCombo" prefHeight="31.0" prefWidth="145.0" promptText="Status" />
-          <ComboBox fx:id="nameCombo" layoutX="40.0" prefHeight="31.0" prefWidth="142.0" promptText="Name" />
+      <TextField fx:id="Holiday" promptText="Holiday" />
      </HBox>
    <HBox spacing="20.0" style="-fx-alignment: center;" GridPane.rowIndex="3">
       <children>
