@@ -31,11 +31,11 @@ public class HolidaysController implements Initializable {
     //for entering a new rank
     //@FXML private ComboBox statusCombo;
     //used for tableview 
-    @FXML private TableView<Blockout> tableView;
-    @FXML private TableColumn<Blockout,String> status;
-    @FXML private TableColumn<Blockout,String> name;
-    @FXML private TableColumn<Blockout,String> fromDate;
-    @FXML private TableColumn<Blockout,String> toDate;
+    @FXML private TableView<Holidays> tableView;
+    @FXML private TableColumn<Holidays,String> status;
+    @FXML private TableColumn<Holidays,String> name;
+    @FXML private TableColumn<Holidays,String> fromDate;
+    @FXML private TableColumn<Holidays,String> toDate;
     @FXML private ComboBox nameCombo;
     @FXML private ComboBox statusCombo;
     @FXML private DatePicker dateFrom;
@@ -93,7 +93,7 @@ public class HolidaysController implements Initializable {
         //Create the Delete menu item
         MenuItem mi1 = new MenuItem("Delete");
             mi1.setOnAction((ActionEvent event) -> { 
-                ObservableList<Blockout> items = tableView.getSelectionModel().getSelectedItems();
+                ObservableList<Holidays> items = tableView.getSelectionModel().getSelectedItems();
                 deleteBlockout(items);
             });
 
@@ -128,7 +128,7 @@ public class HolidaysController implements Initializable {
      * This will delete selected rows from the block out list
      * @param tmpList
      */
-    public void deleteBlockout(ObservableList<Blockout> tmpList){
+    public void deleteBlockout(ObservableList<Holidays> tmpList){
                 if (tmpList==null)
             return;
  
@@ -190,7 +190,7 @@ public class HolidaysController implements Initializable {
                 // getSortIndex pulls updated rank order index. 
                 if(bArry[0].length() > 0 && bArry[1].length() > 0){
                     
-                    HolidaysList.add( new Blockout(
+                    HolidaysList.add( new Holidays(
                             bArry[0],
                             bArry[1],
                             bArry[2],
