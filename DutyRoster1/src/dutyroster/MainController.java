@@ -333,6 +333,28 @@ public class MainController implements Initializable {
         }
     }  
 
+    @FXML private void openHolidays(ActionEvent event) {
+         
+        try{
+            
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("HolidaysFXML.fxml")); 
+            Parent root1 = loader.load();
+            HolidaysController HController = loader.getController();
+            Stage stage = new Stage();
+            stage.setTitle("Holidays Editor");
+            stage.setResizable(false);
+            Scene sceneStatus2 = new Scene(root1);
+            //sceneRank.getStylesheets().add("stylesheet.css");
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setScene(sceneStatus2);
+           // stage.setOnHidden(e -> HController.shutDown());
+            stage.show(); 
+          
+        }
+        catch(IOException e){
+           System.out.println("Can't load new scene: " + e); 
+        }
+    }  
 
     @FXML private void openCrewEditor(ActionEvent event) {
          
