@@ -52,7 +52,7 @@ public class HolidaysController implements Initializable {
     // rankOptions is used to pull the rank information  
  
     //rankListing is used to change it in the column  
-    private ObservableList<Blockout> blockoutList;
+    private ObservableList<Holidays> HolidaysList;
    
     //Used to encrypt, decrypt and store the file.
     private String strData;
@@ -67,7 +67,7 @@ public class HolidaysController implements Initializable {
         
         employeeOptions = FXCollections.observableArrayList();
         statusOptions = FXCollections.observableArrayList();
-        blockoutList = FXCollections.observableArrayList();
+        HolidaysList = FXCollections.observableArrayList();
              
         // pull ranks from secure file and place them into rank listing.
         loadStatus(); 
@@ -77,7 +77,7 @@ public class HolidaysController implements Initializable {
         nameCombo.getItems().setAll(employeeOptions);
 
         loadBlockouts();
-        tableView.setItems(blockoutList);
+        tableView.setItems(HolidaysList);
 
         //used to edit the tables.
         tableView.setEditable(true);
@@ -105,7 +105,7 @@ public class HolidaysController implements Initializable {
     /**
      * This will add a new block out date to the list
      */
-    @FXML public void addBlockout(){
+    @FXML public void addHolidays(){
         
         String n,s,f,t;
 
@@ -115,8 +115,8 @@ public class HolidaysController implements Initializable {
         t = curTo.format(formatter);
                 
         //Add new block out instance to the table
-        Blockout temp = new Blockout(n,s,f,t); 
-        blockoutList.add(temp);
+        Holidays temp = new Holidays(n,s,f,t); 
+        HolidaysList.add(temp);
         tableView.sort();
         
         //Clear datepicker fields
@@ -133,9 +133,9 @@ public class HolidaysController implements Initializable {
             return;
  
         for(int i = 0; i<tmpList.size(); i++)
-            for(int j = 0; j<blockoutList.size(); j++)  
-                if (tmpList.get(i).getName().equals(blockoutList.get(j).getName()))  
-                    blockoutList.remove(j);
+            for(int j = 0; j<HolidaysList.size(); j++)  
+                if (tmpList.get(i).getName().equals(HolidaysList.get(j).getName()))  
+                    HolidaysList.remove(j);
     }
     
     /**
@@ -153,10 +153,10 @@ public class HolidaysController implements Initializable {
         SecureFile scBlockOut = new SecureFile("Blockouts");
         strData = "";
         
-        if (blockoutList == null)
+        if (HolidaysList == null)
             return;
         
-        blockoutList.forEach((b) -> { 
+        HolidaysList.forEach((b) -> { 
            
             strData += b.getName() 
                     + "@" + b.getStatus()
@@ -190,7 +190,7 @@ public class HolidaysController implements Initializable {
                 // getSortIndex pulls updated rank order index. 
                 if(bArry[0].length() > 0 && bArry[1].length() > 0){
                     
-                    blockoutList.add( new Blockout(
+                    HolidaysList.add( new Blockout(
                             bArry[0],
                             bArry[1],
                             bArry[2],
