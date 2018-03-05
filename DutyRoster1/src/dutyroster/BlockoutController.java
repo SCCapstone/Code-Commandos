@@ -87,7 +87,9 @@ public class BlockoutController implements Initializable {
         
         
     }  
-    
+    /**
+     * This will add a new block out date to the list
+     */
     @FXML public void AddBlockout(){
         
         String n;
