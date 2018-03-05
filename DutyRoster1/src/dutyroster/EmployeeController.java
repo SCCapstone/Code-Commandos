@@ -11,6 +11,8 @@ import java.net.URL;
 import java.util.Comparator;
 
 import java.util.ResourceBundle;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.fxml.Initializable;
 
@@ -19,6 +21,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
@@ -30,6 +33,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.input.KeyCode;
 import javafx.util.converter.DefaultStringConverter;
 
 public class EmployeeController implements Initializable {
@@ -38,12 +42,15 @@ public class EmployeeController implements Initializable {
     @FXML private ComboBox rankCombo;
     @FXML private TextField nameField;
     @FXML private TextField fileAddress;
+    @FXML private Button addButton;
     //used for tableview 
     @FXML private TableView<Employee> tableView;
     @FXML private TableColumn<Employee,String> rank;
     @FXML private TableColumn<Employee,String> name;
     @FXML private TableColumn<Employee,Integer> sort;
-     
+    
+    
+    
     // used to import and export data from employee data
     private ObservableList<Employee> employeeList;
     // rankOptions is used to pull the rank information  
@@ -89,6 +96,14 @@ public class EmployeeController implements Initializable {
             }
         });
         // used to make each cell in the rank column in the editable.
+        nameField.setOnKeyPressed((event) -> { 
+            if(event.getCode() == KeyCode.ENTER)         
+                if ( !( rankCombo.getValue()==null || nameField.getText().isEmpty()) ) 
+                    employeeAdd();
+             
+        }
+        );
+       
         name.setCellValueFactory(new PropertyValueFactory<>("name"));
         name.setCellFactory(TextFieldTableCell.forTableColumn());
         name.setOnEditCommit(
@@ -283,7 +298,18 @@ public class EmployeeController implements Initializable {
        
     @FXML
     protected void addEmployee(ActionEvent event) {
-       Alert alert;
+
+        employeeAdd();
+    }
+    
+    @FXML
+    private void comboAdd(ActionEvent event){
+        if ( !( rankCombo.getValue()==null || nameField.getText().isEmpty()) ) 
+                    employeeAdd();
+    }
+
+    public void employeeAdd(){
+           Alert alert;
         
         if (rankCombo.getValue()==null){
              alert = new Alert(Alert.AlertType.ERROR, "Each employee must have a rank."
@@ -308,10 +334,9 @@ public class EmployeeController implements Initializable {
       
         tableView.setItems(employeeList);
         tableView.sort();
-        nameField.setText("");  
- 
-    }  
-
+        nameField.setText("");      
+    }
+    
     //Change index to the next lower value
     private void deleteEmployee(ObservableList<Employee> tmpList){
                                    

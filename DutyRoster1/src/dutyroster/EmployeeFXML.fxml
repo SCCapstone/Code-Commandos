@@ -39,9 +39,9 @@
     </TableView>
    
    <HBox alignment="bottom_right" prefHeight="309.0" prefWidth="334.0" spacing="10" GridPane.rowIndex="2">
-      <ComboBox fx:id="rankCombo" prefHeight="31.0" prefWidth="107.0" promptText="Rank" />
+      <ComboBox fx:id="rankCombo" onAction="#comboAdd" prefHeight="31.0" prefWidth="107.0" promptText="Rank" />
           <TextField fx:id="nameField" prefHeight="31.0" prefWidth="153.0" promptText="Name" />
-          <Button onAction="#addEmployee" text="Add" />
+          <Button fx:id="addButton" onAction="#addEmployee" text="Add" />
      </HBox>
    <HBox alignment="bottom_right" layoutX="20.0" layoutY="437.0" prefHeight="309.0" prefWidth="334.0" spacing="10" GridPane.rowIndex="3">
       <children>
