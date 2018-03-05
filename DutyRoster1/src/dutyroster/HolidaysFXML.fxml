@@ -53,7 +53,7 @@
    </HBox>
    <HBox alignment="bottom_right" layoutX="20.0" layoutY="437.0" spacing="10" style="-fx-alignment: center;" GridPane.rowIndex="4">
       <children>
-             <Button maxWidth="420.0" onAction="#addBlockout" prefWidth="420.0" text="Add" />
+             <Button maxWidth="420.0" onAction="#addHolidays" prefWidth="420.0" text="Add" />
       </children>
    </HBox>
 
