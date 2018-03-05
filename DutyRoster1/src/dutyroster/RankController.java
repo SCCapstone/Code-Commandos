@@ -12,12 +12,14 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
 
 
 public class RankController implements Initializable {
@@ -26,7 +28,8 @@ public class RankController implements Initializable {
     @FXML private TableView<Rank> tableView;
     @FXML private TextField rankField;
     @FXML private TableColumn<Rank,Integer> sort;
-     
+        @FXML private Button addButton;
+ 
     //List of rankssor
     private ObservableList<Rank> rankList;
     
@@ -51,6 +54,13 @@ public class RankController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         
+        rankField.setOnKeyPressed((event) -> { 
+            if(event.getCode() == KeyCode.ENTER)         
+                if ( !( rankExists(rankField.getText()) || rankField.getText().isEmpty()) ) 
+                    rankAdd();
+             
+        }
+        );
         //Add multi select to table
         tableView.getSelectionModel().setSelectionMode(
                 SelectionMode.MULTIPLE
@@ -113,9 +123,20 @@ public class RankController implements Initializable {
 
     }
       
+    @FXML
+    protected void addRank(ActionEvent event){
+        rankAdd();
+    }
+    
+    @FXML
+    private void comboAdd(ActionEvent event){
+        if ( !( rankExists(rankField.getText()) || rankField.getText().isEmpty()) ) 
+                    rankAdd();
+    }
+    
     //The add rank action checks to make sure the rank doesn't already exits
     @FXML
-    public void addRank(ActionEvent event) {
+    public void rankAdd() {
         
         Alert alert;
         
