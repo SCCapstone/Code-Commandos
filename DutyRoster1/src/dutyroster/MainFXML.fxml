@@ -35,7 +35,7 @@
                 <MenuItem fx:id="menu_nameEditor" onAction="#openEmployeeEditor" text="_Employees" />
                 <MenuItem fx:id="menu_statusEditor" onAction="#openStatusEditor" text="_Status" />
                 <MenuItem fx:id="menu_blockoutEditor" onAction="#openBlockout" text="_Blockouts" />
-                  <MenuItem mnemonicParsing="false" text="Holidays" />
+                <MenuItem fx:id="menu_Holidays" onAction="#openHolidays" text="Holidays" />
                 <MenuItem fx:id="menu_addRoster" onAction="#addRoster" text="Add Ro_ster" />
               </items>
             </Menu>
