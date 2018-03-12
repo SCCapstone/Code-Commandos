@@ -5,6 +5,7 @@
  */
 package dutyroster;
 
+import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Application;
@@ -19,7 +20,8 @@ public class Driver extends Application {
     
     @Override
     public void start(Stage stage) {
-        
+        System.out.println("java version: "+System.getProperty("java.version"));
+        System.out.println("javafx.version: " + System.getProperty("javafx.version"));
        openLogin();
         
     }
@@ -42,7 +44,7 @@ public class Driver extends Application {
            
             stage.show();  
         } 
-        catch (Exception e) {
+        catch (IOException e) {
             Logger.getLogger(Driver.class.getName()).log(Level.SEVERE, null, e);
         }
         

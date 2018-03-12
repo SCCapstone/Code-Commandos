@@ -7,8 +7,6 @@ package dutyroster;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -28,13 +26,11 @@ public class ImportFile {
     private  final String TITLE = "Open Employee Data .csv";
     private String pathFile;
     private final ObservableList<Rank> rankList;
-    private final ObservableList<Employee> importErrors;
 
     //constructor 
     public ImportFile(ObservableList<Rank> rankArray) {
         
         rankList = FXCollections.observableArrayList();
-        importErrors = FXCollections.observableArrayList();
         
         rankList.addAll(rankArray);
         
@@ -46,12 +42,12 @@ public class ImportFile {
 
         if (selectedFile != null) {
             pathFile = selectedFile.getPath();
-            }
+        }
+    
     }  
 
     /**
     * returns file path
-    * 
      * @return 
     */
     public String getFilePath(){
@@ -77,23 +73,14 @@ public class ImportFile {
                 String[] val = row.split(",");
                 int priority = Tools.getSortIndex(rankList, val[0]);
              
-                if (priority >= 0){
                     Employee tempE = new Employee(priority, val[0], val[1]);
                     returnArray.add(tempE);
-                }
-                else{
-                    importErrors.add(new Employee(priority, val[0], val[1]));
-                }
                 
             }
             sc.close();
 
         }
         return returnArray;
-    }
-
-    public ObservableList<Employee> getErrors() {
-        return importErrors;
     }
     
 }

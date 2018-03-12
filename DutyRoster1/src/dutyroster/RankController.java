@@ -1,6 +1,7 @@
 /**
- * @version 1
- * 11/20/17
+ * @authors Austin Freed, Tanya Peyush
+ * @version 2
+ * 3/11/18
  */
 package dutyroster;
 
@@ -12,7 +13,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SelectionMode;
@@ -21,31 +21,25 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 
-
 public class RankController implements Initializable {
 
     //GUI
     @FXML private TableView<Rank> tableView;
     @FXML private TextField rankField;
     @FXML private TableColumn<Rank,Integer> sort;
-        @FXML private Button addButton;
  
     //List of rankssor
     private ObservableList<Rank> rankList;
     
     //Extracting Data from encrypted file
-    private SecureFile sc;
     private String strData;
     
     public RankController(){
     startUp();
     }
     
- 
     public void startUp(){
         rankList = FXCollections.observableArrayList();
-        //instantiates new file, use file name Ranks as storage
-        sc = new SecureFile("Ranks");
 
         //pull encrypted info and load into ranked list
         retrieveData();
@@ -89,15 +83,16 @@ public class RankController implements Initializable {
     //Converting store data into an array string
     public void storeData(){
 
+        SecureFile sc = new SecureFile("Ranks");
+        
         strData = "";
         rankList.forEach((rank) -> {  
             strData +=  rank.getSort() + "@" +  rank.getRank() + "|";    
         });
-            strData = Tools.removeLastChar(strData);
+        strData = Tools.removeLastChar(strData);
         
         //Store string array into secure file
         sc.store(strData);
-        
         //clear strData
         strData = "";
         
@@ -105,6 +100,7 @@ public class RankController implements Initializable {
     
     //retrieve data from secure file
     public void retrieveData(){
+        SecureFile sc = new SecureFile("Ranks");
         
         String a = sc.retrieve();
       
@@ -268,13 +264,12 @@ public class RankController implements Initializable {
         tableView.sort();
     }
     
-    
-        //Returns highest Rank
+    //Returns highest Rank
     public int countRanks(){
-            return rankList.size() + 1;
+            return rankList.size();
     }
     
-     public void addNewRank(String rank) {
+    public void addNewRank(String rank) {
         
         for(Rank currentRank : rankList)
             if(currentRank.getRank().equalsIgnoreCase(rank)) 
@@ -294,10 +289,16 @@ public class RankController implements Initializable {
         if (ranks==null)
             throw new IllegalArgumentException("No rank entered");
         
-        for(int i = 0; i<ranks.length; i++)
-            for(int j = 0; j<rankList.size(); j++)  
-                if (ranks[i].equals(rankList.get(j)))  
+        for (String rank : ranks) {
+            for (int j = 0; j<rankList.size(); j++) {
+                if (rank.equals(rankList.get(j).getRank())) {  
                     rankList.remove(j);
+                }
+            
+            }
+        
+        }
 
     }
+
 }

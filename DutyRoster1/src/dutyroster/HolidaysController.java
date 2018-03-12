@@ -32,12 +32,9 @@ public class HolidaysController implements Initializable {
     //@FXML private ComboBox statusCombo;
     //used for tableview 
     @FXML private TableView<Holidays> tableView;
-    @FXML private TableColumn<Holidays,String> status;
     @FXML private TableColumn<Holidays,String> name;
     @FXML private TableColumn<Holidays,String> fromDate;
     @FXML private TableColumn<Holidays,String> toDate;
-    @FXML private ComboBox nameCombo;
-    @FXML private ComboBox statusCombo;
     @FXML private DatePicker dateFrom;
     @FXML private DatePicker dateTo;
     
@@ -70,12 +67,7 @@ public class HolidaysController implements Initializable {
         HolidaysList = FXCollections.observableArrayList();
              
         // pull ranks from secure file and place them into rank listing.
-        loadStatus(); 
-        statusCombo.getItems().setAll(statusOptions);
-        
-        loadEmployees();
-        nameCombo.getItems().setAll(employeeOptions);
-
+       
         loadBlockouts();
         tableView.setItems(HolidaysList);
 
@@ -109,8 +101,8 @@ public class HolidaysController implements Initializable {
         
         String n,s,f,t;
 
-        n = nameCombo.getValue().toString();
-        s = statusCombo.getValue().toString();
+        n = "";
+        s = "";
         f = curFrom.format(formatter);
         t = curTo.format(formatter);
                 

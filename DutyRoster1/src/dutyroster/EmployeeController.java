@@ -1,27 +1,20 @@
 /**
- * 
+ * This class is the controller for the Employee editor
  * @author Harini
- * @version 5 12/5/17
+ * @version 6 3/11/18
  */
 package dutyroster;
-
 
 import java.net.URL;
 
 import java.util.Comparator;
-
 import java.util.ResourceBundle;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.fxml.Initializable;
-
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
@@ -42,14 +35,11 @@ public class EmployeeController implements Initializable {
     @FXML private ComboBox rankCombo;
     @FXML private TextField nameField;
     @FXML private TextField fileAddress;
-    @FXML private Button addButton;
     //used for tableview 
     @FXML private TableView<Employee> tableView;
     @FXML private TableColumn<Employee,String> rank;
     @FXML private TableColumn<Employee,String> name;
     @FXML private TableColumn<Employee,Integer> sort;
-    
-    
     
     // used to import and export data from employee data
     private ObservableList<Employee> employeeList;
@@ -58,8 +48,6 @@ public class EmployeeController implements Initializable {
     //rankListing is used to change it in the column  
     private ObservableList<String> rankListing;
     // used to encrypt, decrypt and store the file.
-    private SecureFile scEmployees;
-    private SecureFile scRanks;
     private String strData;
     
     /**
@@ -74,26 +62,21 @@ public class EmployeeController implements Initializable {
         rankOptions = FXCollections.observableArrayList();
         rankListing = FXCollections.observableArrayList();
         // using file name ranks for secure files
-        scRanks = new SecureFile("Ranks");  
         // pull ranks from secure file and place them into rank listing.
         loadRanks(); 
  
         // used to make each cell in the rank column in the editable.
         rank.setCellValueFactory(new PropertyValueFactory<>("rank"));
         rank.setCellFactory(ComboBoxTableCell.forTableColumn(new DefaultStringConverter(), rankListing));
-        rank.setOnEditCommit(
-            new EventHandler<TableColumn.CellEditEvent<Employee, String>>() {
-                @Override
-                public void handle(TableColumn.CellEditEvent<Employee, String> t) {
-                    String newName = t.getNewValue();
-                    ObservableList<Employee> items = t.getTableView().getItems();
-                    TablePosition<Employee, String> tablePosition = t.getTablePosition();
-
-                    Employee fieldRow = items.get(tablePosition.getRow());
-                    fieldRow.setRank(newName);
-                    fieldRow.setSort( Tools.getSortIndex(rankOptions, newName) );
-                    tableView.sort();
-            }
+        rank.setOnEditCommit((TableColumn.CellEditEvent<Employee, String> t) -> {
+            String newName = t.getNewValue();
+            ObservableList<Employee> items = t.getTableView().getItems();
+            TablePosition<Employee, String> tablePosition = t.getTablePosition();
+            
+            Employee fieldRow = items.get(tablePosition.getRow());
+            fieldRow.setRank(newName);
+            fieldRow.setSort( Tools.getSortIndex(rankOptions, newName) );
+            tableView.sort();
         });
         // used to make each cell in the rank column in the editable.
         nameField.setOnKeyPressed((event) -> { 
@@ -101,8 +84,7 @@ public class EmployeeController implements Initializable {
                 if ( !( rankCombo.getValue()==null || nameField.getText().isEmpty()) ) 
                     employeeAdd();
              
-        }
-        );
+        });
        
         name.setCellValueFactory(new PropertyValueFactory<>("name"));
         name.setCellFactory(TextFieldTableCell.forTableColumn());
@@ -111,24 +93,21 @@ public class EmployeeController implements Initializable {
                     ( t.getTableView().getItems().get(
                             t.getTablePosition().getRow())
                     ).setName(t.getNewValue())
-                );       
+        );       
             
-       
         MenuItem mi1 = new MenuItem("Delete");
             mi1.setOnAction((ActionEvent event) -> { 
                 ObservableList<Employee> items = tableView.getSelectionModel().getSelectedItems();
                 deleteEmployee(items);
-            });
+        });
 
         ContextMenu menu = new ContextMenu();
         menu.getItems().add(mi1);
         tableView.setContextMenu(menu);
 
         //  load the rankListing into rankCombo
-        rankCombo.getItems().setAll(rankListing);
-        
-       // Creating a new secure files employees and load it into secure files.
-        scEmployees = new SecureFile("Employees");
+        rankCombo.setItems(rankListing);
+       
         //pull the ranks from secureFile and loads it into employees.
         loadEmployees();
         
@@ -147,15 +126,19 @@ public class EmployeeController implements Initializable {
         name.setSortType(TableColumn.SortType.ASCENDING);
         tableView.getSortOrder().add(name);
         name.setSortable(true);
-        
-        
+             
     }  
     
     public void shutDown() {  
         storeData();
+        storeRanks();
     }
  
     public void storeData(){   
+        
+        // Creating a new secure files employees and load it into secure files.
+        SecureFile scEmployees = new SecureFile("Employees");
+        
         strData = "";
         
         if (employeeList == null)
@@ -177,6 +160,8 @@ public class EmployeeController implements Initializable {
      */
     public void loadEmployees(){
         
+         // Creating a new secure files employees and load it into secure files.
+        SecureFile scEmployees = new SecureFile("Employees");
         String a = scEmployees.retrieve();
       
         String aArry[] = a.split("\\|", -1);
@@ -197,11 +182,11 @@ public class EmployeeController implements Initializable {
     }
     
     /**
-     * 
      * This is used to load ranks from secure files into the link listing array.
      */
     public void loadRanks(){
         
+        SecureFile scRanks = new SecureFile("Ranks");
         String a = scRanks.retrieve();
       
         String aArry[] = a.split("\\|", -1);
@@ -216,9 +201,27 @@ public class EmployeeController implements Initializable {
                    rankOptions.add( new Rank(Integer.parseInt(bArry[0]), bArry[1] ) );
                    rankListing.add(bArry[1]);
                 }
+            
             }
  
         }   
+        
+    }
+    
+        //Converting store data into an array string
+    public void storeRanks(){
+
+        SecureFile sc = new SecureFile("Ranks");
+        strData = "";
+        rankOptions.forEach((srank) -> {  
+            strData +=  srank.getSort() + "@" +  srank.getRank() + "|";    
+        });
+            strData = Tools.removeLastChar(strData);
+        
+        //Store string array into secure file
+        sc.store(strData);
+        //clear strData
+        strData = "";
         
     }
         
@@ -255,12 +258,21 @@ public class EmployeeController implements Initializable {
             }
             
             if(!eExists){
+                
+                String chRank = eThis.getRank();
+                
                 employeeList.add(
                         new Employee(
                         eThis.getSort(),
-                        eThis.getRank(),
+                        chRank,
                         eThis.getName()
                 ));
+            
+                if(!rankExists(chRank)){
+                    rankOptions.add(new Rank(rankOptions.size() + 1,chRank));
+                    rankListing.add(chRank);
+                }            
+            
             }
 
         }
@@ -269,30 +281,14 @@ public class EmployeeController implements Initializable {
         comparator = Comparator.comparingInt(Employee::getSort);
         FXCollections.sort(employeeList, comparator);
         
-        ObservableList<Employee> errorList;
+        int sizeImports = importList.size();
         
-        errorList = importF.getErrors();
-                
-        if (!errorList.isEmpty()){
-
-            String message1 = ( importList.size() > 0)? "Imort complete with" : "There was ";
-            String message2 = ( errorList.size() == 1 )? "an error" : "some  errors";
-            String message3 = "";
-            
-            Alert alert = new Alert(Alert.AlertType.WARNING,"");
-            alert.setTitle("Check Import List");
-                for(Employee e : errorList)
-                    message3 += "\n" + e.getRank() + " " 
-                            + e.getName() + " (" + e.getRank() + " not in rank listing)";
-            alert.setContentText(message1 + " " + message2 + message3);
-            alert.showAndWait();
-        }
-        else{
-            String message1 = ( importList.size()==1)? "Employee" : "Employees";
-            Alert alert = new Alert(Alert.AlertType.INFORMATION,"Import file added to Employee list");
-            alert.setTitle(message1 + " Added");
-            alert.showAndWait();
-        }
+        String msg1 = (sizeImports==1)? "employee" : "employees";
+        
+        Alert alert = new Alert(Alert.AlertType.INFORMATION,"Import file added to Employee list");
+        alert.setTitle(sizeImports + " " + msg1 + " added");
+        alert.showAndWait();       
+        
         fileAddress.clear();
     }
        
@@ -351,6 +347,17 @@ public class EmployeeController implements Initializable {
         tableView.setItems(employeeList);  
         tableView.sort();
     
+    }
+    
+    //Check to see if the rank already exitst
+    public boolean rankExists (String strIn) {
+        
+        for(Rank currentRank : rankOptions)
+            if(currentRank.getRank().equalsIgnoreCase(strIn)) 
+                return true;
+        
+        return false;    
+        
     }
     
 }
