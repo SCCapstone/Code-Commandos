@@ -39,12 +39,6 @@
                 <MenuItem fx:id="menu_addRoster" onAction="#addRoster" text="Add Ro_ster" />
               </items>
             </Menu>
-            <Menu text="_Help">
-              <items>
-                <MenuItem text="_About">
-                </MenuItem>
-              </items>
-            </Menu>
             <Menu mnemonicParsing="false" text="Settings">
               <items>
                 <MenuItem mnemonicParsing="false" text="Defaults" />
@@ -52,6 +46,13 @@
                   <MenuItem mnemonicParsing="false" text="Themes" />
               </items>
             </Menu>
+            <Menu text="_Help">
+              <items>
+                <MenuItem text="_About">
+                </MenuItem>
+              </items>
+            </Menu>
+
           </menus>
         </MenuBar>
       <HBox maxHeight="-Infinity" minWidth="-Infinity" prefHeight="44.0" prefWidth="200.0">

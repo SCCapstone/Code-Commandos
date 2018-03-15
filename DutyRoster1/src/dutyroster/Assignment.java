@@ -3,7 +3,7 @@
  * on rosters for a specific month
  * @author Othen Prock
  * @coauthor Michael Harlow
- * @version 2, March 3, 2018
+ * @version 3, March 15, 2018
  */
 package dutyroster;
 
@@ -37,45 +37,63 @@ public class Assignment {
             ArrayList<ArrayList<String>> inner = getCrewData(r.getTitle());
             crewsArray.add(inner);
         }
-
     }
-    
     
     public void setAssingned(){
         
         ArrayList<ArrayList<ArrayList<Assignee>>> rosterLevel = getUpdate();
-         
-          
+        Calendar selCal = Calendar.getInstance();
+        selCal.set(year, (month-1), 1);
+        
         for(int i = 0 ; i < crewsArray.size(); i++){
             
             ArrayList<ArrayList<String>> crewlist = crewsArray.get(i);
             ArrayList<ArrayList<Assignee>> roster = rosterLevel.get(i);
             ObservableList<ObservableList<StringProperty>> rowData = FXCollections.observableArrayList(); 
             
+            boolean rWeekends = rosterArray.get(i).getWeekends();
+            
             String title =  rosterArray.get(i).getTitle();
             String pathName = "Crew_"+ title+"_"+year+"_"+month;
             RosterData dr = new RosterData();
 
             for (ArrayList<String> row : crewlist) {
-                ObservableList<StringProperty> member = FXCollections.observableArrayList();;
+                ObservableList<StringProperty> member = FXCollections.observableArrayList();
                 member.add(new SimpleStringProperty(row.get(0)));
                 member.add(new SimpleStringProperty(row.get(1)));
                 member.add(new SimpleStringProperty(row.get(2)));
                 member.add(new SimpleStringProperty(row.get(3)));
                 member.add(new SimpleStringProperty(row.get(4)));
-
+ 
                 for(int j = 0; j < roster.size(); j++){
-
+                    
+                    //These will be needed to handle the weekend incrementers
+                    selCal.set(Calendar.DAY_OF_MONTH, j+1);
+                    int thisDay = selCal.get(Calendar.DAY_OF_WEEK);
+                    int daily=0;
+                    
                     for(Assignee a:roster.get(j)){
+                        
+                        if(rWeekends){
+                            
+                            if(thisDay==1 || thisDay==7)
+                             daily = a.getLastW(); 
+                            else
+                            daily = a.getLastN();
+ 
+                        }
+                        else{
+                            daily = a.getLastN();
+                        }
+                        
                         if(a.getName().equals(row.get(1))){
-                           String newS = (a.getOnDuty())? "X" : Integer.toString(a.getLastN()); 
-                           member.add((5+j),new SimpleStringProperty(newS)); 
+                           String newS = (a.getOnDuty()==0)? "X" : Integer.toString(daily); 
+                           member.add( (5+j),new SimpleStringProperty(newS) ); 
                            break;
                         }
                     }
-
                 }
-                System.out.println(row.get(1));
+                
                 rowData.add(member);
             }
             dr.storeData(pathName, rowData); 
@@ -83,77 +101,112 @@ public class Assignment {
         
     }
 
-    
     public ArrayList<ArrayList<ArrayList<Assignee>>> getUpdate(){
         
         //Used to contain new daily info for each assignee
-        
         ArrayList<ArrayList<ArrayList<Assignee>>> rosterLevel = new ArrayList();            
         Calendar selCal = Calendar.getInstance();
         selCal.set(year, (month-1), 1);
         int lastDay = selCal.getActualMaximum(Calendar.DAY_OF_MONTH);
-        
-        // Rosters Loop
+        int firstSat = Tools.getFirstSaturday(year, (month-1));
+       
+        // Loop through rosters==============
         for(int i = 0; i < crewsArray.size(); i++){ 
             
             ArrayList<ArrayList<Assignee>> dayLevel = new ArrayList();
-            String rTitle = rosterArray.get(i).getTitle();
             boolean rWeekends = rosterArray.get(i).getWeekends();
-            boolean rHolidays = rosterArray.get(i).getHolidays();
+            //boolean rHolidays = rosterArray.get(i).getHolidays();
             int rInterval =  rosterArray.get(i).getInterval();
             int rAmount =  rosterArray.get(i).getAmount();
-            int n,w=1,h=1;
-
+            int n=1,w=1,h=1;
             
             //====Day Columns Loop
             for(int j=1; j <= lastDay; j++){ 
                 
                 ArrayList<Assignee> assignees = new ArrayList();
-                //These will be needed to handle the weekend incrementers
-               // selCal.set(Calendar.DAY_OF_MONTH, j);
-               // int  thisDay = selCal.get(Calendar.DAY_OF_WEEK);
-   
+                selCal.set(Calendar.DAY_OF_MONTH, j);
+                int thisDay = selCal.get(Calendar.DAY_OF_WEEK);
+                
                 //===Crew Rows Loop
                 for(ArrayList<String> row : crewsArray.get(i)){
-                    
+                      
                     if(j==1){
                         n = Integer.parseInt(row.get(2));
-                        w = Integer.parseInt(row.get(3));
-                        h = Integer.parseInt(row.get(4));
                     }
                     else{
-                       n = lookupInc( dayLevel,"n",j-1,row.get(1))+1;
-                       // w += lookupInc( dayLevel,"w",j-1,row.get(1));
-                       // h += lookupInc( dayLevel,"h",j-1,row.get(1));
-                    }
                         
+                        if(rWeekends){
+                            if(thisDay==1 || thisDay==7){
+                                n = lookupInc( dayLevel,"n",j-1,row.get(1));
+                                    
+                                    if(j==firstSat)
+                                    w = Integer.parseInt(row.get(3));
+                                    else
+                                    w = lookupInc( dayLevel,"w",j-1,row.get(1))+1;
+                            }
+                            else{
+                                n = lookupInc( dayLevel,"n",j-1,row.get(1))+1;
+                                w = lookupInc( dayLevel,"w",j-1,row.get(1));
+                            }
+                        }
+                        else{
+                            n = lookupInc( dayLevel,"n",j-1,row.get(1))+1;
+                            w = lookupInc( dayLevel,"w",j-1,row.get(1));
+                        }
+                       
+                    }
                     
-                    assignees.add(new Assignee(row.get(1),n,w,h,false));
+                    assignees.add(new Assignee(row.get(1),n,w,h));
                 }
                 
                 //Sort list decsending so first index is the highest increment
-                Collections.sort(assignees, (Assignee o1, Assignee o2) ->
-                        o2.getLastN()-o1.getLastN());
+                if(rWeekends){
+                     if(thisDay==1 || thisDay==7){
+                         Collections.sort(assignees, (Assignee o1, Assignee o2) ->
+                         o2.getLastW()-o1.getLastW());
+                     }
+                     else{
+                         Collections.sort(assignees, (Assignee o1, Assignee o2) ->
+                         o2.getLastN()-o1.getLastN());
+                     }
+                 }
+                 else{
+                     Collections.sort(assignees, (Assignee o1, Assignee o2) ->
+                      o2.getLastN()-o1.getLastN());
+                 }          
+               
                 
+                //Duty Assignment here==============================
                 int needed = (24/rInterval) * rAmount;
                 for(int c = 0; c < assignees.size(); c++){
+                    
                     if(c < needed){
-                    assignees.get(c).setLastN(0);
-                    assignees.get(c).setOnDuty(true);
+                        
+                        if(rWeekends){
+                            
+                            if(thisDay==1 || thisDay==7)
+                                assignees.get(c).setLastW(0);   
+                            else
+                                assignees.get(c).setLastN(0);
+                        
+                        }
+                        else{
+                            assignees.get(c).setLastN(0);
+                        }
+                       
+                        assignees.get(c).setOnDuty(0);
+                    
                     }
                     else{
-                    assignees.get(c).setOnDuty(false);    
+                        int lastDuty = assignees.get(c).getOnDuty();
+                        assignees.get(c).setOnDuty(lastDuty+1);    
                     }
                 }
-                
-                dayLevel.add(assignees);
-                
+                dayLevel.add(assignees);    
             }
             rosterLevel.add(dayLevel);
-        }
-       
-        return rosterLevel;
-           
+        } 
+        return rosterLevel;       
     }
     
     private int lookupInc(ArrayList<ArrayList<Assignee>> dayLevel, String type, int day, String eName){
@@ -178,8 +231,7 @@ public class Assignment {
         
         Calendar selCal = Calendar.getInstance();
         selCal.set(year, (month-1), 1);
-        int lastDayOfMonth = selCal.getActualMaximum(Calendar.DAY_OF_MONTH);
-        
+
         CrewController cController = new CrewController();
         SecureFile scCrews = new SecureFile("Crew_" + rosterName);      
         ArrayList<Employee> aCrews = cController.getCrewData(scCrews);

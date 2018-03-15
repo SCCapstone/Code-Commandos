@@ -4,6 +4,7 @@
 */
 package dutyroster;
 
+import java.util.Calendar;
 import java.util.Comparator;
 import javafx.collections.ObservableList;
 
@@ -53,5 +54,16 @@ public class Tools {
         }
     
     }
+    
+    public static int getFirstSaturday(int year, int month) {
+    Calendar cal = Calendar.getInstance();
+    cal.set(year, month, 1);        
+    cal.set(Calendar.DAY_OF_WEEK, Calendar.SATURDAY);
+    cal.set(Calendar.DAY_OF_WEEK_IN_MONTH, 1);
+    cal.set(Calendar.MONTH, month);
+    cal.set(Calendar.YEAR, year);
+    return cal.get(Calendar.DATE);
+}
+
         
 }

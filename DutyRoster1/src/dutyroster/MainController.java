@@ -27,7 +27,6 @@ import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -131,7 +130,7 @@ public class MainController implements Initializable {
             selectedRoster(0);
         }
         
-       rosterTabs.getSelectionModel().selectedItemProperty().addListener((
+        rosterTabs.getSelectionModel().selectedItemProperty().addListener((
         ObservableValue<? extends Tab> ov, Tab t, Tab t1) -> {
                 if (t1!=null){
                  int id = rosterTabs.getSelectionModel().getSelectedIndex();
@@ -139,8 +138,6 @@ public class MainController implements Initializable {
                 }
         });
          
-        
-
         intervalList.addAll(
                 new Interval(1, "1 hour"), 
                 new Interval(2, "2 hours"),
@@ -149,11 +146,12 @@ public class MainController implements Initializable {
                 new Interval(6, "6 hours"),
                 new Interval(8, "8 hours"),
                 new Interval(12, "12 hours"),
-                new Interval(24, "1 day"),
-                new Interval(48, "2 days"),
-                new Interval(168, "1 week"),
-                new Interval(336, "2 weeks"),
-                new Interval(-1, "1 month")
+                new Interval(24, "1 day")
+                //We'll do this later
+               // new Interval(48, "2 days"),
+               // new Interval(168, "1 week"),
+               // new Interval(336, "2 weeks"),
+               // new Interval(-1, "1 month")
         
         );
        
@@ -176,15 +174,15 @@ public class MainController implements Initializable {
         cInterval.valueProperty().addListener((ObservableValue<? extends Interval> obs, Interval oldval, Interval newval) -> {
             if(newval != null)
                 fInterval.setText(Integer.toString(newval.getHour()));
-            currentRoster.setInterval(newval.getHour());             
+                currentRoster.setInterval(newval.getHour());
+                bSave.setDisable(false);
         });
 
        setInterval();
         
-
         //Form Controls
         fTitle.setOnKeyTyped(e -> {bSave.setDisable(false);});
-        fInterval.setOnKeyTyped(e -> {bSave.setDisable(false);});
+        
         fAmount.setOnKeyTyped(e -> {bSave.setDisable(false);});
         cWeekends.setOnMouseClicked(e -> {bSave.setDisable(false);});
         cHolidays.setOnMouseClicked(e -> {bSave.setDisable(false);});
@@ -194,6 +192,8 @@ public class MainController implements Initializable {
         cWeekends.setTooltip(new Tooltip("Check this to keep a separate rototion for weekends"));
         cHolidays.setTooltip(new Tooltip("Check this to keep a separate rototion for holidays"));
  
+         //Set save to false at startup
+        bSave.setDisable(true);
     }    
  
     public void setInterval(){
@@ -329,9 +329,8 @@ public class MainController implements Initializable {
            System.out.println("Can't load new scene: " + e); 
         }
     }  
-
     
-@FXML private void openHolidays(ActionEvent event) {
+    @FXML private void openHolidays(ActionEvent event) {
          
         try{
             
@@ -354,7 +353,7 @@ public class MainController implements Initializable {
         }
     }  
 
-@FXML private void openCrewEditor(ActionEvent event) {
+    @FXML private void openCrewEditor(ActionEvent event) {
          
         try{
             FXMLLoader loader = new FXMLLoader(getClass().getResource("CrewFXML.fxml")); 
@@ -641,35 +640,32 @@ public class MainController implements Initializable {
     public void  createTab(String title){  
 
         Tab tab = new Tab(title);
-        tab.setOnCloseRequest(new EventHandler<Event>(){
-            @Override
-            public void handle(Event ev) {
-                Alert alert;
-                alert = new Alert(AlertType.WARNING, 
-                        "This will permanently remove " + currentRoster.getTitle() + "."
-                                + " Do you wish to continue?",
-                        ButtonType.YES,
-                        ButtonType.NO);
-                alert.setTitle("Remove " + currentRoster.getTitle());
-              
-                //Deactivate Defaultbehavior for yes-Button:
-                Button yesButton = (Button) alert.getDialogPane().lookupButton( ButtonType.YES );
-                yesButton.setDefaultButton( false );
-
-                //Activate Defaultbehavior for no-Button:
-                Button noButton = (Button) alert.getDialogPane().lookupButton( ButtonType.NO );
-                noButton.setDefaultButton( true );
-              
-                Optional<ButtonType> result = alert.showAndWait();
-                if (result.get() == ButtonType.YES) {
-                    int index = rosterTabs.getSelectionModel().getSelectedIndex();
-                  deleteRoster(index);
-                  if(rosterArray.isEmpty())
-                        rosterControls.setVisible(false);
-                }
-                else{
-                    ev.consume();
-                }  
+        tab.setOnCloseRequest((Event ev) -> {
+            Alert alert;
+            alert = new Alert(AlertType.WARNING,
+                    "This will permanently remove " + currentRoster.getTitle() + "."
+                            + " Do you wish to continue?",
+                    ButtonType.YES,
+                    ButtonType.NO);
+            alert.setTitle("Remove " + currentRoster.getTitle());
+            
+            //Deactivate Defaultbehavior for yes-Button:
+            Button yesButton = (Button) alert.getDialogPane().lookupButton( ButtonType.YES );
+            yesButton.setDefaultButton( false );
+            
+            //Activate Defaultbehavior for no-Button:
+            Button noButton = (Button) alert.getDialogPane().lookupButton( ButtonType.NO );
+            noButton.setDefaultButton( true );
+            
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.get() == ButtonType.YES) {
+                int index = rosterTabs.getSelectionModel().getSelectedIndex();
+                deleteRoster(index);
+                if(rosterArray.isEmpty())
+                    rosterControls.setVisible(false);
+            }
+            else{
+                ev.consume();  
             }
         });
         Tooltip tip = new Tooltip("Set roster priority by dragging tabs. The farest left tab has the highest priority");

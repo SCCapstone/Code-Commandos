@@ -1,23 +1,26 @@
 
 package dutyroster;
 
+
 public class Assignee{
     
     private String name;
-    private boolean onDuty;
+    private int onDuty;
     private int lastN, lastW, lastH;
-    
     
     public Assignee(String inName,
                     int inLastN,
                     int inLastW,
-                    int inLastH,
-                    boolean onD){
+                    int inLastH){
         name = inName;
         lastN = inLastN;
         lastW = inLastW;
         lastH = inLastH;
-        onDuty = onD;
+        
+        onDuty = 100;//This enures any employee can be assigned duty
+                     //at the beginning, unless that employee pulled duty on
+                     //the last shift of the previous month. Then that person
+                     //will carry over a zero using setOnDuty function.
     }
     
     public String getName(){
@@ -28,22 +31,22 @@ public class Assignee{
         return lastN;
     }
     
-
     public int getLastW(){
         return lastW;
     }  
         
     public int getLastH(){
         return lastH;
-    }  
-    public boolean getOnDuty(){
+    } 
+    
+    public int getOnDuty(){
         return onDuty;
-    }   
+    } 
+    
     public void setName(String inName){
         name = inName; 
     }
     
-
     public void setLastN(int inLast){
         lastN = inLast;
     }
@@ -55,7 +58,7 @@ public class Assignee{
     public void setLastH(int inLast){
         lastH = inLast;
     }
-    public void setOnDuty(boolean onD){
+    public void setOnDuty(int onD){
             onDuty = onD;
     }
 }
