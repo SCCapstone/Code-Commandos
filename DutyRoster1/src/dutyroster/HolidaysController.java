@@ -3,7 +3,7 @@
  * excuse them from the duty assignment for that period of time.
  * @author Tanya Peyush
  * @assisted by Austin Freed
- * @version 1 3/4/2018
+ * @version 2 3/14/2018
  */
 
 package dutyroster;
@@ -18,12 +18,12 @@ import javafx.fxml.Initializable;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.util.StringConverter;
 
 public class HolidaysController implements Initializable {
@@ -35,6 +35,7 @@ public class HolidaysController implements Initializable {
     @FXML private TableColumn<Holidays,String> name;
     @FXML private TableColumn<Holidays,String> fromDate;
     @FXML private TableColumn<Holidays,String> toDate;
+    @FXML private TextField dateName;
     @FXML private DatePicker dateFrom;
     @FXML private DatePicker dateTo;
     
@@ -63,22 +64,27 @@ public class HolidaysController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) { 
         
         employeeOptions = FXCollections.observableArrayList();
-        statusOptions = FXCollections.observableArrayList();
         HolidaysList = FXCollections.observableArrayList();
              
         // pull ranks from secure file and place them into rank listing.
-       
-        loadBlockouts();
+        loadHolidays();
+        
+        //This completely attachers the Holiday List to the table. 
         tableView.setItems(HolidaysList);
 
         //used to edit the tables.
         tableView.setEditable(true);
     
-        //set proper sorting. 
-        name.setSortType(TableColumn.SortType.ASCENDING);
-        tableView.getSortOrder().add(name);
-        name.setSortable(true);
-
+        //set proper sorting for fromDate. 
+        fromDate.setSortType(TableColumn.SortType.ASCENDING);
+        tableView.getSortOrder().add(fromDate);
+        fromDate.setSortable(true);
+        
+        //set proper sorting for toDate.
+        toDate.setSortType(TableColumn.SortType.ASCENDING);
+        tableView.getSortOrder().add(toDate);
+        toDate.setSortable(true);
+        
         //Scene formatting
         setDatePickers();
         
@@ -86,7 +92,7 @@ public class HolidaysController implements Initializable {
         MenuItem mi1 = new MenuItem("Delete");
             mi1.setOnAction((ActionEvent event) -> { 
                 ObservableList<Holidays> items = tableView.getSelectionModel().getSelectedItems();
-                deleteBlockout(items);
+                deleteHoliday(items);
             });
 
         ContextMenu menu = new ContextMenu();
@@ -99,17 +105,20 @@ public class HolidaysController implements Initializable {
      */
     @FXML public void addHolidays(){
         
-        String n,s,f,t;
-
-        n = "";
-        s = "";
-        f = curFrom.format(formatter);
-        t = curTo.format(formatter);
+        String tmpName = dateName.getText();
+        String tmpFrom = curFrom.format(formatter);
+        String tmpTo = curTo.format(formatter);
                 
         //Add new block out instance to the table
-        Holidays temp = new Holidays(n,s,f,t); 
-        HolidaysList.add(temp);
+ 
+        HolidaysList.add(new Holidays(tmpName, tmpFrom, tmpTo));
         tableView.sort();
+        
+        //Clear form controls
+        dateName.clear();
+        dateFrom.setValue(null);
+        dateTo.setValue(null);
+        
         
         //Clear datepicker fields
         curFrom = null;
@@ -120,7 +129,7 @@ public class HolidaysController implements Initializable {
      * This will delete selected rows from the block out list
      * @param tmpList
      */
-    public void deleteBlockout(ObservableList<Holidays> tmpList){
+    public void deleteHoliday(ObservableList<Holidays> tmpList){
                 if (tmpList==null)
             return;
  
@@ -142,7 +151,7 @@ public class HolidaysController implements Initializable {
       * This will store block out data to file
       */
     public void storeData(){  
-        SecureFile scBlockOut = new SecureFile("Blockouts");
+        SecureFile scHoliday = new SecureFile("Holidays");
         strData = "";
         
         if (HolidaysList == null)
@@ -151,25 +160,23 @@ public class HolidaysController implements Initializable {
         HolidaysList.forEach((b) -> { 
            
             strData += b.getName() 
-                    + "@" + b.getStatus()
                     + "@" + b.getFromDate()
                     + "@" + b.getToDate()
                     + "|";    
         });
         strData = Tools.removeLastChar(strData);
             
-        scBlockOut.store(strData);
+        scHoliday.store(strData);
         
         strData = "";
         
     }
  
- 
     /**
      * This is used to load block out data from secure files into the link listing array.
      */
-    public void loadBlockouts(){
-        SecureFile scBO = new SecureFile("Blockouts");
+    public void loadHolidays(){
+        SecureFile scBO = new SecureFile("Holidays");
         String a = scBO.retrieve();
       
         String aArry[] = a.split("\\|", -1);
@@ -185,8 +192,7 @@ public class HolidaysController implements Initializable {
                     HolidaysList.add( new Holidays(
                             bArry[0],
                             bArry[1],
-                            bArry[2],
-                            bArry[3]
+                            bArry[2]
                     ));
                 }
             }    
