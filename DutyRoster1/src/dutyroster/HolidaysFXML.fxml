@@ -23,22 +23,24 @@
           <TableColumn fx:id="name" maxWidth="170.0" minWidth="170.0" prefWidth="170.0" resizable="false" sortable="true" text="Holiday">
                 <cellValueFactory><PropertyValueFactory property="name" />
                 </cellValueFactory>
-          
           </TableColumn>
-         <TableColumn fx:id="fromDate" maxWidth="140.66668701171875" minWidth="80.0" prefWidth="140.66668701171875" resizable="false" sortable="true" text="From Date">
-          <cellValueFactory><PropertyValueFactory property="fromDate" />
+          
+         <TableColumn fx:id="fromDate" maxWidth="140.7" minWidth="80.0" prefWidth="140.7" resizable="false" sortable="true" text="From Date">
+                <cellValueFactory><PropertyValueFactory property="fromDate" />
                 </cellValueFactory>   
-         </TableColumn>    
-         <TableColumn fx:id="toDate" maxWidth="146.0" minWidth="80.0" prefWidth="118.33331298828125" resizable="false" sortable="true" text="To Date">
-       <cellValueFactory><PropertyValueFactory property="toDate" />
+         </TableColumn>   
+          
+         <TableColumn fx:id="toDate" maxWidth="146.0" minWidth="80.0" prefWidth="118.3" resizable="false" sortable="true" text="To Date">
+                <cellValueFactory><PropertyValueFactory property="toDate" />
                 </cellValueFactory>   
          </TableColumn>
+         
      </columns>    
   
     </TableView>
    
    <HBox alignment="bottom_right" spacing="10.0" style="-fx-alignment: center;" GridPane.rowIndex="2">
-      <TextField fx:id="Holiday" promptText="Holiday" />
+      <TextField fx:id="dateName" promptText="Holiday" />
      </HBox>
    <HBox spacing="20.0" style="-fx-alignment: center;" GridPane.rowIndex="3">
       <children>
