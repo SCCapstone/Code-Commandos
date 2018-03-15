@@ -69,7 +69,7 @@ public class HolidaysController implements Initializable {
         // pull ranks from secure file and place them into rank listing.
         loadHolidays();
         
-        //This completely attachers the Holiday List to the table. 
+        //This completely attaches the Holiday List to the table. 
         tableView.setItems(HolidaysList);
 
         //used to edit the tables.

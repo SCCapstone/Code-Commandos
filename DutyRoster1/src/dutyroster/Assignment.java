@@ -175,7 +175,6 @@ public class Assignment {
                       o2.getLastN()-o1.getLastN());
                  }          
                
-                
                 //Duty Assignment here==============================
                 int needed = (24/rInterval) * rAmount;
                 for(int c = 0; c < assignees.size(); c++){

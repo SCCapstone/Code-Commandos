@@ -1,7 +1,6 @@
 /**
- * 
  * @author Harini, Othen
- * @version 6 2/14/18
+ * @version 7 3/15/18
  */
 package dutyroster;
 
@@ -29,10 +28,8 @@ public class CrewController implements Initializable {
     @FXML private TableColumn<Employee,String> rank;
     @FXML private TableColumn<Employee,String> name;
     @FXML private TableColumn<Employee,Integer> sort;
-    @FXML private TableColumn<Employee,Boolean> crew;
     @FXML private CheckBox selectAll;
     @FXML private Label ratio;
-    
     
     // used to import and export data from employee data
     private ObservableList<Employee> crewList;
@@ -41,11 +38,8 @@ public class CrewController implements Initializable {
     //rankListing is used to change it in the column box 
     private ObservableList<String> rankListing;
     // used to encrypt, decrypt and store the file.
-    private SecureFile scCrews;
-    private SecureFile scEmployees;
-    private SecureFile scRanks;
     private String strData;
-    
+    private String crewLink;
    
     public CrewController(){
         startUp();
@@ -55,7 +49,7 @@ public class CrewController implements Initializable {
         rankOptions = FXCollections.observableArrayList();
         rankListing = FXCollections.observableArrayList();
         //instantiates new file, use file name Ranks as storage
-        scRanks = new SecureFile("Ranks");
+        crewLink = "Crew_" + MainController.rosterName;
         //pull encrypted info and load into ranked list
         loadRanks();  
     }
@@ -94,16 +88,14 @@ public class CrewController implements Initializable {
             checkAll(selected);
             statusBar();
         });
-        statusBar();
-        
+        statusBar();   
     }  
     
     
     public void shutDown() {  
         storeData(crewList);
     }
- 
-   
+  
     public void checkAll(boolean val){
            
         for(Employee f: crewList)
@@ -124,7 +116,7 @@ public class CrewController implements Initializable {
     }
     
     public void storeData(ObservableList<Employee> cList){   
-       
+       SecureFile scCrews = new SecureFile(crewLink);  
         strData = "";
 
         if (cList == null || cList.isEmpty()) 
@@ -150,9 +142,9 @@ public class CrewController implements Initializable {
      */
     public void loadCrews(){
         
-        scCrews = new SecureFile("Crew_" + MainController.rosterName);      
+        SecureFile scCrews = new SecureFile(crewLink);      
         ArrayList<Employee> aCrews = getCrewData(scCrews);
-        scEmployees = new SecureFile("Employees");
+        SecureFile scEmployees = new SecureFile("Employees");
         ArrayList<Employee> aEmployees = getCrewData(scEmployees);
         
         //add members from crews who are not on the employeelist
@@ -180,7 +172,6 @@ public class CrewController implements Initializable {
        
     }
 
-    
     public ArrayList<Employee> getCrewData(SecureFile sf){
         
         String a = sf.retrieve();
@@ -205,6 +196,7 @@ public class CrewController implements Initializable {
      */
     public void loadRanks(){
         
+        SecureFile scRanks = new SecureFile("Ranks");
         String a = scRanks.retrieve();
       
         String aArry[] = a.split("\\|", -1);
@@ -220,9 +212,7 @@ public class CrewController implements Initializable {
                    rankListing.add(bArry[1]);
                 }
             }
- 
-        }   
-        
+        }     
     }
         
     /**

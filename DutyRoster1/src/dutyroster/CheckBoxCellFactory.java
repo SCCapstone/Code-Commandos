@@ -8,6 +8,7 @@ import javafx.util.Callback;
 public class CheckBoxCellFactory implements Callback {
     @Override
     public TableCell call(Object param) {
+        System.out.println(param.toString());
         CheckBoxTableCell<Employee,Boolean> checkBoxCell = new CheckBoxTableCell();
         return checkBoxCell;
     }

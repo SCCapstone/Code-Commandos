@@ -1,13 +1,7 @@
 /**
  * @authors Austin Freed, Tanya Peyush, Harini Karnati
- * 02/12/2017
+ * @version 2, 3/15/2018
  */
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 
 package dutyroster;
 
@@ -19,15 +13,15 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.input.KeyCode;
-
 
 public final class StatusController implements Initializable {
 
@@ -36,16 +30,13 @@ public final class StatusController implements Initializable {
     @FXML private TableView<Status> tableView;
     @FXML private TableColumn<Status,String> colCode;
     @FXML private TableColumn<Status,String> colTitle;
+    @FXML private TableColumn<Status,Boolean> colIncrements;
     @FXML private TextField codeField;
     @FXML private TextField titleField;
-    @FXML private Button addButton1;
+    @FXML private CheckBox chkIncrements;
   
     //List of rankssor
     private ObservableList<Status> statusList;
-    // used to encrypt, decrypt and store the file.
-    // private SecureFile scStatus;
-    
-    //Extracting Data from encrypted file
     
     private String strData;
     
@@ -55,15 +46,14 @@ public final class StatusController implements Initializable {
     
     public void startUp(){
         statusList = FXCollections.observableArrayList();
-        //instantiates new file, use file name Ranks as storage
-
         //pull encrypted info and load into ranked list
         retrieveData();
     }
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        
+
+        startUp(); 
         
         //Add multi select to table
         tableView.getSelectionModel().setSelectionMode(
@@ -76,6 +66,10 @@ public final class StatusController implements Initializable {
                     statusAdd();
         }
         );
+        
+        colIncrements.setCellValueFactory(cellData -> cellData.getValue().iProperty());
+        colIncrements.setCellFactory(param -> new CheckBoxTableCell<Status, Boolean>());
+        
         //Create the Delete menu item
         MenuItem mi1 = new MenuItem("Delete");
             mi1.setOnAction((ActionEvent event) -> { 
@@ -85,14 +79,14 @@ public final class StatusController implements Initializable {
         ContextMenu menu = new ContextMenu();
         menu.getItems().add(mi1);
         tableView.setContextMenu(menu);
-       
-        startUp();
         
-        updateSort();
+        //used to edit the tables.
+        tableView.setEditable(true); 
+       
+        updateSort();   
     }    
 
     public void shutDown() {
-        
         storeData();
     }
     
@@ -103,16 +97,17 @@ public final class StatusController implements Initializable {
         
         if (statusList == null)
             return;
-        statusList.forEach((status) -> {  
-            strData +=  status.getCode() + "@" +  status.getTitle() + "|"; });
+        statusList.forEach((status) -> { 
+            String incs = (status.getIncrements()==true)? "1" : "0";
+                 
+            strData +=  status.getCode() + "@" +  status.getTitle() + "@" + incs + "|"; });
             strData = Tools.removeLastChar(strData);
         
         //Store string array into secure file
         sc.store(strData);
         
         //clear strData
-        strData = "";
-        
+        strData = ""; 
     }
     
     //retrieve data from secure file
@@ -127,12 +122,12 @@ public final class StatusController implements Initializable {
                 
                 String bArry[] = b.split("\\@", -1);
                 
-                if(bArry[0].length() > 0 && bArry[1].length() > 0)
-                    statusList.add( new Status(bArry[0],bArry[1]) );
+                if(bArry[0].length() > 0 && bArry[1].length() > 0){
+                    boolean incs = ( bArry[2].equals("1") );
+                    statusList.add(  new Status(bArry[0], bArry[1], incs)  );  
+                }
             }
-            
         }
-
     }
       
     //The add rank action checks to make sure the rank doesn't already exits
@@ -146,6 +141,7 @@ public final class StatusController implements Initializable {
         if ( !( codeField.getText().isEmpty() || titleField.getText().isEmpty()) ) 
                     statusAdd();
     }
+    
     public void statusAdd(){
         
         Alert alert;
@@ -164,7 +160,6 @@ public final class StatusController implements Initializable {
         return;
         }
         
-        
         if (titleExists(titleField.getText())){
              alert = new Alert(Alert.AlertType.ERROR, "Each title must be a unique value.");
              alert.setTitle("Status Already Exists");
@@ -178,16 +173,27 @@ public final class StatusController implements Initializable {
              alert.showAndWait();
           return;
         }
-       
         
-        statusList.add( new Status(codeField.getText(),titleField.getText()) );
-         
-       updateSort();
+        boolean incs = chkIncrements.isSelected();
+        statusList.add(  new Status(codeField.getText(),titleField.getText(), incs)  );
         
-       codeField.setText("");
-       titleField.setText("");
+        updateSort();
+    }
     
-    } 
+    /**
+     * This is workaround for a known table update bug
+     */
+    private void updateSort(){
+         //Sets the code column as the primary sort
+        colCode.setSortType(TableColumn.SortType.ASCENDING);
+        //Sets the code title as the secondary sort
+        colTitle.setSortType(TableColumn.SortType.ASCENDING);
+        tableView.setItems(statusList);
+        tableView.getSortOrder().add(colTitle);
+        tableView.getSortOrder().add(colCode);
+        tableView.refresh();
+        tableView.sort();
+    }
  
     //Delete rank function
     public void deleteStatus(ObservableList<Status> tmpList){
@@ -200,15 +206,7 @@ public final class StatusController implements Initializable {
                 if (tmpList.get(i).equals(statusList.get(j)))  
                     statusList.remove(j);
         
-      updateSort();
-    }
-    
-    private void updateSort(){
-        colCode.setSortType(TableColumn.SortType.ASCENDING);
-        tableView.setItems(statusList);
-        tableView.getSortOrder().add(colCode);
-        tableView.refresh();
-        tableView.sort();
+        updateSort();
     }
     
      public boolean titleExists (String strIn) {

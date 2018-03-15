@@ -1,33 +1,42 @@
 /**
  * @authors Austin Freed, Tanya Peyush, Harini Karnati
- * 02/12/2017
+ * @version 2, 3/15/2018
  */
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package dutyroster;
 
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 
 public class Status {
     
-     
      private final SimpleStringProperty code = new SimpleStringProperty("");
      private final SimpleStringProperty title = new SimpleStringProperty("");
-    
+     private final SimpleBooleanProperty increments = new SimpleBooleanProperty(false);
+     
     //Constructors
     public Status() {
-      this("", "");
+      this("", "", false);
     }
     
     public Status(String code, String title) {
         
         setCode(code);
         setTitle(title);
-        
+
     }
+    
+    public Status(String code, String title, boolean incs) {
+        
+        setCode(code);
+        setTitle(title);
+        setIncrements(incs);
+    }
+    
+     public SimpleBooleanProperty iProperty() {
+        return this.increments;
+    }
+     
     //getters and setters
     public String getCode() {
         return code.get();
@@ -37,6 +46,10 @@ public class Status {
         return title.get();
     }
     
+    public boolean getIncrements() {
+        return  this.iProperty().get();
+    }
+    
     public void setCode(String codeIn) {
         code.set(codeIn);
     }
@@ -44,5 +57,11 @@ public class Status {
     public void setTitle(String titleIn) {
         title.set(titleIn);
     }
-      
+ 
+    public void setIncrements(boolean incs) {
+        this.iProperty().set(incs);
+    }
+    
+    
+
 }
