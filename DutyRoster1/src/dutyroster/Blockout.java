@@ -2,13 +2,12 @@
  * This is an employee strut class
  * @author Austin Freed
  * @assisted by Tanya Peyush
- * @version 5 2/28/2018
+ * @version 6 3/15/2018
  */
 package dutyroster;
 
 
 //import javafx.beans.property.SimpleBooleanProperty;
-import java.time.LocalDate;
 import javafx.beans.property.SimpleStringProperty;
 
 
@@ -18,30 +17,28 @@ public class Blockout {
    //SimipleString is a string. It works better with tableview
    private final SimpleStringProperty name = new SimpleStringProperty("");
    private final SimpleStringProperty status = new SimpleStringProperty("");
-   private LocalDate fromDate;
-   private LocalDate toDate;
+   private final SimpleStringProperty fromDate = new SimpleStringProperty("");
+   private final SimpleStringProperty toDate = new SimpleStringProperty("");
 
 
    
     //Constructor 
     public Blockout() {
-     
-         
+
         status.set(null);
         name.set(null); 
-        fromDate = LocalDate.now();
-        toDate = LocalDate.now();
+        fromDate.set(null);
+        toDate.set(null);
     }
  
-    public Blockout(String nameIn, String statusIn, LocalDate from, LocalDate to) {
+    public Blockout(String nameIn, String statusIn, String from, String to) {
        
         name.set(nameIn); 
         status.set(statusIn);
-        fromDate = from;
-        toDate = to;
+        fromDate.set(from);
+        toDate.set(to);
        
     }
-
 
     //getters for rank, name, sort
     public String getName() {
@@ -52,33 +49,34 @@ public class Blockout {
         return status.get();
     }
     
-    public LocalDate getFromDate() {
+    public String getFromDate() {
         
-        return fromDate;
+        return fromDate.get();
     }
-    public LocalDate getToDate() {
+   
+    public String getToDate() {
         
-        return toDate;
+        return toDate.get();
     }
-  
-    
   
      // setters
     public void setName(String nameIn) {
         name.set(nameIn);
+    
     }
     
     public void setStatus(String statusIn) {
         status.set(statusIn);
+    
     }
     
-    public void setFromDate(LocalDate from) {
-       fromDate = from;
+    public void setFromDate(String from) {
+       fromDate.set(from);
               
     }
     
-    public void setToDate(LocalDate to) {
-       toDate = to;
+    public void setToDate(String to) {
+       toDate.set(to);
               
     }
     

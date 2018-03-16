@@ -32,7 +32,6 @@ public class HolidaysController implements Initializable {
     //@FXML private ComboBox statusCombo;
     //used for tableview 
     @FXML private TableView<Holidays> tableView;
-    @FXML private TableColumn<Holidays,String> name;
     @FXML private TableColumn<Holidays,String> fromDate;
     @FXML private TableColumn<Holidays,String> toDate;
     @FXML private TextField dateName;
@@ -118,7 +117,6 @@ public class HolidaysController implements Initializable {
         dateName.clear();
         dateFrom.setValue(null);
         dateTo.setValue(null);
-        
         
         //Clear datepicker fields
         curFrom = null;
