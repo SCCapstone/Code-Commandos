@@ -161,8 +161,8 @@ public class BlockoutController implements Initializable {
             return;
         
         blockoutList.forEach((b) -> { 
+           
             
-
             strData += b.getName() 
                     + "@" + b.getStatus()
                     + "@" + b.getName() 
@@ -182,7 +182,7 @@ public class BlockoutController implements Initializable {
      * This is used to load block out data from secure files into the link listing array.
      */
     public void loadBlockouts(){
-        SecureFile scBO = new SecureFile("Holidays");
+        SecureFile scBO = new SecureFile("Blockouts");
         String a = scBO.retrieve();
       
         String aArry[] = a.split("\\|", -1);
