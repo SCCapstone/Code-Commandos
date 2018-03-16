@@ -28,10 +28,8 @@ import javafx.util.StringConverter;
 
 public class HolidaysController implements Initializable {
     
-    //for entering a new rank
-    //@FXML private ComboBox statusCombo;
-    //used for tableview 
     @FXML private TableView<Holidays> tableView;
+    @FXML private TableColumn<Holidays,String> name;
     @FXML private TableColumn<Holidays,String> fromDate;
     @FXML private TableColumn<Holidays,String> toDate;
     @FXML private TextField dateName;
@@ -65,9 +63,11 @@ public class HolidaysController implements Initializable {
         employeeOptions = FXCollections.observableArrayList();
         HolidaysList = FXCollections.observableArrayList();
              
-        // pull ranks from secure file and place them into rank listing.
         loadHolidays();
         
+        //Scene formatting
+        setDatePickers();
+
         //This completely attaches the Holiday List to the table. 
         tableView.setItems(HolidaysList);
 
@@ -83,9 +83,6 @@ public class HolidaysController implements Initializable {
         toDate.setSortType(TableColumn.SortType.ASCENDING);
         tableView.getSortOrder().add(toDate);
         toDate.setSortable(true);
-        
-        //Scene formatting
-        setDatePickers();
         
         //Create the Delete menu item
         MenuItem mi1 = new MenuItem("Delete");
@@ -117,6 +114,7 @@ public class HolidaysController implements Initializable {
         dateName.clear();
         dateFrom.setValue(null);
         dateTo.setValue(null);
+        
         
         //Clear datepicker fields
         curFrom = null;
@@ -174,6 +172,7 @@ public class HolidaysController implements Initializable {
      * This is used to load block out data from secure files into the link listing array.
      */
     public void loadHolidays(){
+        
         SecureFile scBO = new SecureFile("Holidays");
         String a = scBO.retrieve();
       

@@ -344,7 +344,7 @@ public class MainController implements Initializable {
             //sceneRank.getStylesheets().add("stylesheet.css");
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setScene(sceneStatus2);
-           // stage.setOnHidden(e -> HController.shutDown());
+            stage.setOnHidden(e -> HController.shutDown());
             stage.show(); 
           
         }
