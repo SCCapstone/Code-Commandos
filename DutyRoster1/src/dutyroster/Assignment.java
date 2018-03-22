@@ -1,9 +1,8 @@
 /**
  * This class is a collection of functions to assign duty to employees
  * on rosters for a specific month
- * @author Othen Prock
- * @coauthor Michael Harlow
- * @version 3, March 15, 2018
+ * @author Othen Prock, Michael Harlow
+ * @version 4, March 22, 2018
  */
 package dutyroster;
 
@@ -116,7 +115,7 @@ public class Assignment {
             ArrayList<ArrayList<Assignee>> dayLevel = new ArrayList();
             boolean rWeekends = rosterArray.get(i).getWeekends();
             //boolean rHolidays = rosterArray.get(i).getHolidays();
-            int rInterval =  rosterArray.get(i).getInterval();
+            int rInterval =  rosterArray.get(i).getDInterval();
             int rAmount =  rosterArray.get(i).getAmount();
             int n=1,w=1,h=1;
             

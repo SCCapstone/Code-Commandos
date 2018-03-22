@@ -18,7 +18,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="800.0" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dutyroster.MainController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="800.0" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dutyroster.MainController">
   <children>
         <MenuBar minWidth="400.0">
           <menus>
@@ -84,7 +84,7 @@
             <Insets right="10.0" />
          </padding>
       </ButtonBar>
-      <HBox fx:id="rosterControls" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="50.0" spacing="10.0" style="-fx-alignment: CENTER-LEFT;">
+      <HBox fx:id="rosterControls" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="50.0" spacing="5.0" style="-fx-alignment: CENTER-LEFT;">
          <children>
             <Button mnemonicParsing="false" onAction="#openCrewEditor" text="Assign Members">
                <HBox.margin>
@@ -92,15 +92,21 @@
                </HBox.margin>
             </Button>
             <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" maxWidth="50.0" minWidth="50.0" prefWidth="50.0" text="Title" />
-            <TextField fx:id="fTitle" maxHeight="-Infinity" maxWidth="200.0" minHeight="-Infinity" minWidth="200.0" prefHeight="31.0" prefWidth="200.0" />
-            <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" maxWidth="60.0" minWidth="60.0" prefWidth="60.0" text="Interval" />
-            <ComboBox fx:id="cInterval" maxWidth="200.0" />
+            <TextField fx:id="fTitle" maxHeight="-Infinity" maxWidth="200.0" minHeight="-Infinity" minWidth="123.0" prefWidth="123.0" />
+            <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" maxWidth="77.0" minWidth="60.0" prefHeight="17.0" prefWidth="77.0" text="Duty Interval" />
+            <ComboBox fx:id="cDInterval" maxWidth="200.0" />
+            <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="404.0" layoutY="27.0" maxWidth="77.0" minWidth="60.0" prefHeight="17.0" prefWidth="77.0" text="Rest Interval" />
+            <ComboBox fx:id="cRInterval" maxWidth="200.0" />
             <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" maxWidth="60.0" minWidth="60.0" prefHeight="21.0" prefWidth="60.0" text="Amount" />
-            <TextField fx:id="fAmount" alignment="CENTER" maxHeight="-Infinity" maxWidth="80.0" minHeight="-Infinity" minWidth="80.0" prefHeight="31.0" prefWidth="40.0" />
-            <CheckBox fx:id="cWeekends" maxHeight="-Infinity" maxWidth="100.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="21.0" prefWidth="100.0" text="Weekends" />
+            <TextField fx:id="fAmount" alignment="CENTER" maxHeight="-Infinity" maxWidth="38.0" minHeight="-Infinity" minWidth="38.0" prefWidth="38.0" />
+            <CheckBox fx:id="cWeekends" maxHeight="-Infinity" maxWidth="100.0" minHeight="-Infinity" minWidth="100.0" mnemonicParsing="false" prefHeight="21.0" prefWidth="100.0" text="Weekends">
+               <HBox.margin>
+                  <Insets left="10.0" />
+               </HBox.margin></CheckBox>
             <CheckBox fx:id="cHolidays" maxHeight="-Infinity" maxWidth="100.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="21.0" prefWidth="100.0" text="Holidays" />
             <Button fx:id="bSave" disable="true" mnemonicParsing="false" onAction="#saveFields" text="Save" />
-            <TextField fx:id="fInterval" alignment="CENTER" maxHeight="-Infinity" maxWidth="80.0" minHeight="-Infinity" minWidth="80.0" prefHeight="31.0" prefWidth="40.0" visible="false" />
+            <TextField fx:id="fDInterval" alignment="CENTER" maxHeight="-Infinity" maxWidth="80.0" minHeight="-Infinity" minWidth="80.0" prefHeight="31.0" prefWidth="40.0" visible="false" />
+            <TextField fx:id="fRInterval" alignment="CENTER" maxHeight="-Infinity" maxWidth="80.0" minHeight="-Infinity" minWidth="80.0" prefHeight="31.0" prefWidth="40.0" visible="false" />
 
          </children>
          <opaqueInsets>
