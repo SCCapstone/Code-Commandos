@@ -66,10 +66,12 @@ public class MainController implements Initializable {
     @FXML private TableView<ObservableList<StringProperty>>tableView;
     @FXML private ComboBox comboMonth;
     @FXML private ComboBox comboYear;
-    @FXML private ComboBox<Interval> cInterval;
+    @FXML private ComboBox<Interval> cDInterval;
+    @FXML private ComboBox<Interval> cRInterval;
     @FXML private Label lowerOutput;
     @FXML private TextField fTitle;
-    @FXML private TextField fInterval;
+    @FXML private TextField fDInterval;
+    @FXML private TextField fRInterval;
     @FXML private TextField fAmount;
     @FXML private CheckBox cWeekends;
     @FXML private CheckBox cHolidays;
@@ -152,17 +154,10 @@ public class MainController implements Initializable {
                 new Interval(8, "8 hours"),
                 new Interval(12, "12 hours"),
                 new Interval(24, "1 day")
-                //We'll do this later
-               // new Interval(48, "2 days"),
-               // new Interval(168, "1 week"),
-               // new Interval(336, "2 weeks"),
-               // new Interval(-1, "1 month")
-        
         );
        
-        cInterval.setItems(intervalList); 
-
-        cInterval.setConverter(new StringConverter<Interval>() {
+        cDInterval.setItems(intervalList); 
+        cDInterval.setConverter(new StringConverter<Interval>() {
 
             @Override
             public String toString(Interval object) {
@@ -171,19 +166,41 @@ public class MainController implements Initializable {
 
             @Override
             public Interval fromString(String s) {
-                return (Interval) cInterval.getItems().stream().filter(ap -> 
+                return (Interval) cDInterval.getItems().stream().filter(ap -> 
                     ap.getTitle().equals(s)).findFirst().orElse(null);
             }
         });      
-    
-        cInterval.valueProperty().addListener((ObservableValue<? extends Interval> obs, Interval oldval, Interval newval) -> {
+        cDInterval.valueProperty().addListener((ObservableValue<? extends Interval> obs, Interval oldval, Interval newval) -> {
             if(newval != null)
-                fInterval.setText(Integer.toString(newval.getHour()));
-                currentRoster.setInterval(newval.getHour());
+                fDInterval.setText(Integer.toString(newval.getHour()));
+                currentRoster.setDInterval(newval.getHour());
+                bSave.setDisable(false);
+        });
+        
+        setDInterval();
+        
+        cRInterval.setItems(intervalList); 
+        cRInterval.setConverter(new StringConverter<Interval>() {
+
+            @Override
+            public String toString(Interval object) {
+                return object.getTitle();
+            }
+
+            @Override
+            public Interval fromString(String s) {
+                return (Interval) cRInterval.getItems().stream().filter(ap -> 
+                    ap.getTitle().equals(s)).findFirst().orElse(null);
+            }
+        });      
+        cRInterval.valueProperty().addListener((ObservableValue<? extends Interval> obs, Interval oldval, Interval newval) -> {
+            if(newval != null)
+                fRInterval.setText(Integer.toString(newval.getHour()));
+                currentRoster.setRInterval(newval.getHour());
                 bSave.setDisable(false);
         });
 
-       setInterval();
+       setRInterval();
         
         //Form Controls
         fTitle.setOnKeyTyped(e -> {bSave.setDisable(false);});
@@ -192,7 +209,7 @@ public class MainController implements Initializable {
         cWeekends.setOnMouseClicked(e -> {bSave.setDisable(false);});
         cHolidays.setOnMouseClicked(e -> {bSave.setDisable(false);});
      
-        fInterval.setTooltip(new Tooltip("The interval (in hours) for each shift"));             
+        fDInterval.setTooltip(new Tooltip("The interval (in hours) for each shift"));             
         fAmount.setTooltip(new Tooltip("The total number of employees assigned to each shift"));
         cWeekends.setTooltip(new Tooltip("Check this to keep a separate rototion for weekends"));
         cHolidays.setTooltip(new Tooltip("Check this to keep a separate rototion for holidays"));
@@ -201,21 +218,33 @@ public class MainController implements Initializable {
         bSave.setDisable(true);
     }    
  
-    public void setInterval(){
+    public void setDInterval(){
         
         int selected = -1;
 
         for(int i = 0; i < intervalList.size(); i++)
-            if (!fInterval.getText().isEmpty() && intervalList.get(i).getHour() == Integer.parseInt(fInterval.getText()) )
+            if (!fDInterval.getText().isEmpty() && intervalList.get(i).getHour() == Integer.parseInt(fDInterval.getText()) )
                 selected = i;
 
         if(selected >= 0)
-            cInterval.getSelectionModel().select(selected);
-    } 
+            cDInterval.getSelectionModel().select(selected);
+    }
+    
+    public void setRInterval(){
+        
+        int selected = -1;
+
+        for(int i = 0; i < intervalList.size(); i++)
+            if (!fRInterval.getText().isEmpty() && intervalList.get(i).getHour() == Integer.parseInt(fRInterval.getText()) )
+                selected = i;
+
+        if(selected >= 0)
+            cRInterval.getSelectionModel().select(selected);
+    }
     
     @FXML public void saveFields(){
         
-        currentRoster.setInterval(Integer.parseInt(fInterval.getText()));
+        currentRoster.setDInterval(Integer.parseInt(fDInterval.getText()));
         currentRoster.setAmount(Integer.parseInt(fAmount.getText()));
         currentRoster.setWeekends(cWeekends.isSelected());
         currentRoster.setHolidays(cHolidays.isSelected());    
@@ -779,8 +808,10 @@ public class MainController implements Initializable {
         lowerOutput.setText(rosterName + " is set to priority " + (xVal+1) + ". Drag and drop tabs to change.");
         rosterControls.setVisible(true);
         fTitle.setText(rosterName);
-        fInterval.setText(Integer.toString(currentRoster.getInterval()));
-        setInterval();
+        fDInterval.setText(Integer.toString(currentRoster.getDInterval()));
+        setDInterval();
+        fRInterval.setText(Integer.toString(currentRoster.getRInterval()));
+        setRInterval();
         fAmount.setText(Integer.toString(currentRoster.getAmount()));
         cWeekends.setSelected(currentRoster.getWeekends());
         cHolidays.setSelected(currentRoster.getHolidays());
@@ -820,8 +851,9 @@ public class MainController implements Initializable {
                         bArry[0],
                         Integer.parseInt(bArry[1]),
                         Integer.parseInt(bArry[2]),
-                        Boolean.parseBoolean(bArry[3]),
-                        Boolean.parseBoolean(bArry[4])    
+                        Integer.parseInt(bArry[3]),
+                        Boolean.parseBoolean(bArry[4]),
+                        Boolean.parseBoolean(bArry[5])    
                         ) 
                     
                     );
@@ -841,7 +873,9 @@ public class MainController implements Initializable {
         rosterArray.forEach((roster) -> {  
             strData +=  roster.getTitle() 
                     + "@" 
-                    +  roster.getInterval() 
+                    +  roster.getDInterval() 
+                    + "@"  
+                    +  roster.getRInterval() 
                     + "@"  
                     +  roster.getAmount() 
                     + "@" 
