@@ -1,7 +1,7 @@
 /**
  * This is the main screen of the program. Plus, it handles roster data
- * @author Othen Prock
- * @version 8, 2/18/2018
+ * @author Othen Prock, Michael Harlow
+ * @version 9, 3/22/2018
  */
 package dutyroster;
 
@@ -10,6 +10,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -77,9 +79,11 @@ public class MainController implements Initializable {
     
     private Tab currentDragTab;
     private static final AtomicLong ID = new AtomicLong();
-    private final String draggingID = "DraggingTab-"+ID.incrementAndGet() ;
+    private final String draggingID = "DraggingTab-"+ID.incrementAndGet();
     private int dragIndex,dropIndex;
     private int lastDayOfMonth,curMonth,curYear;
+    private static final String DATE_FORMAT = "d MMM uuuu";
+    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_FORMAT);
            
     private final ObservableList<String> monthList = FXCollections.observableArrayList();
     private final ObservableList<Integer> yearList = FXCollections.observableArrayList();
@@ -87,6 +91,7 @@ public class MainController implements Initializable {
     private final ObservableList<ObservableList<StringProperty>> rowData = FXCollections.observableArrayList(); 
    
     private final ArrayList<Roster> rosterArray = new ArrayList(); 
+    private final ArrayList<Holidays> holidayArray = new ArrayList(); 
     private Roster currentRoster = new Roster();
     //Extracting Data from encrypted file
 
@@ -515,7 +520,7 @@ public class MainController implements Initializable {
 
             selCal.set(Calendar.DAY_OF_MONTH, i);
             int  day = selCal.get(Calendar.DAY_OF_WEEK);
- 
+            
             TableColumn colI = createColumn(finalIdx, weekDay[day]);
             colI.setPrefWidth(35);
             colI.setMaxWidth(35);
@@ -955,6 +960,33 @@ public class MainController implements Initializable {
         tab.getGraphic().setOnDragDropped(null);
         tab.getGraphic().setOnDragDone(null);
     }
+
+   /**
+     * This is used to load holidays from secure files into the link listing array.
+     */
+    public void loadHolidays(){
+        SecureFile scEmployees = new SecureFile("Holidays");
+        String a = scEmployees.retrieve();
+      
+        String aArry[] = a.split("\\|", -1);
+        for (String b : aArry){
+            
+            if (b.length() > 2){
+                
+                String bArry[] = b.split("\\@", -1);
+                
+                if(bArry[0].length() > 0 && bArry[1].length() > 0){
+                    holidayArray.add(  new Holidays(bArry[0],bArry[1],bArry[2])  );
+                }
+            
+            }    
+        
+        }       
+        
+    }
+    
+    private boolean isHoliday (){return false;}
+
 }
    
 
