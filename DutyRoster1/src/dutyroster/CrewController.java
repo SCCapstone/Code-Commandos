@@ -1,6 +1,6 @@
 /**
  * @author Harini, Othen
- * @version 7 3/15/18
+ * @version 8 3/23/18
  */
 package dutyroster;
 
@@ -18,7 +18,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 
 
-public class CrewController implements Initializable {
+public final class CrewController implements Initializable {
  
     //for entering a new rank
     @FXML private ComboBox rankCombo;
@@ -184,7 +184,11 @@ public class CrewController implements Initializable {
                 String bArry[] = b.split("\\@", -1);
                 // getSortIndex pulls updated rank order index. 
                 if(bArry[0].length() > 0 && bArry[1].length() > 0){
-                    aReturn.add( new Employee( getSortIndex(bArry[0]), bArry[0], bArry[1]));
+                    
+                    int rankSort = getSortIndex(bArry[0]);
+                    String chRank = (rankSort < 1000)? bArry[0] : "No rank";
+                    
+                    aReturn.add( new Employee( rankSort, chRank, bArry[1]));
                 }
             }    
         } 
@@ -227,7 +231,7 @@ public class CrewController implements Initializable {
             if ( currentRank.getRank().equals(strRank) )
                     return currentRank.getSort();
         
-        return 0;
+        return 1000;
     }
       
 }

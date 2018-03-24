@@ -1,7 +1,7 @@
 /**
  * This class is the controller for the Employee editor
  * @author Harini
- * @version 6 3/11/18
+ * @version 6 3/23/18
  */
 package dutyroster;
 
@@ -173,7 +173,11 @@ public class EmployeeController implements Initializable {
                 
                 // getSortIndex pulls updated rank order index. 
                 if(bArry[0].length() > 0 && bArry[1].length() > 0){
-                    employeeList.add( new Employee(  Tools.getSortIndex(rankOptions, bArry[0]), bArry[0], bArry[1]) );
+                    
+                    int rankSort = Tools.getSortIndex(rankOptions, bArry[0]);
+                    String chRank = (rankSort < 1000)? bArry[0] : "No rank";
+                    
+                    employeeList.add( new Employee( rankSort , chRank, bArry[1]) );
                 }
             }    
         }       

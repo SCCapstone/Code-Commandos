@@ -1,6 +1,7 @@
 /**
  * This class is for nested classes of reusable functions
- * @author othen
+ * @author othen prock, Harini
+ * @version 2, 3/23/18
 */
 package dutyroster;
 
@@ -33,7 +34,7 @@ public class Tools {
         for(Rank c : rankOptions)
             if (c.getRank().equalsIgnoreCase(strRank) )
                     return c.getSort();
-        return -1;
+        return 1000;
     }
   
     public class EmployeeComparator implements Comparator<Employee>{
