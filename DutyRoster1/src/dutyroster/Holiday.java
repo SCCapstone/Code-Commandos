@@ -9,7 +9,7 @@ package dutyroster;
 //import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 
-public class Holidays {
+public class Holiday {
 
    //SimipleString is a string. It works better with tableview
    private final SimpleStringProperty name = new SimpleStringProperty("");
@@ -17,17 +17,19 @@ public class Holidays {
    private final SimpleStringProperty toDate = new SimpleStringProperty("");
    
     //Constructor 
-   
-    public Holidays() {
+    public Holiday() {
+    
         name.set(null); 
         fromDate.set(null);
         toDate.set(null);
     }
  
-    public Holidays (String nameIn, String from, String to) {    
+    public Holiday(String nameIn, String from, String to) {
+       
         name.set(nameIn); 
         fromDate.set(from);
         toDate.set(to);
+       
     }
 
     //getters for rank, name, sort
@@ -38,7 +40,6 @@ public class Holidays {
     public String getFromDate() {
         return fromDate.get();
     }
-    
     public String getToDate() {
         return toDate.get();
     }

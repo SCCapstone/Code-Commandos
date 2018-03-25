@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
-import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -93,7 +92,7 @@ public class MainController implements Initializable {
     private final ObservableList<ObservableList<StringProperty>> rowData = FXCollections.observableArrayList(); 
    
     private final ArrayList<Roster> rosterArray = new ArrayList(); 
-    private final ArrayList<Holidays> holidayArray = new ArrayList(); 
+    private final ArrayList<Holiday> holidayArray = new ArrayList(); 
     private Roster currentRoster = new Roster();
     //Extracting Data from encrypted file
 
@@ -368,9 +367,9 @@ public class MainController implements Initializable {
          
         try{
             
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("HolidaysFXML.fxml")); 
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("HolidayFXML.fxml")); 
             Parent root1 = loader.load();
-            HolidaysController HController = loader.getController();
+            HolidayController HController = loader.getController();
             Stage stage = new Stage();
             stage.setTitle("Holidays Editor");
             stage.setResizable(false);
@@ -1010,7 +1009,7 @@ public class MainController implements Initializable {
                 String bArry[] = b.split("\\@", -1);
                 
                 if(bArry[0].length() > 0 && bArry[1].length() > 0){
-                    holidayArray.add(  new Holidays(bArry[0],bArry[1],bArry[2])  );
+                    holidayArray.add(  new Holiday(bArry[0],bArry[1],bArry[2])  );
                 }
             
             }    
