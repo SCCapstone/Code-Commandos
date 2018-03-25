@@ -6,13 +6,10 @@
  */
 package dutyroster;
 
-
 //import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 
-
 public class Blockout {
-
   
    //SimipleString is a string. It works better with tableview
    private final SimpleStringProperty name = new SimpleStringProperty("");
@@ -20,8 +17,6 @@ public class Blockout {
    private final SimpleStringProperty fromDate = new SimpleStringProperty("");
    private final SimpleStringProperty toDate = new SimpleStringProperty("");
 
-
-   
     //Constructor 
     public Blockout() {
 
@@ -78,6 +73,19 @@ public class Blockout {
     public void setToDate(String to) {
        toDate.set(to);
               
+    }
+    
+    public boolean equals(Blockout that) {
+        
+        if (!(that instanceof Blockout)) {
+        return false;
+        }
+
+        // Custom equality check here.
+        return this.name.equals(that.name)
+        && this.status.equals(that.status)
+        && this.fromDate.equals(that.fromDate)
+        && this.toDate.equals(that.toDate);
     }
     
 }

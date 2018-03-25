@@ -1,6 +1,6 @@
 /**
  * @author Austin Freed, Tanya Peyush
- * @version 5 3/15/18
+ * @version 6 3/16/18
  */
 package dutyroster;
 
@@ -15,11 +15,14 @@ import javafx.fxml.Initializable;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.util.StringConverter;
 
@@ -35,17 +38,17 @@ public class BlockoutController implements Initializable {
     @FXML private ComboBox statusCombo;
     @FXML private DatePicker dateFrom;
     @FXML private DatePicker dateTo;
+    @FXML private Button buAdd,buUpdate,buCancel;
   
     //Hold localdates from datepickers
     private LocalDate curFrom, curTo;
     private static final String DATE_FORMAT = "d MMM uuuu";
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_FORMAT);
-    
+    private Blockout oldBlock;
+            
     // used to import and export data from employee data
     private ObservableList<String> employeeOptions;
     private ObservableList<String> statusOptions;
-    // rankOptions is used to pull the rank information  
- 
     //rankListing is used to change it in the column  
     private ObservableList<Blockout> blockoutList;
    
@@ -87,11 +90,27 @@ public class BlockoutController implements Initializable {
         nameCombo.getItems().setAll(employeeOptions);
         statusCombo.getItems().setAll(statusOptions);
         
+        //Hide Update Cancel Buttons
+        buUpdate.setVisible(false);
+        buCancel.setVisible(false);
+        
         tableView.setItems(blockoutList);
  
         //used to edit the tables.
         tableView.setEditable(true);
     
+        //Set row double-click for editing
+        tableView.setRowFactory( tv -> {
+            TableRow<Blockout> row = new TableRow<>();
+            row.setOnMouseClicked(event -> {
+                if (event.getClickCount() == 2 && (! row.isEmpty()) ) {
+                    Blockout rowData = row.getItem();
+                    setEdit(rowData);
+                }
+            });
+            return row;
+        });
+  
         //set proper sorting.      
         fromDate.setSortType(TableColumn.SortType.ASCENDING);
         tableView.getSortOrder().add(fromDate);
@@ -106,17 +125,55 @@ public class BlockoutController implements Initializable {
         name.setSortable(true); 
     } 
     
-    
     /**
      * This will add a new block out date to the list
      */
     @FXML public void AddBlockout(){
-             
+         
+        Alert alert;     
+        
+        if (nameCombo.getValue()==null){
+             alert = new Alert(Alert.AlertType.ERROR, "Please select a employee.");
+             alert.setTitle("No Employee selected");
+             alert.showAndWait();
+            return;
+        }
+        
+        if (statusCombo.getValue()==null){
+             alert = new Alert(Alert.AlertType.ERROR, "Please selecte a status");
+             alert.setTitle("No Status selected");
+             alert.showAndWait();
+            return;
+        }
+        
+        if (curFrom==null){
+            alert = new Alert(Alert.AlertType.ERROR, "Missing \"from\" date");
+            alert.setTitle("Incorrect Date");
+            alert.showAndWait();
+            return;
+        }
+        
+         if (curTo==null){
+            alert = new Alert(Alert.AlertType.ERROR, "Missing \"to\" date");
+            alert.setTitle("Incorrect Date");
+            alert.showAndWait();
+            return;
+        }
+               
         String sName = nameCombo.getValue().toString();
         String sStatus = statusCombo.getValue().toString();
         String tmpFrom = curFrom.format(formatter);
-        String tmpTo = curTo.format(formatter);
+        String tmpTo = curTo.format(formatter); 
         
+        if (curFrom.isEqual(curTo) || curFrom.isAfter(curTo)){
+            
+            alert = new Alert(Alert.AlertType.ERROR, "The \"From\" date must be a date that is earlier than the \"To\" date.");
+            alert.setTitle("Incorrect Date");
+            alert.showAndWait();
+            return;
+        }
+
+
         blockoutList.add( new Blockout(sName,sStatus,tmpFrom,tmpTo) );
         tableView.sort();
         
@@ -130,7 +187,99 @@ public class BlockoutController implements Initializable {
         curFrom = null;
         curTo = null;
     }
-
+  
+    private void setEdit(Blockout block){
+         
+        oldBlock = block;
+        nameCombo.setValue(block.getName());
+        statusCombo.setValue(block.getStatus());
+        dateFrom.setValue(LocalDate.parse(block.getFromDate(), formatter));
+        dateTo.setValue(LocalDate.parse(block.getToDate(), formatter));
+        buUpdate.setVisible(true);
+        buCancel.setVisible(true);
+        buAdd.setVisible(false);
+    }
+    
+    
+    @FXML private void updateBlockout(){
+        
+        
+        Alert alert;     
+        
+        if (nameCombo.getValue()==null){
+             alert = new Alert(Alert.AlertType.ERROR, "Please select a employee.");
+             alert.setTitle("No Employee selected");
+             alert.showAndWait();
+            return;
+        }
+        
+        if (statusCombo.getValue()==null){
+             alert = new Alert(Alert.AlertType.ERROR, "Please selecte a status");
+             alert.setTitle("No Status selected");
+             alert.showAndWait();
+            return;
+        }
+        
+        if (curFrom==null){
+            alert = new Alert(Alert.AlertType.ERROR, "Missing \"from\" date");
+            alert.setTitle("Incorrect Date");
+            alert.showAndWait();
+            return;
+        }
+        
+         if (curTo==null){
+            alert = new Alert(Alert.AlertType.ERROR, "Missing \"to\" date");
+            alert.setTitle("Incorrect Date");
+            alert.showAndWait();
+            return;
+        }
+               
+        String sName = nameCombo.getValue().toString();
+        String sStatus = statusCombo.getValue().toString();
+        String tmpFrom = curFrom.format(formatter);
+        String tmpTo = curTo.format(formatter); 
+        
+        if (curFrom.isEqual(curTo) || curFrom.isAfter(curTo)){
+            
+            alert = new Alert(Alert.AlertType.ERROR, "The \"From\" date must be a date that is earlier than the \"To\" date.");
+            alert.setTitle("Incorrect Date");
+            alert.showAndWait();
+            return;
+        }     
+        
+        blockoutList.forEach((b) -> {
+          
+            if(oldBlock.equals(b)){
+            b.setName(sName);
+            b.setStatus(sStatus);
+            b.setFromDate(tmpFrom);
+            b.setToDate(tmpTo);           
+            setCancel();
+            
+            tableView.setItems(blockoutList);
+            tableView.refresh();
+            tableView.sort();
+            
+            }
+            
+        });
+              
+    }
+  
+    @FXML private void setCancel(){
+         
+        //Clear form controls
+        nameCombo.setValue(null);
+        statusCombo.setValue(null);
+        dateFrom.setValue(null);
+        dateTo.setValue(null);
+        buUpdate.setVisible(false);
+        buCancel.setVisible(false);
+        buAdd.setVisible(true);
+        
+        tableView.sort();
+    } 
+    
     /**
      * This will delete selected rows from the block out list
      * @param tmpList
@@ -163,14 +312,12 @@ public class BlockoutController implements Initializable {
 
             strData += b.getName() 
                     + "@" + b.getStatus()
-                    + "@" + b.getName() 
                     + "@" + b.getFromDate()
                     + "@" + b.getToDate()
                     + "|";    
             });
             strData = Tools.removeLastChar(strData);
             
-        
         scBlockOut.store(strData);
         strData = "";
         
@@ -223,6 +370,7 @@ public class BlockoutController implements Initializable {
                 if(bArry[0].length() > 0 && bArry[1].length() > 0){
                     employeeOptions.add(bArry[1]);
                 }
+            
             }    
         
         }       
