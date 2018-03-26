@@ -10,11 +10,16 @@ import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Iterator;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.concurrent.atomic.AtomicLong;
@@ -108,6 +113,9 @@ public class MainController implements Initializable {
         //instantiates new file, use file name Ranks as storage
         
         retrieveData();
+        
+        if(!rosterArray.isEmpty())
+        currentRoster = rosterArray.get(0);
     }  
  
     @Override
@@ -121,8 +129,12 @@ public class MainController implements Initializable {
         
         loadMonths(tmpMonth);
         loadYears(tmpYear);
+        loadHolidays();
+        
         setDate(tmpYear, tmpMonth);
-
+        
+        tableView.setStyle("-fx-selection-bar:#cccccc;");
+        
         bAddRoster.setTooltip(new Tooltip("Click here to add a new roster"));
 
         rosterControls.setVisible(false);
@@ -245,6 +257,13 @@ public class MainController implements Initializable {
         
         currentRoster.setDInterval(Integer.parseInt(fDInterval.getText()));
         currentRoster.setAmount(Integer.parseInt(fAmount.getText()));
+        
+        boolean updateCal = false;
+        if (currentRoster.getWeekends()!= cWeekends.isSelected()
+            || currentRoster.getHolidays()!= cHolidays.isSelected()){
+                updateCal = true;
+        }
+        
         currentRoster.setWeekends(cWeekends.isSelected());
         currentRoster.setHolidays(cHolidays.isSelected());    
         
@@ -263,6 +282,11 @@ public class MainController implements Initializable {
             rosterTabs.getSelectionModel().select(newTab);
 
         }
+        
+        if (updateCal){
+            setDate(curYear, curMonth-1);
+        }
+        
               
         bSave.setDisable(true);
     }
@@ -377,7 +401,12 @@ public class MainController implements Initializable {
             //sceneRank.getStylesheets().add("stylesheet.css");
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setScene(sceneStatus2);
-            stage.setOnHidden(e -> HController.shutDown());
+            stage.setOnHidden(e -> {
+                HController.shutDown();
+                loadHolidays();
+                setDate(curYear, curMonth-1);
+                }
+            );
             stage.show(); 
           
         }
@@ -410,6 +439,8 @@ public class MainController implements Initializable {
     }    
     
     @FXML private void assignDuty(){
+        
+        storeData();
         storeRosterData();
         
         Assignment assign = new Assignment(rosterArray,curYear,curMonth);
@@ -482,6 +513,7 @@ public class MainController implements Initializable {
         String[] weekDay = new String[] {null, "SU", "MO", "TU", "WE", "TH", "FR", "SA"};
         
         Calendar selCal = Calendar.getInstance();
+        Calendar now = Calendar.getInstance();
         
         //!!!Before switching to another month, store the current data!
         storeRosterData();
@@ -508,13 +540,50 @@ public class MainController implements Initializable {
         colName.setSortable(false);
         tableView.getColumns().add(colName);
       
-        TableColumn colInc = createColumn(2, "Increment");
+        TableColumn colInc1 = createColumn(2, "");
+        colInc1.setPrefWidth(0);
+        colInc1.setMaxWidth(0);
+        colInc1.setResizable(false);
+        colInc1.setSortable(false);
+        colInc1.setStyle("-fx-maxwidth:0;");
+        
+            TableColumn colN1 = createColumn(2, "");
+            colN1.setEditable(false);
+            colN1.setMaxWidth(0);
+            colN1.setResizable(false);
+            colN1.setSortable(false);
+            colN1.setStyle("-fx-max-width:0;");
+            
+            colInc1.getColumns().add(colN1);  
+                      
+            TableColumn colW1 = createColumn(3, "");
+            colW1.setEditable(false);
+            colW1.setMaxWidth(0);
+            colW1.setResizable(false);
+            colW1.setSortable(false);
+            colW1.setStyle("-fx-max-width:0;");
+            
+            colInc1.getColumns().add(colW1);
+           
+            TableColumn colH1 = createColumn(4, "");
+            colH1.setEditable(false);
+            colH1.setMaxWidth(0);
+            colH1.setResizable(false);
+            colH1.setSortable(false);
+            colH1.setStyle("-fx-max-width:0;");
+            
+            colInc1.getColumns().add(colH1); 
+
+        tableView.getColumns().add(colInc1); 
+        
+        TableColumn colInc = createColumn(5, "Increments");
         colInc.setPrefWidth(150);
         colInc.setMaxWidth(150);
         colInc.setResizable(false);
         colInc.setSortable(false);
+        colInc.setStyle("-fx-background-color:#ffffff;");
   
-            TableColumn colN = createColumn(2, "N");
+            TableColumn colN = createColumn(5, "N");
             colN.setPrefWidth(35);
             colN.setMaxWidth(35);
             colN.setResizable(false);
@@ -522,32 +591,40 @@ public class MainController implements Initializable {
             colN.setStyle("-fx-alignment: CENTER;");
             colInc.getColumns().add(colN);  
                       
-            TableColumn colW = createColumn(3, "W");
+            TableColumn colW = createColumn(6, "W");
             colW.setPrefWidth(35);
             colW.setMaxWidth(35);
             colW.setResizable(false);
             colW.setSortable(false);
-            colW.setStyle("-fx-alignment: CENTER;");
+            colW.setStyle("-fx-alignment: CENTER;-fx-background-color:#dddddd;"
+                        + "-fx-border-color:#ffffff;");
             colInc.getColumns().add(colW);
            
-            TableColumn colH = createColumn(4, "H");
+            TableColumn colH = createColumn(7, "H");
             colH.setPrefWidth(35);
             colH.setMaxWidth(35);
             colH.setResizable(false);
             colH.setSortable(false);
-            colH.setStyle("-fx-alignment: CENTER;");
+            colH.setStyle("-fx-alignment: CENTER;-fx-background-color:#ddeedd;"
+                        + "-fx-border-color:#ffffff;");
             colInc.getColumns().add(colH); 
-          
+
         tableView.getColumns().add(colInc); 
                     
         for (int i = 1; i <= lastDayOfMonth; i++) {
-            final int finalIdx = i + 4;
+            final int finalIdx = i + 7;
             
             TableColumn col = createColumn(finalIdx, Integer.toString(i));
             col.setResizable(false);
 
+            //Get current day of the month
             selCal.set(Calendar.DAY_OF_MONTH, i);
+            //Get current day of the week
             int  day = selCal.get(Calendar.DAY_OF_WEEK);
+            
+            if (selCal.equals(now)){
+            col.setStyle("-fx-alignment: CENTER;-fx-background-color:#ffffff;");
+            }
             
             TableColumn colI = createColumn(finalIdx, weekDay[day]);
             colI.setPrefWidth(35);
@@ -558,15 +635,42 @@ public class MainController implements Initializable {
  
             col.getColumns().add(colI);           
 
-            if (day == 7 || day == 1){
+            String isHol = isHoliday(selCal);
+            
+            //Check for Satudays and Sundays
+            
+
+            if ( !isHol.isEmpty() && currentRoster.getHolidays()){
+                
+                Tooltip tip = new Tooltip(isHol);
+                
+                //Clear normal date colum headers to show tool tip label with
+                //Holiday title
+                Label dayM = new Label(Integer.toString(i));
+                dayM.setTooltip(tip);
+                col.setText("");
+                col.setGraphic(dayM);
+                Label dayW = new Label(weekDay[day]);
+                dayW.setTooltip(tip);
+                colI.setText("");
+                colI.setGraphic(dayW);
+                
                 colI.setStyle(
-                        "-fx-background-color:#eeeeee;"
-                        + "-fx-border-color:#dddddd;"
+                        "-fx-background-color:#ddeedd;"     
                         + "-fx-alignment: CENTER;"
+                         + "-fx-border-color:#ffffff;"
+                );
+            }
+            else if ( currentRoster.getWeekends() && (day == 7 || day == 1 ) ){
+                
+                colI.setStyle(
+                        "-fx-background-color:#dddddd;"       
+                        + "-fx-alignment: CENTER;"
+                         + "-fx-border-color:#ffffff;"
                 );
             }
             else{
-                colI.setStyle("-fx-alignment: CENTER;");    
+                colI.setStyle("-fx-alignment: CENTER;"); 
             }
             
             tableView.getColumns().add(col);
@@ -633,7 +737,7 @@ public class MainController implements Initializable {
         
         if(rosterName.isEmpty() || rosterArray.isEmpty() || updateLock)
             return;
-        
+
         CrewController cController = new CrewController();
 
         SecureFile scCrews = new SecureFile("Crew_" + rosterName);      
@@ -643,32 +747,72 @@ public class MainController implements Initializable {
         String pathName = "Crew_"+ rosterName+"_"+curYear+"_"+curMonth;
         //This will pull daily data for each roster member        
         RosterData rd = new RosterData();
-            
+        
+        Calendar lastMonth = Calendar.getInstance();
+        lastMonth.set(curYear, curMonth-1,1);
+        ArrayList<String> lastRdArray = new ArrayList();
+        int lastY = lastMonth.get(Calendar.YEAR);
+        int lastM = lastMonth.get(Calendar.MONTH);
+        String pathLastMonth = "Crew_"+ rosterName+"_"
+                +Integer.toString(lastY)+"_"+Integer.toString(lastM);
+    
         rowData.clear();
         for(Employee crew: aCrews){
             crewName = crew.getName();
             ObservableList<StringProperty> row = FXCollections.observableArrayList();
-            row.add(new SimpleStringProperty(crew.getRank()));
-            row.add(new SimpleStringProperty(crewName));
+            row.add(new SimpleStringProperty(crew.getRank())); //Index 0
+            row.add(new SimpleStringProperty(crewName)); //Index 1
          
-            if (!crewName.isEmpty())
-            rdArray = rd.getRow(pathName,crewName);
-           
-            if(rdArray==null || rdArray.isEmpty() || rdArray.size()!= lastDayOfMonth + 5){
-                for (int i = -2; i <= lastDayOfMonth; i++)
-                    if(i<1)
+            if (!crewName.isEmpty()){
+                rdArray = rd.getRow(pathName,crewName);
+                lastRdArray = rd.getRow(pathLastMonth,crewName);
+            }
+               
+            if(rdArray==null || rdArray.isEmpty() ){
+                
+                for (int i = 2; i < lastDayOfMonth + 8; i++)
+                    if(i<8)
                         row.add(new SimpleStringProperty("1"));
                     else
-                        row.add(new SimpleStringProperty("_"));    
-           }
-           else{
-                for (int i = 2; i < rdArray.size();i++)
+                        row.add(new SimpleStringProperty("_")); 
+                
+            }
+            else{
+                for (int i = 2; i < lastDayOfMonth + 8; i++)
                     row.add(new SimpleStringProperty(rdArray.get(i)));
-           }
+            }
+            
             rowData.add(row);
         }
 
     }
+   
+    @FXML public void resetIncrements(){
+
+        Calendar lastMonth = Calendar.getInstance();
+        lastMonth.set(curYear, curMonth-1,1);
+        RosterData rd = new RosterData();
+        ArrayList<String> lastRdArray;
+        int lastY = lastMonth.get(Calendar.YEAR);
+        int lastM = lastMonth.get(Calendar.MONTH);
+        String pathLastMonth = "Crew_"+ rosterName +"_"
+                +Integer.toString(lastY)+"_"+Integer.toString(lastM);
+  
+        for (ObservableList<StringProperty> row : rowData) {
+            lastRdArray = rd.getRow(pathLastMonth,row.get(1).get());
+                       
+            if( lastRdArray != null){
+                row.set(5, new SimpleStringProperty( lastRdArray.get(2) )); //Index 2
+                row.set(6, new SimpleStringProperty( lastRdArray.get(3) )); //Index 3
+                row.set(7, new SimpleStringProperty( lastRdArray.get(4) )); //Index 4
+                
+            }
+        
+        }
+        tableView.refresh();
+    
+    }
+    
     
     public void  createTab(String title){  
 
@@ -798,11 +942,16 @@ public class MainController implements Initializable {
         
         if(rosterArray.isEmpty())
             return;
-        //Store roster data before it changes
+ 
         
-        storeRosterData();
+         //Store roster data before it changes
+        storeRosterData();       
         
         currentRoster = rosterArray.get(xVal);
+        cWeekends.setSelected(currentRoster.getWeekends());
+        cHolidays.setSelected(currentRoster.getHolidays());       
+        setDate(curYear, curMonth-1);
+
         rosterName = currentRoster.getTitle();
         lowerOutput.setText(rosterName + " is set to priority " + (xVal+1) + ". Drag and drop tabs to change.");
         rosterControls.setVisible(true);
@@ -812,10 +961,10 @@ public class MainController implements Initializable {
         fRInterval.setText(Integer.toString(currentRoster.getRInterval()));
         setRInterval();
         fAmount.setText(Integer.toString(currentRoster.getAmount()));
-        cWeekends.setSelected(currentRoster.getWeekends());
-        cHolidays.setSelected(currentRoster.getHolidays());
-        
+
         updateCrew();
+        
+
     }
     
     public void storeRosterData(){
@@ -1001,6 +1150,9 @@ public class MainController implements Initializable {
         SecureFile scEmployees = new SecureFile("Holidays");
         String a = scEmployees.retrieve();
       
+        if(!holidayArray.isEmpty())
+            holidayArray.clear();
+        
         String aArry[] = a.split("\\|", -1);
         for (String b : aArry){
             
@@ -1018,7 +1170,32 @@ public class MainController implements Initializable {
         
     }
     
-    private boolean isHoliday (){return false;}
+    public String isHoliday (Calendar curDate){
+        
+        SimpleDateFormat sdf = new SimpleDateFormat("d MMM yyyy", Locale.ENGLISH);
+        Calendar startDate = Calendar.getInstance();
+        Calendar endDate = Calendar.getInstance();   
+        
+      
+        for(Holiday h : holidayArray){
+            
+            try {
+                
+                startDate.setTime( sdf.parse( h.getFromDate() ) );
+                endDate.setTime( sdf.parse( h.getToDate() ) );
+                endDate.add(Calendar.DATE, 1);
+            } catch (ParseException ex) {
+                Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            if ( curDate.after(startDate) && curDate.before(endDate) )
+                return h.getName();
+            
+        }    
+
+        return "";
+    }
+
 
 }
    

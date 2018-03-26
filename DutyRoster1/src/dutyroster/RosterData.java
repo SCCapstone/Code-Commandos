@@ -38,7 +38,7 @@ public class RosterData {
   
         return returnArray;
     }
-  
+    
     /**
      * This function will store all stored data for each roster based
      * on a specific month and year.
@@ -63,6 +63,10 @@ public class RosterData {
         //Store string array into secure file
         scf.store(strData);
     }
+    
+    
+    
+    
     /**
      * This function will get a specific row from the crew table. 
      * @param filePath
@@ -72,13 +76,16 @@ public class RosterData {
     public ArrayList<String> getRow(String filePath, String s){
         
         ArrayList<ArrayList<String>> sArray = retrieveData(filePath);
-       
+      
+        
         try{
-            for(ArrayList<String> row : sArray)
+            for(ArrayList<String> row : sArray){
+               
                 if(row!=null && row.get(1).equals(s))
                     return row;
+            }
         }
-        catch (Exception ex){/*Just let it die. Its better this way...*/}
+        catch (Exception ex){}
 
     return null;
         

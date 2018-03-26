@@ -6,8 +6,7 @@
 
 package dutyroster;
 public class Roster {
-
-    
+ 
     private String title;
     private int dInterval; // Duty Interval
     private int rInterval; // Rest Interval

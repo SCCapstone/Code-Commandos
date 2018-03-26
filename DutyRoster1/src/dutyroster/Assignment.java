@@ -6,9 +6,14 @@
  */
 package dutyroster;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Locale;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
@@ -19,7 +24,8 @@ public class Assignment {
     private final ArrayList<Roster> rosterArray = new ArrayList();
     private final ArrayList<Blockout> blockoutArray = new ArrayList();
     private final ArrayList<ArrayList<ArrayList<String>>> crewsArray = new ArrayList();
-
+    private final ArrayList<Holiday> holidayArray = new ArrayList();
+    
     private final int year;
     private final int month;
     
@@ -28,6 +34,7 @@ public class Assignment {
         month = inMonth;//Month - 1 to start at 0.
         rosterArray.addAll(rArray);
         loadCrewsArray();
+        loadHolidays();
     }
     
     private void loadCrewsArray(){
@@ -51,6 +58,8 @@ public class Assignment {
             ObservableList<ObservableList<StringProperty>> rowData = FXCollections.observableArrayList(); 
             
             boolean rWeekends = rosterArray.get(i).getWeekends();
+            boolean rHolidays = rosterArray.get(i).getHolidays();
+            
             
             String title =  rosterArray.get(i).getTitle();
             String pathName = "Crew_"+ title+"_"+year+"_"+month;
@@ -58,41 +67,57 @@ public class Assignment {
 
             for (ArrayList<String> row : crewlist) {
                 ObservableList<StringProperty> member = FXCollections.observableArrayList();
-                member.add(new SimpleStringProperty(row.get(0)));
-                member.add(new SimpleStringProperty(row.get(1)));
-                member.add(new SimpleStringProperty(row.get(2)));
-                member.add(new SimpleStringProperty(row.get(3)));
-                member.add(new SimpleStringProperty(row.get(4)));
- 
+                member.add(new SimpleStringProperty(row.get(0))); //Rank
+                member.add(new SimpleStringProperty(row.get(1))); //Name
+                member.add(new SimpleStringProperty(row.get(2))); //NM n
+                member.add(new SimpleStringProperty(row.get(3))); //NM w
+                member.add(new SimpleStringProperty(row.get(4))); //NM h
+                member.add(new SimpleStringProperty(row.get(5))); //n
+                member.add(new SimpleStringProperty(row.get(6))); //w
+                member.add(new SimpleStringProperty(row.get(7))); //h
+                
+               // boolean hadHoliday = false;
+                
+                //Day of the month
                 for(int j = 0; j < roster.size(); j++){
                     
                     //These will be needed to handle the weekend incrementers
                     selCal.set(Calendar.DAY_OF_MONTH, j+1);
+                    boolean isHol = isHoliday(selCal);
                     int thisDay = selCal.get(Calendar.DAY_OF_WEEK);
                     int daily=0;
                     
                     for(Assignee a:roster.get(j)){
                         
-                        if(rWeekends){
-                            
-                            if(thisDay==1 || thisDay==7)
-                             daily = a.getLastW(); 
-                            else
-                            daily = a.getLastN();
- 
+                        if ( isHol && rHolidays ){
+                             daily = a.getLastH(); 
+                             member.set(4, new SimpleStringProperty(Integer.toString(a.getLastH())) ); 
+                            //hadHoliday = true;
                         }
+                        else if(rWeekends && (thisDay==1 || thisDay==7) ){
+                             daily = a.getLastW(); 
+                             member.set(3, new SimpleStringProperty(Integer.toString(a.getLastW())) ); 
+                        }  
                         else{
                             daily = a.getLastN();
+                             member.set(2, new SimpleStringProperty(Integer.toString(a.getLastN())) );  
                         }
                         
+                        if (j==roster.size()-1){
+                            member.set(4, new SimpleStringProperty(Integer.toString(a.getLastH()+1)) ); 
+                            member.set(3, new SimpleStringProperty(Integer.toString(a.getLastW()+1)) );
+                            member.set(2, new SimpleStringProperty(Integer.toString(a.getLastN()+1)) ); 
+                        }
+
                         if(a.getName().equals(row.get(1))){
                            String newS = (a.getOnDuty()==0)? "X" : Integer.toString(daily); 
-                           member.add( (5+j),new SimpleStringProperty(newS) ); 
+                           member.add( (8+j), new SimpleStringProperty(newS) ); 
                            break;
                         }
+                    
                     }
-                }
                 
+                }
                 rowData.add(member);
             }
             dr.storeData(pathName, rowData); 
@@ -107,98 +132,86 @@ public class Assignment {
         Calendar selCal = Calendar.getInstance();
         selCal.set(year, (month-1), 1);
         int lastDay = selCal.getActualMaximum(Calendar.DAY_OF_MONTH);
-        int firstSat = Tools.getFirstSaturday(year, (month-1));
-       
+               
         // Loop through rosters==============
         for(int i = 0; i < crewsArray.size(); i++){ 
             
             ArrayList<ArrayList<Assignee>> dayLevel = new ArrayList();
             boolean rWeekends = rosterArray.get(i).getWeekends();
-            //boolean rHolidays = rosterArray.get(i).getHolidays();
-            int rInterval =  rosterArray.get(i).getDInterval();
+            boolean rHolidays = rosterArray.get(i).getHolidays();
+            int rDInterval =  rosterArray.get(i).getDInterval();
             int rAmount =  rosterArray.get(i).getAmount();
-            int n=1,w=1,h=1;
+            int n,w,h;
             
             //====Day Columns Loop
             for(int j=1; j <= lastDay; j++){ 
                 
                 ArrayList<Assignee> assignees = new ArrayList();
                 selCal.set(Calendar.DAY_OF_MONTH, j);
+                boolean isHol = isHoliday(selCal);
+
                 int thisDay = selCal.get(Calendar.DAY_OF_WEEK);
-                
+
                 //===Crew Rows Loop
                 for(ArrayList<String> row : crewsArray.get(i)){
-                      
-                    if(j==1){
-                        n = Integer.parseInt(row.get(2));
+                    
+                    if(isHol && rHolidays){
+                        n = lookupInc( dayLevel,row,'n',j-1,row.get(1));
+                        w = lookupInc( dayLevel,row,'w',j-1,row.get(1));
+                        h = lookupInc( dayLevel,row,'h',j-1,row.get(1))+1;     
+                    }
+                    else if(rWeekends && (thisDay==1 || thisDay==7) ){
+                        n = lookupInc( dayLevel,row,'n',j-1,row.get(1));
+                        w = lookupInc( dayLevel,row,'w',j-1,row.get(1))+1;
+                        h = lookupInc( dayLevel,row,'h',j-1,row.get(1));
                     }
                     else{
-                        
-                        if(rWeekends){
-                            if(thisDay==1 || thisDay==7){
-                                n = lookupInc( dayLevel,"n",j-1,row.get(1));
-                                    
-                                    if(j==firstSat)
-                                    w = Integer.parseInt(row.get(3));
-                                    else
-                                    w = lookupInc( dayLevel,"w",j-1,row.get(1))+1;
-                            }
-                            else{
-                                n = lookupInc( dayLevel,"n",j-1,row.get(1))+1;
-                                w = lookupInc( dayLevel,"w",j-1,row.get(1));
-                            }
-                        }
-                        else{
-                            n = lookupInc( dayLevel,"n",j-1,row.get(1))+1;
-                            w = lookupInc( dayLevel,"w",j-1,row.get(1));
-                        }
-                       
-                    }
-                    
+                        n = lookupInc( dayLevel,row,'n',j-1,row.get(1))+1;
+                        w = lookupInc( dayLevel,row,'w',j-1,row.get(1));
+                        h = lookupInc( dayLevel,row,'h',j-1,row.get(1));
+                    }                        
+
                     assignees.add(new Assignee(row.get(1),n,w,h));
                 }
                 
                 //Sort list decsending so first index is the highest increment
-                if(rWeekends){
-                     if(thisDay==1 || thisDay==7){
-                         Collections.sort(assignees, (Assignee o1, Assignee o2) ->
-                         o2.getLastW()-o1.getLastW());
-                     }
-                     else{
-                         Collections.sort(assignees, (Assignee o1, Assignee o2) ->
-                         o2.getLastN()-o1.getLastN());
-                     }
-                 }
-                 else{
-                     Collections.sort(assignees, (Assignee o1, Assignee o2) ->
-                      o2.getLastN()-o1.getLastN());
-                 }          
-               
+                if(isHol && rHolidays){
+                    Collections.sort(assignees, (Assignee o1, Assignee o2) ->
+                    o2.getLastH()-o1.getLastH());
+                }
+                else if(rWeekends && (thisDay==1 || thisDay==7) ) {
+                    Collections.sort(assignees, (Assignee o1, Assignee o2) ->
+                    o2.getLastW()-o1.getLastW());
+                }
+                else{
+                    Collections.sort(assignees, (Assignee o1, Assignee o2) ->
+                    o2.getLastN()-o1.getLastN());
+                }
+        
                 //Duty Assignment here==============================
-                int needed = (24/rInterval) * rAmount;
+                int needed = (24/rDInterval) * rAmount;
                 for(int c = 0; c < assignees.size(); c++){
                     
                     if(c < needed){
                         
-                        if(rWeekends){
-                            
-                            if(thisDay==1 || thisDay==7)
-                                assignees.get(c).setLastW(0);   
-                            else
-                                assignees.get(c).setLastN(0);
-                        
+                        if(isHol && rHolidays){
+                           assignees.get(c).setLastH(0); 
+                        }
+                        else if(rWeekends && (thisDay==1 || thisDay==7) ){
+                            assignees.get(c).setLastW(0); 
                         }
                         else{
                             assignees.get(c).setLastN(0);
                         }
-                       
-                        assignees.get(c).setOnDuty(0);
+                        assignees.get(c).setOnDuty(0); //When on duty, set recovery time to zero
                     
                     }
                     else{
-                        int lastDuty = assignees.get(c).getOnDuty();
-                        assignees.get(c).setOnDuty(lastDuty+1);    
+                        int recoveryTime = rDInterval * c; //Hours for one duty
+                        int lastDuty = assignees.get(c).getOnDuty(); //Accumalation
+                        assignees.get(c).setOnDuty(lastDuty+recoveryTime);    
                     }
+                
                 }
                 dayLevel.add(assignees);    
             }
@@ -207,20 +220,28 @@ public class Assignment {
         return rosterLevel;       
     }
     
-    private int lookupInc(ArrayList<ArrayList<Assignee>> dayLevel, String type, int day, String eName){
-       int returnI=0;
+    private int lookupInc(ArrayList<ArrayList<Assignee>> dayLevel, ArrayList<String> uData, char type, int day, String eName){
       
+        if(dayLevel.isEmpty()){
+       
+            switch(type){
+                case 'n' : return Integer.parseInt(uData.get(5)) - 1;
+                case 'w' : return Integer.parseInt(uData.get(6)) - 1;
+                case 'h' : return Integer.parseInt(uData.get(7)) - 1;
+            }             
+        }
+ 
         for(Assignee row : dayLevel.get(day-1)){
             
             if(row.getName().equals(eName)){
                 switch(type){
-                    case "n" : return row.getLastN();
-                    case "w" : return row.getLastW();
-                    case "h" : return row.getLastH();
+                    case 'n' : return row.getLastN();
+                    case 'w' : return row.getLastW();
+                    case 'h' : return row.getLastH();
                 } 
             }   
         }
-        return returnI;
+        return 0;
     }
     
     private ArrayList<ArrayList<String>> getCrewData(String rosterName){
@@ -243,24 +264,75 @@ public class Assignment {
             String crewName = crew.getName();
             
             ArrayList<String> row = new ArrayList();
-            row.add(crew.getRank());
-            row.add(crewName);
+            row.add(crew.getRank()); //Index 0
+            row.add(crewName); //Index 1
          
             if (!crewName.isEmpty())
             rdArray = rd.getRow(pathName,crewName);
            
             if(rdArray==null || rdArray.isEmpty()){
-                for (int i = 0; i < 3; i++)
+                for (int i = 0; i < 6; i++)
                         row.add("1");
            }
            else{
-                for (int i = 2; i <= 4;i++)
-                    row.add(rdArray.get(i));
+               for (int i = 2; i < 8; i++)
+                        row.add(rdArray.get(i));
            }
            returnArray.add(row);
         }
 
     return returnArray;    
+    }
+    
+    
+    public void loadHolidays(){
+        SecureFile scEmployees = new SecureFile("Holidays");
+        String a = scEmployees.retrieve();
+      
+        if(!holidayArray.isEmpty())
+            holidayArray.clear();
+        
+        String aArry[] = a.split("\\|", -1);
+        for (String b : aArry){
+            
+            if (b.length() > 2){
+                
+                String bArry[] = b.split("\\@", -1);
+                
+                if(bArry[0].length() > 0 && bArry[1].length() > 0){
+                    holidayArray.add(  new Holiday(bArry[0],bArry[1],bArry[2])  );
+                }
+            
+            }    
+        
+        }       
+        
+    }
+    
+    public Boolean isHoliday (Calendar curDate){
+        
+        SimpleDateFormat sdf = new SimpleDateFormat("d MMM yyyy", Locale.ENGLISH);
+        Calendar startDate = Calendar.getInstance();
+        Calendar endDate = Calendar.getInstance();   
+        
+      
+        for(Holiday h : holidayArray){
+            
+            try {
+                
+                startDate.setTime( sdf.parse( h.getFromDate() ) );
+                endDate.setTime( sdf.parse( h.getToDate() ) );
+                endDate.add(Calendar.DATE, 1);
+            } catch (ParseException ex) {
+                Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            if ( curDate.after(startDate) && curDate.before(endDate) )
+                return true;
+            
+        }    
+
+        return false;
     }
     
 }
