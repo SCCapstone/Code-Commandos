@@ -98,6 +98,8 @@ public class MainController implements Initializable {
    
     private final ArrayList<Roster> rosterArray = new ArrayList(); 
     private final ArrayList<Holiday> holidayArray = new ArrayList(); 
+    private final ArrayList<Status> statusArray = new ArrayList();
+    private final ArrayList<Blockout> blockoutArray = new ArrayList();
     private Roster currentRoster = new Roster();
     //Extracting Data from encrypted file
 
@@ -130,6 +132,8 @@ public class MainController implements Initializable {
         loadMonths(tmpMonth);
         loadYears(tmpYear);
         loadHolidays();
+        loadBlockouts();
+        loadStatusData();
         
         setDate(tmpYear, tmpMonth);
         
@@ -379,7 +383,11 @@ public class MainController implements Initializable {
             //sceneRank.getStylesheets().add("stylesheet.css");
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setScene(sceneStatus2);
-            stage.setOnHidden(e -> BOController.shutDown());
+            stage.setOnHidden(e -> {
+                BOController.shutDown();
+                loadBlockouts();
+                updateCrew();
+                    });
             stage.show(); 
         }
         catch(IOException e){
@@ -747,15 +755,8 @@ public class MainController implements Initializable {
         String pathName = "Crew_"+ rosterName+"_"+curYear+"_"+curMonth;
         //This will pull daily data for each roster member        
         RosterData rd = new RosterData();
+        Calendar thisMonth = Calendar.getInstance();
         
-        Calendar lastMonth = Calendar.getInstance();
-        lastMonth.set(curYear, curMonth-1,1);
-        ArrayList<String> lastRdArray = new ArrayList();
-        int lastY = lastMonth.get(Calendar.YEAR);
-        int lastM = lastMonth.get(Calendar.MONTH);
-        String pathLastMonth = "Crew_"+ rosterName+"_"
-                +Integer.toString(lastY)+"_"+Integer.toString(lastM);
-    
         rowData.clear();
         for(Employee crew: aCrews){
             crewName = crew.getName();
@@ -765,25 +766,55 @@ public class MainController implements Initializable {
          
             if (!crewName.isEmpty()){
                 rdArray = rd.getRow(pathName,crewName);
-                lastRdArray = rd.getRow(pathLastMonth,crewName);
             }
                
             if(rdArray==null || rdArray.isEmpty() ){
                 
-                for (int i = 2; i < lastDayOfMonth + 8; i++)
-                    if(i<8)
+                for (int i = 2; i < lastDayOfMonth + 8; i++){
+                    if(i<8){
                         row.add(new SimpleStringProperty("1"));
-                    else
-                        row.add(new SimpleStringProperty("_")); 
-                
+                    }
+                    else{
+                        
+                        thisMonth.set(curYear, curMonth-1, i-7);
+                        //Load blockouts for this employee
+                        String block = blockStatus(crewName, thisMonth); 
+                        SimpleStringProperty fill;
+                       
+                        if (!block.isEmpty())
+                            fill = new SimpleStringProperty(block);
+                        else
+                            fill = new SimpleStringProperty("_");
+                        
+                        row.add(fill); 
+                    }
+                }
             }
             else{
-                for (int i = 2; i < lastDayOfMonth + 8; i++)
-                    row.add(new SimpleStringProperty(rdArray.get(i)));
+                for (int i = 2; i < lastDayOfMonth + 8; i++){
+                    
+                    if(i<8){
+                        row.add(new SimpleStringProperty(rdArray.get(i)));
+                    }
+                    else{
+                        
+                        thisMonth.set(curYear, curMonth-1, i-7);
+                        //Load blockouts for this employee
+                        String block = blockStatus(crewName, thisMonth); 
+                        SimpleStringProperty fill;
+                       
+                        if (!block.isEmpty())
+                            fill = new SimpleStringProperty(block);
+                        else
+                            fill = new SimpleStringProperty(rdArray.get(i));
+                        
+                        row.add(fill); 
+                    }
+                }
             }
-            
             rowData.add(row);
         }
+        tableView.refresh();
 
     }
    
@@ -1142,6 +1173,92 @@ public class MainController implements Initializable {
         tab.getGraphic().setOnDragDropped(null);
         tab.getGraphic().setOnDragDone(null);
     }
+    
+    public void loadStatusData(){
+        
+          if(!statusArray.isEmpty()) 
+        statusArray.clear();
+        
+        SecureFile sc = new SecureFile("Status");
+        String a = sc.retrieve();
+      
+        String aArry[] = a.split("\\|", -1);
+        for (String b : aArry){
+            
+            if (b.length() > 2){
+                
+                String bArry[] = b.split("\\@", -1);
+                
+                if(bArry[0].length() > 0 && bArry[1].length() > 0){
+                    boolean incs = ( bArry[2].equals("1") );
+                    statusArray.add(  new Status(bArry[0], bArry[1], incs)  );  
+                }
+            }
+        }
+    }
+    
+    public void loadBlockouts(){
+        
+        if(!blockoutArray.isEmpty()) 
+        blockoutArray.clear();
+        
+        SecureFile scBO = new SecureFile("Blockouts");
+        String a = scBO.retrieve();
+      
+        String aArry[] = a.split("\\|", -1);
+        for (String b : aArry){
+            
+            if (b.length() > 2){
+                
+                String bArry[] = b.split("\\@", -1);
+                
+                // getSortIndex pulls updated rank order index. 
+                if(bArry[0].length() > 0 && bArry[1].length() > 0){
+                    
+                    blockoutArray.add( new Blockout(
+                            bArry[0],
+                            bArry[1],
+                            bArry[2],
+                            bArry[3]
+                    ));
+                }
+            }    
+        }           
+    }  
+    
+    private String blockStatus(String employee, Calendar curDate){
+           
+        SimpleDateFormat sdf = new SimpleDateFormat("d MMM yyyy", Locale.ENGLISH);
+        Calendar startDate = Calendar.getInstance();
+        Calendar endDate = Calendar.getInstance();    
+        
+        for (Blockout b : blockoutArray){  
+            
+            try {
+                startDate.setTime( sdf.parse( b.getFromDate() ) );
+                endDate.setTime( sdf.parse( b.getToDate() ) );
+                endDate.add(Calendar.DATE, 1); 
+            } catch (ParseException ex) {
+                Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+                
+            if (b.getName().equals(employee) && curDate.after(startDate) && curDate.before(endDate)){
+                return lookupStatusCode(b.getStatus());
+            }
+                
+        }    
+        return "";
+        
+    }
+    
+    private String lookupStatusCode(String status){
+        
+        for (Status s : statusArray)
+            if (s.getTitle().equals(status))
+                return s.getCode();
+        
+        return "";
+    }
 
    /**
      * This is used to load holidays from secure files into the link listing array.
@@ -1199,5 +1316,3 @@ public class MainController implements Initializable {
 
 }
    
-
-
