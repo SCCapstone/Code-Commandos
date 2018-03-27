@@ -69,7 +69,7 @@
       </HBox>
       <ButtonBar buttonMinWidth="50.0" minHeight="50.0" prefHeight="50.0">
         <buttons>
-            <Button layoutX="706.0" layoutY="20.0" maxHeight="31.0" maxWidth="114.0" minHeight="-Infinity" minWidth="50.0" mnemonicParsing="false" onAction="#resetIncrements" prefHeight="31.0" prefWidth="50.0" text="Reset Incremets">
+            <Button layoutX="706.0" layoutY="20.0" maxHeight="31.0" maxWidth="114.0" minHeight="-Infinity" minWidth="50.0" mnemonicParsing="false" onAction="#resetIncrements" prefHeight="31.0" prefWidth="50.0" text="Set Incremets">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>

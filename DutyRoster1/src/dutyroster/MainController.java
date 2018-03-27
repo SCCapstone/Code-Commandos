@@ -1,7 +1,7 @@
 /**
  * This is the main screen of the program. Plus, it handles roster data
  * @author Othen Prock, Michael Harlow
- * @version 9, 3/22/2018
+ * @version 10, 3/27/2018
  */
 package dutyroster;
 
@@ -12,13 +12,11 @@ import java.nio.file.Files;
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -548,41 +546,23 @@ public class MainController implements Initializable {
         colName.setSortable(false);
         tableView.getColumns().add(colName);
       
-        TableColumn colInc1 = createColumn(2, "");
-        colInc1.setPrefWidth(0);
-        colInc1.setMaxWidth(0);
-        colInc1.setResizable(false);
-        colInc1.setSortable(false);
-        colInc1.setStyle("-fx-maxwidth:0;");
-        
-            TableColumn colN1 = createColumn(2, "");
-            colN1.setEditable(false);
-            colN1.setMaxWidth(0);
-            colN1.setResizable(false);
-            colN1.setSortable(false);
-            colN1.setStyle("-fx-max-width:0;");
-            
-            colInc1.getColumns().add(colN1);  
-                      
-            TableColumn colW1 = createColumn(3, "");
-            colW1.setEditable(false);
-            colW1.setMaxWidth(0);
-            colW1.setResizable(false);
-            colW1.setSortable(false);
-            colW1.setStyle("-fx-max-width:0;");
-            
-            colInc1.getColumns().add(colW1);
-           
-            TableColumn colH1 = createColumn(4, "");
-            colH1.setEditable(false);
-            colH1.setMaxWidth(0);
-            colH1.setResizable(false);
-            colH1.setSortable(false);
-            colH1.setStyle("-fx-max-width:0;");
-            
-            colInc1.getColumns().add(colH1); 
+        TableColumn colN1 = createColumn(2, "");
+        colN1.setMaxWidth(0.01);
+        colN1.setEditable(false);
+        colN1.setSortable(false);
+        tableView.getColumns().add(colN1);  
 
-        tableView.getColumns().add(colInc1); 
+        TableColumn colW1 = createColumn(3, "");
+        colW1.setMaxWidth(0.01);
+        colW1.setEditable(false);
+        colW1.setSortable(false);
+        tableView.getColumns().add(colW1); 
+
+        TableColumn colH1 = createColumn(4, "");
+        colH1.setMaxWidth(0.01);
+        colH1.setEditable(false);
+        colH1.setSortable(false);
+        tableView.getColumns().add(colH1); 
         
         TableColumn colInc = createColumn(5, "Increments");
         colInc.setPrefWidth(150);
@@ -756,14 +736,15 @@ public class MainController implements Initializable {
         //This will pull daily data for each roster member        
         RosterData rd = new RosterData();
         Calendar thisMonth = Calendar.getInstance();
-        
+       
         rowData.clear();
         for(Employee crew: aCrews){
+            
             crewName = crew.getName();
             ObservableList<StringProperty> row = FXCollections.observableArrayList();
             row.add(new SimpleStringProperty(crew.getRank())); //Index 0
             row.add(new SimpleStringProperty(crewName)); //Index 1
-         
+
             if (!crewName.isEmpty()){
                 rdArray = rd.getRow(pathName,crewName);
             }
@@ -771,6 +752,7 @@ public class MainController implements Initializable {
             if(rdArray==null || rdArray.isEmpty() ){
                 
                 for (int i = 2; i < lastDayOfMonth + 8; i++){
+                    
                     if(i<8){
                         row.add(new SimpleStringProperty("1"));
                     }
@@ -787,11 +769,14 @@ public class MainController implements Initializable {
                             fill = new SimpleStringProperty("_");
                         
                         row.add(fill); 
-                    }
+                    } 
+                       
                 }
+                
             }
             else{
                 for (int i = 2; i < lastDayOfMonth + 8; i++){
+                    
                     
                     if(i<8){
                         row.add(new SimpleStringProperty(rdArray.get(i)));
@@ -809,11 +794,15 @@ public class MainController implements Initializable {
                             fill = new SimpleStringProperty(rdArray.get(i));
                         
                         row.add(fill); 
-                    }
+                    } 
                 }
             }
+            
             rowData.add(row);
         }
+        
+        
+        tableView.setItems(rowData);
         tableView.refresh();
 
     }
@@ -842,8 +831,7 @@ public class MainController implements Initializable {
         }
         tableView.refresh();
     
-    }
-    
+    }   
     
     public void  createTab(String title){  
 
@@ -1012,6 +1000,7 @@ public class MainController implements Initializable {
         RosterData dr = new RosterData();
         dr.storeData(pathName, rowData);
     }
+   
     //retrieve data from secure file
     public void retrieveData(){
         SecureFile sc = new SecureFile("Rosters");
@@ -1173,7 +1162,7 @@ public class MainController implements Initializable {
         tab.getGraphic().setOnDragDropped(null);
         tab.getGraphic().setOnDragDone(null);
     }
-    
+
     public void loadStatusData(){
         
           if(!statusArray.isEmpty()) 
@@ -1259,8 +1248,8 @@ public class MainController implements Initializable {
         
         return "";
     }
-
-   /**
+    
+    /**
      * This is used to load holidays from secure files into the link listing array.
      */
     public void loadHolidays(){
@@ -1312,7 +1301,5 @@ public class MainController implements Initializable {
 
         return "";
     }
-
-
 }
    
