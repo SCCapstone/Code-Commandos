@@ -777,7 +777,6 @@ public class MainController implements Initializable {
             else{
                 for (int i = 2; i < lastDayOfMonth + 8; i++){
                     
-                    
                     if(i<8){
                         row.add(new SimpleStringProperty(rdArray.get(i)));
                     }
@@ -800,7 +799,6 @@ public class MainController implements Initializable {
             
             rowData.add(row);
         }
-        
         
         tableView.setItems(rowData);
         tableView.refresh();

@@ -152,7 +152,9 @@ public class LoginController implements Initializable {
             Stage stage = new Stage();
             stage.setTitle("Duty Roster 1.0");
             stage.setResizable(true);
-            stage.setScene(new Scene(root1));
+            Scene sceneMain = new Scene(root1);
+            stage.setScene(sceneMain);
+            //sceneMain.getStylesheets().add("stylesheet.css");
             stage.setMaximized(true);
             stage.setOnHidden(e -> mController.shutDown());
             stage.show(); 

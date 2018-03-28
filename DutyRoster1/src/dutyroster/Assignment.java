@@ -23,6 +23,7 @@ public class Assignment {
     
     private final ArrayList<Roster> rosterArray = new ArrayList();
     private final ArrayList<Blockout> blockoutArray = new ArrayList();
+    private final ArrayList<Status> statusArray = new ArrayList();
     private final ArrayList<ArrayList<ArrayList<String>>> crewsArray = new ArrayList();
     private final ArrayList<Holiday> holidayArray = new ArrayList();
     
@@ -35,6 +36,8 @@ public class Assignment {
         rosterArray.addAll(rArray);
         loadCrewsArray();
         loadHolidays();
+        loadStatusData();
+        loadBlockouts();
     }
     
     private void loadCrewsArray(){
@@ -60,7 +63,6 @@ public class Assignment {
             boolean rWeekends = rosterArray.get(i).getWeekends();
             boolean rHolidays = rosterArray.get(i).getHolidays();
             
-            
             String title =  rosterArray.get(i).getTitle();
             String pathName = "Crew_"+ title+"_"+year+"_"+month;
             RosterData dr = new RosterData();
@@ -75,9 +77,7 @@ public class Assignment {
                 member.add(new SimpleStringProperty(row.get(5))); //n
                 member.add(new SimpleStringProperty(row.get(6))); //w
                 member.add(new SimpleStringProperty(row.get(7))); //h
-                
-               // boolean hadHoliday = false;
-                
+              
                 //Day of the month
                 for(int j = 0; j < roster.size(); j++){
                     
@@ -92,7 +92,7 @@ public class Assignment {
                         if ( isHol && rHolidays ){
                              daily = a.getLastH(); 
                              member.set(4, new SimpleStringProperty(Integer.toString(a.getLastH())) ); 
-                            //hadHoliday = true;
+                          
                         }
                         else if(rWeekends && (thisDay==1 || thisDay==7) ){
                              daily = a.getLastW(); 
@@ -129,10 +129,13 @@ public class Assignment {
         
         //Used to contain new daily info for each assignee
         ArrayList<ArrayList<ArrayList<Assignee>>> rosterLevel = new ArrayList();            
+        
         Calendar selCal = Calendar.getInstance();
         selCal.set(year, (month-1), 1);
         int lastDay = selCal.getActualMaximum(Calendar.DAY_OF_MONTH);
-               
+        
+        Calendar thisDate = Calendar.getInstance();       
+
         // Loop through rosters==============
         for(int i = 0; i < crewsArray.size(); i++){ 
             
@@ -142,16 +145,17 @@ public class Assignment {
             int rDInterval =  rosterArray.get(i).getDInterval();
             int rAmount =  rosterArray.get(i).getAmount();
             int n,w,h;
-            
+                        
             //====Day Columns Loop
             for(int j=1; j <= lastDay; j++){ 
                 
                 ArrayList<Assignee> assignees = new ArrayList();
                 selCal.set(Calendar.DAY_OF_MONTH, j);
                 boolean isHol = isHoliday(selCal);
-
                 int thisDay = selCal.get(Calendar.DAY_OF_WEEK);
 
+                thisDate.set(year, month-1, j);
+                
                 //===Crew Rows Loop
                 for(ArrayList<String> row : crewsArray.get(i)){
                     
@@ -192,7 +196,13 @@ public class Assignment {
                 int needed = (24/rDInterval) * rAmount;
                 for(int c = 0; c < assignees.size(); c++){
                     
-                    if(c < needed){
+                    //Load blockouts for this employee
+                    String onBlock = blockStatus(assignees.get(c).getName(), thisDate);  
+                    
+                    if(c < needed && onBlock.isEmpty()){
+                        
+                        assignees.get(c).setOnDuty(0); //When on duty, set recovery time to zero
+                        //Need to use OnDuty-rDInterval to determine actual rest period    
                         
                         if(isHol && rHolidays){
                            assignees.get(c).setLastH(0); 
@@ -203,13 +213,33 @@ public class Assignment {
                         else{
                             assignees.get(c).setLastN(0);
                         }
-                        assignees.get(c).setOnDuty(0); //When on duty, set recovery time to zero
-                    
+                       
                     }
                     else{
+                                           
                         int recoveryTime = rDInterval * c; //Hours for one duty
                         int lastDuty = assignees.get(c).getOnDuty(); //Accumalation
-                        assignees.get(c).setOnDuty(lastDuty+recoveryTime);    
+                        assignees.get(c).setOnDuty(lastDuty+recoveryTime);   
+                        
+                        if (!onBlock.isEmpty()){
+                            
+                            //This employee is blocked, so get a replacement
+                            needed++;
+                           
+                            if(!doesStatusInc(onBlock)){
+    
+                                //If status for blockout doesn't increment, then just take one back here
+                                if(isHol && rHolidays)
+                                    assignees.get(c).setLastH(assignees.get(c).getLastH()-1);    
+                                else if(rWeekends && (thisDay==1 || thisDay==7) )
+                                    assignees.get(c).setLastW(assignees.get(c).getLastW()-1);
+                                else
+                                    assignees.get(c).setLastN(assignees.get(c).getLastN()-1);
+ 
+                            }  
+                        
+                        }
+
                     }
                 
                 }
@@ -284,7 +314,6 @@ public class Assignment {
     return returnArray;    
     }
     
-    
     public void loadHolidays(){
         SecureFile scEmployees = new SecureFile("Holidays");
         String a = scEmployees.retrieve();
@@ -334,5 +363,100 @@ public class Assignment {
 
         return false;
     }
+   
+    public void loadStatusData(){
+        
+          if(!statusArray.isEmpty()) 
+        statusArray.clear();
+        
+        SecureFile sc = new SecureFile("Status");
+        String a = sc.retrieve();
+      
+        String aArry[] = a.split("\\|", -1);
+        for (String b : aArry){
+            
+            if (b.length() > 2){
+                
+                String bArry[] = b.split("\\@", -1);
+                
+                if(bArry[0].length() > 0 && bArry[1].length() > 0){
+                    boolean incs = ( bArry[2].equals("1") );
+                    statusArray.add(  new Status(bArry[0], bArry[1], incs)  );  
+                }
+            }
+        }
+    }
     
+    
+    public void loadBlockouts(){
+        
+        if(!blockoutArray.isEmpty()) 
+        blockoutArray.clear();
+        
+        SecureFile scBO = new SecureFile("Blockouts");
+        String a = scBO.retrieve();
+      
+        String aArry[] = a.split("\\|", -1);
+        for (String b : aArry){
+            
+            if (b.length() > 2){
+                
+                String bArry[] = b.split("\\@", -1);
+                
+                // getSortIndex pulls updated rank order index. 
+                if(bArry[0].length() > 0 && bArry[1].length() > 0){
+                    
+                    blockoutArray.add( new Blockout(
+                            bArry[0],
+                            bArry[1],
+                            bArry[2],
+                            bArry[3]
+                    ));
+                }
+            }    
+        }           
+    }  
+    
+    private String blockStatus(String employee, Calendar curDate){
+           
+        SimpleDateFormat sdf = new SimpleDateFormat("d MMM yyyy", Locale.ENGLISH);
+        Calendar startDate = Calendar.getInstance();
+        Calendar endDate = Calendar.getInstance();    
+        
+        for (Blockout b : blockoutArray){  
+            
+            try {
+                startDate.setTime( sdf.parse( b.getFromDate() ) );
+                endDate.setTime( sdf.parse( b.getToDate() ) );
+                endDate.add(Calendar.DATE, 1); 
+            } catch (ParseException ex) {
+                Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+                
+            if (b.getName().equals(employee) && curDate.after(startDate) && curDate.before(endDate)){
+                return lookupStatusCode(b.getStatus());
+            }
+                
+        }    
+        return "";
+        
+    }
+    
+    private String lookupStatusCode(String status){
+        
+        for (Status s : statusArray)
+            if (s.getTitle().equals(status))
+                return s.getCode();
+        
+        return "";
+    }     
+ 
+    private boolean doesStatusInc(String code){
+        
+        for (Status s : statusArray)
+            if (s.getCode().equals(code))
+                return s.getIncrements();
+        
+        return false;
+    }   
 }
