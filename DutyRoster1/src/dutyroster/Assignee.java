@@ -4,7 +4,7 @@ package dutyroster;
 
 public class Assignee{
     
-    private String name;
+    private String name, statusCode;
     private int onDuty;
     private int lastN, lastW, lastH;
     
@@ -16,7 +16,7 @@ public class Assignee{
         lastN = inLastN;
         lastW = inLastW;
         lastH = inLastH;
-        
+        statusCode="";
         onDuty = 100;//This enures any employee can be assigned duty
                      //at the beginning, unless that employee pulled duty on
                      //the last shift of the previous month. Then that person
@@ -42,6 +42,10 @@ public class Assignee{
     public int getOnDuty(){
         return onDuty;
     } 
+ 
+    public String getStatusCode(){
+        return statusCode;
+    }
     
     public void setName(String inName){
         name = inName; 
@@ -58,7 +62,13 @@ public class Assignee{
     public void setLastH(int inLast){
         lastH = inLast;
     }
+    
     public void setOnDuty(int onD){
             onDuty = onD;
     }
+    
+    public void setStatusCode(String status){
+            statusCode = status;
+    }
+    
 }

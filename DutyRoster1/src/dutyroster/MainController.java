@@ -132,6 +132,7 @@ public class MainController implements Initializable {
         loadHolidays();
         loadBlockouts();
         loadStatusData();
+        updateCrew();
         
         setDate(tmpYear, tmpMonth);
         
