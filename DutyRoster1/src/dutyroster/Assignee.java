@@ -11,16 +11,14 @@ public class Assignee{
     public Assignee(String inName,
                     int inLastN,
                     int inLastW,
-                    int inLastH){
+                    int inLastH,
+                    int inDuty){
         name = inName;
         lastN = inLastN;
         lastW = inLastW;
         lastH = inLastH;
         statusCode="";
-        onDuty = 100;//This enures any employee can be assigned duty
-                     //at the beginning, unless that employee pulled duty on
-                     //the last shift of the previous month. Then that person
-                     //will carry over a zero using setOnDuty function.
+        onDuty = inDuty;
     }
     
     public String getName(){

@@ -5,6 +5,7 @@
  */
 package dutyroster;
 
+import com.itextpdf.text.DocumentException;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -473,6 +474,18 @@ public class MainController implements Initializable {
     
         comboYear.getItems().setAll(yearList);
         comboYear.getSelectionModel().select(Integer.toString(curYear));
+    }
+    
+    @FXML public void printDA6(ActionEvent event){
+        
+        PDF da6 = new PDF(rowData,curYear,curMonth);
+        
+        try {
+            da6.output();
+        } catch (DocumentException | IOException ex) {
+            Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+       
     }
     
     @FXML public void newDate(ActionEvent event){

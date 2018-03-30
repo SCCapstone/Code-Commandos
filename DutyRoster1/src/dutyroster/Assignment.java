@@ -27,7 +27,7 @@ public class Assignment {
     private final ArrayList<ArrayList<ArrayList<String>>> crewsArray = new ArrayList();
     private final ArrayList<Holiday> holidayArray = new ArrayList();
     
-    private final static String DUTY="X", REST="D";
+    private final static String DUTY="X", DETAIL="D", REST="A", BLANK="";
     
     private final int year;
     private final int month;
@@ -114,7 +114,7 @@ public class Assignment {
                         if(a.getName().equals(row.get(1))){
                            String newS;
                            
-                            if (a.getOnDuty()==0 || !a.getStatusCode().isEmpty() )
+                            if (!a.getStatusCode().isEmpty() )
                                newS = a.getStatusCode();
                             else    
                                newS = Integer.toString(daily);
@@ -152,7 +152,7 @@ public class Assignment {
             boolean rHolidays = rosterArray.get(i).getHolidays();
             int rDInterval =  rosterArray.get(i).getDInterval();
             int rAmount =  rosterArray.get(i).getAmount();
-            int n,w,h;
+            int n,w,h,d;
                         
             //====Day Columns Loop
             for(int j=1; j <= lastDay; j++){ 
@@ -166,6 +166,9 @@ public class Assignment {
                 
                 //===Crew Rows Loop
                 for(ArrayList<String> row : crewsArray.get(i)){
+                    
+                    d = (j>1) ? lookupDuty( dayLevel,j-1,row.get(1)) : 500;
+                    
                     
                     if(isHol && rHolidays){
                         n = lookupInc( dayLevel,row,'n',j-1,row.get(1));
@@ -183,7 +186,7 @@ public class Assignment {
                         h = lookupInc( dayLevel,row,'h',j-1,row.get(1));
                     }                        
 
-                    assignees.add(new Assignee(row.get(1),n,w,h));
+                    assignees.add(new Assignee(row.get(1),n,w,h,d));
                 }
                 
                 //Sort list decsending so first index is the highest increment
@@ -204,13 +207,13 @@ public class Assignment {
                 int needed = (24/rDInterval) * rAmount;
                 for(int c = 0; c < assignees.size(); c++){
                     
-                    //Load blockouts for this employee
                     String onBlock = blockStatus(assignees.get(c).getName(), thisDate);
-                    //Check rosters with higher priorities and see if this 
-                    //employee is either on duty or duty rest.
-                    boolean hasConflict = (i > 0) ? (hasDutyConflict(rosterLevel,assignees.get(c).getName(),i,j)) : false;
-
-                    if(c < needed && onBlock.isEmpty() && !hasConflict){
+                    String tName = assignees.get(c).getName();
+                    int tResting = assignees.get(c).getOnDuty();
+                    int hasDuty = (i > 0) ? hasDutyConflict(rosterLevel,tName,i,j-1) : 0;//today
+                    int willHaveDuty = (i > 0 && j < lastDay) ? hasDutyConflict(rosterLevel,tName,i,j) : 0; //tomorrow
+                    
+                    if(c < needed && onBlock.isEmpty() && hasDuty==0 && willHaveDuty==0){
                         
                         assignees.get(c).setStatusCode(DUTY);
                         assignees.get(c).setOnDuty(0); //When on duty, set recovery time to zero
@@ -228,20 +231,25 @@ public class Assignment {
                        
                     }
                     else{
-                                           
-                        int recoveryTime = rDInterval * c; //Hours for one duty
+                                                  
                         int lastDuty = assignees.get(c).getOnDuty(); //Accumalation
-                        assignees.get(c).setOnDuty(lastDuty+recoveryTime);   
-                         
-                        if (hasConflict || !onBlock.isEmpty()){
+                        assignees.get(c).setOnDuty(lastDuty+rDInterval); 
+
+                        if ( !(hasDuty==0 && willHaveDuty==0 && onBlock.isEmpty()) ){
                             
                             //This employee is blocked, so get a replacement
                             needed++;
-                           
-                            if(hasConflict || !doesStatusInc(onBlock)){
-    
-                                if(hasConflict)
-                                    assignees.get(c).setStatusCode(REST);
+                            
+                            if(hasDuty==1)
+                                assignees.get(c).setStatusCode(DETAIL);
+                            else if(willHaveDuty!=0 || hasDuty==-1)
+                                assignees.get(c).setStatusCode(REST);
+                            else 
+                                assignees.get(c).setStatusCode(BLANK);
+                                
+                            
+                            if(  hasDuty==0 && willHaveDuty==0 && !doesStatusInc(onBlock)  ){
+
                                 //If status for blockout doesn't increment, then just take one back here
                                 if(isHol && rHolidays)
                                     assignees.get(c).setLastH(assignees.get(c).getLastH()-1);    
@@ -264,28 +272,30 @@ public class Assignment {
         return rosterLevel;       
     }
     
-     private boolean hasDutyConflict(ArrayList<ArrayList<ArrayList<Assignee>>> rosters, String name, int rIndex, int thisDay){
+     private int hasDutyConflict(ArrayList<ArrayList<ArrayList<Assignee>>> rosters,
+             String name,int rIndex, int thisDay){
          
         for(int i = rIndex - 1; i >= 0; i--){
         
-            int rRInterval =  rosterArray.get(i).getDInterval();    
+            int rRInterval =  rosterArray.get(i).getRInterval();    
             
-            ArrayList<Assignee> assignees = rosters.get(i).get(thisDay-1);
+            ArrayList<Assignee> assignees = rosters.get(i).get(thisDay);
            
             for(Assignee a : assignees){       
                 
-                if(a.getName().endsWith(name)){
-                
-                    if(a.getOnDuty() < rRInterval){
-                        return true;
-                    }
+                if(a.getName().equals(name)){
+
+                    if(a.getStatusCode().equals("X"))
+                        return 1;
+                    else if(!a.getStatusCode().equals("X") && a.getOnDuty() <= rRInterval)
+                        return -1;
                 
                 }
 
             }
             
         } 
-        return false;
+        return 0;
     }
     
     private int lookupInc(ArrayList<ArrayList<Assignee>> dayLevel, ArrayList<String> uData, char type, int day, String eName){
@@ -309,6 +319,15 @@ public class Assignment {
                 } 
             }   
         }
+        return 0;
+    }
+    
+    private int lookupDuty(ArrayList<ArrayList<Assignee>> dayLevel, int day, String eName){
+      
+        for(Assignee row : dayLevel.get(day-1))
+            if(row.getName().equals(eName))
+                return row.getOnDuty();
+
         return 0;
     }
     
