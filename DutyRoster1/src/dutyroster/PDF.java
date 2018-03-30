@@ -10,27 +10,21 @@ package dutyroster;
  * @author othen
  */
 
-import com.itextpdf.text.BaseColor;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.OutputStream;
-import java.util.Date;
 
+import java.io.FileOutputStream;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.Font.FontFamily;
 import com.itextpdf.text.PageSize;
-import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Phrase;
 import com.itextpdf.text.Rectangle;
-import com.itextpdf.text.pdf.PdfName;
-import com.itextpdf.text.pdf.PdfNumber;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
@@ -41,14 +35,19 @@ public class PDF {
     public static final int LANDSCAPE = 90;
 
     private final ObservableList<ObservableList<StringProperty>> rowData = FXCollections.observableArrayList();
+    private static final String DATE_FORMAT = "d MMM yy";
+    private String rosterTitle;
+    SimpleDateFormat milDate = new SimpleDateFormat(DATE_FORMAT);
+    
     private int cYear,cMonth;
  
     
-    public PDF(ObservableList<ObservableList<StringProperty>> tempRows, int year, int month){
+    public PDF(ObservableList<ObservableList<StringProperty>> tempRows, String roster, int year, int month){
 
         rowData.addAll(tempRows);
         cYear = year;
         cMonth = month;
+        rosterTitle = roster;
     }
     
     public void output() throws DocumentException, IOException {
@@ -58,6 +57,12 @@ public class PDF {
         selCal.set(cYear, (cMonth-1), 1);
         int lastDay = selCal.getActualMaximum(Calendar.DAY_OF_MONTH);
         
+        
+        String strMonth = new SimpleDateFormat("MMMM").format(selCal.getTime());
+        String startDate = milDate.format(selCal.getTime()); 
+        selCal.set(cYear, (cMonth-1), lastDay);
+        String endDate = milDate.format(selCal.getTime()); 
+                
         Document document = new Document(PageSize.A4.rotate());
         PdfWriter.getInstance(document, new FileOutputStream(rTitle + ".pdf"));
         
@@ -117,10 +122,11 @@ public class PDF {
         table.addCell(cell);
         
         //Row 2
-        cell = new PdfPCell(new Phrase(" ",mdFont));
+        cell = new PdfPCell(new Phrase(rosterTitle,mdFont)); //Title
         cell.setFixedHeight(15f);
         cell.setColspan(12);
         cell.setBorder(Rectangle.RIGHT);
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
         table.addCell(cell);
         
         cell = new PdfPCell(new Phrase(" ",mdFont));
@@ -128,14 +134,16 @@ public class PDF {
         cell.setBorder(Rectangle.RIGHT);
         table.addCell(cell);
         
-        cell = new PdfPCell(new Phrase(" ",mdFont));
+        cell = new PdfPCell(new Phrase(startDate,mdFont));
         cell.setColspan(8);
         cell.setBorder(Rectangle.RIGHT);
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
         table.addCell(cell);
         
-        cell = new PdfPCell(new Phrase(" ",mdFont));
+        cell = new PdfPCell(new Phrase(endDate,mdFont));
         cell.setColspan(7);
         cell.setBorder(Rectangle.RIGHT);
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
         table.addCell(cell);
              
         //Row 3
@@ -159,7 +167,7 @@ public class PDF {
         cell.setFixedHeight(10f);
         table.addCell(cell);
        
-        cell = new PdfPCell(new Phrase(" "));
+        cell = new PdfPCell(new Phrase(strMonth, mdFont));
         cell.setColspan(40);
         table.addCell(cell);
         

@@ -478,7 +478,7 @@ public class MainController implements Initializable {
     
     @FXML public void printDA6(ActionEvent event){
         
-        PDF da6 = new PDF(rowData,curYear,curMonth);
+        PDF da6 = new PDF(rowData,currentRoster.getTitle(),curYear,curMonth);
         
         try {
             da6.output();
