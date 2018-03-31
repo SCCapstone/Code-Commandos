@@ -446,6 +446,25 @@ public class MainController implements Initializable {
         }
     }    
     
+    @FXML private void openSettings(ActionEvent event) {
+         
+        try{
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("SettingsFXML.fxml")); 
+            Parent root1 = loader.load();
+           // CrewController eController = loader.getController();
+            Stage stage = new Stage();
+            stage.setTitle("Settings Editor");
+            stage.setResizable(false);
+            Scene scene = new Scene(root1);
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setScene(scene);
+            stage.show(); 
+        }
+        catch(IOException e){
+           System.out.println("Can't load new scene: " + e); 
+        }
+    }  
+    
     @FXML private void assignDuty(){
         
         storeData();

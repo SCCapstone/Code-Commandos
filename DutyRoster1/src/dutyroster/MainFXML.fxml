@@ -28,6 +28,11 @@
                 </MenuItem>
               </items>
             </Menu>
+            <Menu mnemonicParsing="false" text="Edit">
+              <items>
+                <MenuItem mnemonicParsing="false" onAction="#openSettings" text="Settings" />
+              </items>
+            </Menu>
             <Menu text="_Tools">
               <items>
                 <MenuItem fx:id="menu_rankEditor" onAction="#openRankEditor" text="_Ranks" />
@@ -36,13 +41,6 @@
                 <MenuItem fx:id="menu_blockoutEditor" onAction="#openBlockout" text="_Blockouts" />
                 <MenuItem fx:id="menu_Holidays" onAction="#openHolidays" text="Holidays" />
                 <MenuItem fx:id="menu_addRoster" onAction="#addRoster" text="Add Ro_ster" />
-              </items>
-            </Menu>
-            <Menu mnemonicParsing="false" text="Settings">
-              <items>
-                <MenuItem mnemonicParsing="false" text="Defaults" />
-                  <MenuItem mnemonicParsing="false" text="Exports" />
-                  <MenuItem mnemonicParsing="false" text="Themes" />
               </items>
             </Menu>
             <Menu text="_Help">
