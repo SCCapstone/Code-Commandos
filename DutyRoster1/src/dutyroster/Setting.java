@@ -7,51 +7,48 @@ package dutyroster;
 
 public class Setting {
     
-    private String title;
-    private int value;
+    private int cat;
+    private String id;
     private String text;
-    private String desc;
-    
-    public Setting (String inTitle, String inDesc){
-        title = inTitle;
-        desc = inDesc;
-        value = 0;
-        text = "";
+    private boolean isTextArea;
+
+    public Setting (int inCat, String inId, String inText, boolean inTA){
+        cat = inCat;
+        id = inId;
+        text = inText;
+        isTextArea = inTA;
     }
-    
+        
     //Getters
-    
-    public String getTitle(){
-        return title;
+    public int getCat(){
+        return cat;
     }
     
-    public String getDesc(){
-        return desc;
-    }
-    
-    public int getValue(){
-        return value;
+    public String getId(){
+        return id;
     }
     
     public String getText(){
         return text;
     }
     
-    //Setters
-    
-    public void setTitle(String inTitle){
-        title = inTitle;
+    public boolean isTextArea(){
+        return isTextArea;
+    }   
+    //Setters   
+    public void setCat(int inCat){
+        cat = inCat;
     }
     
-    public void setDesc(String inDesc){
-        desc = inDesc;
-    }
-        
-    public void setValue(int inValue){
-        value = inValue;
+    public void setId(String inId){
+        id = inId;
     }
     
     public void setText(String inText){
         text = inText;
-    }    
+    }
+
+    public void setTextArea(boolean inTA){
+        isTextArea = inTA;
+    }
 }

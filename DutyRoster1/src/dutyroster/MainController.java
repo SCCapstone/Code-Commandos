@@ -1312,7 +1312,6 @@ public class MainController implements Initializable {
         SimpleDateFormat sdf = new SimpleDateFormat("d MMM yyyy", Locale.ENGLISH);
         Calendar startDate = Calendar.getInstance();
         Calendar endDate = Calendar.getInstance();   
-        
       
         for(Holiday h : holidayArray){
             
