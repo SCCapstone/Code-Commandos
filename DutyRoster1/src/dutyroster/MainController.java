@@ -500,7 +500,7 @@ public class MainController implements Initializable {
         PDF da6 = new PDF(rowData,currentRoster.getTitle(),curYear,curMonth);
         
         try {
-            da6.output();
+            da6.makePDF();
         } catch (DocumentException | IOException ex) {
             Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex);
         }

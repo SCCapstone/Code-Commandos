@@ -1,14 +1,8 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package dutyroster;
-
 /**
- *
+ * This creates the DA 6 Form PDF file for a specific roster and a specific month
  * @author othen
  */
+package dutyroster;
 
 
 import java.io.FileOutputStream;
@@ -36,10 +30,11 @@ public class PDF {
 
     private final ObservableList<ObservableList<StringProperty>> rowData = FXCollections.observableArrayList();
     private static final String DATE_FORMAT = "d MMM yy";
-    private String rosterTitle;
+    private final String rosterTitle;
     SimpleDateFormat milDate = new SimpleDateFormat(DATE_FORMAT);
     
-    private int cYear,cMonth;
+    private final int cYear;
+    private final int cMonth;
  
     
     public PDF(ObservableList<ObservableList<StringProperty>> tempRows, String roster, int year, int month){
@@ -50,23 +45,44 @@ public class PDF {
         rosterTitle = roster;
     }
     
-    public void output() throws DocumentException, IOException {
+    
+    public void makePDF() throws DocumentException, IOException{
 
         String rTitle = "DA6_" + cYear + "_" + cMonth; 
+       
+        Document document = new Document(PageSize.A4.rotate());
+        PdfWriter.getInstance(document, new FileOutputStream(rTitle + ".pdf"));
+
+        int rowSize = rowData.size();        
+        int pages = (int) Math.ceil( (double) rowSize / (double) 40 );
+           
+        document.setPageCount(pages);
+        document.setMargins(50f, 50f, 30f, 20f);
+        document.open();        
+        
+        for (int i = 0; i < pages; i++){
+            
+            if(i>0)
+                document.newPage();
+    
+            PdfPTable table = newTable(i+1, pages);
+            document.add( table); 
+        }
+       
+        document.close();       
+           
+    }
+    
+    public PdfPTable newTable(int page, int pages) throws DocumentException, IOException {
+
         Calendar selCal = Calendar.getInstance();
         selCal.set(cYear, (cMonth-1), 1);
         int lastDay = selCal.getActualMaximum(Calendar.DAY_OF_MONTH);
         
-        
         String strMonth = new SimpleDateFormat("MMMM").format(selCal.getTime());
         String startDate = milDate.format(selCal.getTime()); 
         selCal.set(cYear, (cMonth-1), lastDay);
-        String endDate = milDate.format(selCal.getTime()); 
-                
-        Document document = new Document(PageSize.A4.rotate());
-        PdfWriter.getInstance(document, new FileOutputStream(rTitle + ".pdf"));
-        
-        document.open();
+        String endDate = milDate.format(selCal.getTime());
         
         PdfPTable table = new PdfPTable(43);
         table.setWidthPercentage(100);
@@ -75,10 +91,10 @@ public class PDF {
        
         columnWidths[0] = 2.5f;
         columnWidths[1] = 5f;
-        columnWidths[2] = 2.5f;
+        columnWidths[2] = 2f;
         
         for(int i = 3; i < 43; i++)
-            columnWidths[i] = 1f;
+            columnWidths[i] = .8f;
         
         table.setWidths(columnWidths);
         
@@ -181,17 +197,84 @@ public class PDF {
         for(int i = 1; i < 41; i++){
             String day = (i <= lastDay)? Integer.toString(i) : "";
             cell = new PdfPCell(new Phrase(day,smFont));
+            cell.setPadding(0);
             cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
             cell.setHorizontalAlignment(Element.ALIGN_CENTER); 
             table.addCell(cell);
             
         }
         
-        document.add(table);
-        // step 5
-        document.close();     
-     
-    
+        int startIndex = (40 * page) - 40;
+        int endIndex = startIndex + 39;
+        int leftOver = 40 - ((pages * 40) - rowData.size());       
+                
+         System.out.println();
+         
+        for(int i = startIndex; i < endIndex; i++){
+       
+            System.out.println(page + " < " + pages + " or  " + i + " < " + leftOver );
+            
+            if((page < pages) || i < leftOver ){
+                
+                
+                //Grade
+                cell = new PdfPCell(new Phrase(rowData.get(i).get(0).get(),smFont));
+                cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+                cell.setHorizontalAlignment(Element.ALIGN_CENTER); 
+                cell.setFixedHeight(12f);
+                table.addCell(cell);          
+
+                //Name
+                cell = new PdfPCell(new Phrase(rowData.get(i).get(1).get(),smFont));
+                cell.setColspan(2);
+                cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+                cell.setHorizontalAlignment(Element.ALIGN_LEFT); 
+                table.addCell(cell); 
+            
+                for(int j = 8; j < 48; j++){
+           
+                    if(j < rowData.get(i).size())
+                        cell = new PdfPCell(new Phrase(rowData.get(i).get(j).get(),smFont));
+                    else
+                        cell = new PdfPCell(new Phrase("",smFont));
+                    
+                    cell.setPadding(0);
+                    cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+                    cell.setHorizontalAlignment(Element.ALIGN_CENTER); 
+                    table.addCell(cell);
+                }
+            }
+            else{
+                
+                 //Grade
+                cell = new PdfPCell(new Phrase(" ",smFont));
+                cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+                cell.setHorizontalAlignment(Element.ALIGN_CENTER); 
+                cell.setFixedHeight(12f);
+                table.addCell(cell);          
+
+                //Name
+                cell = new PdfPCell(new Phrase(" ",smFont));
+                cell.setColspan(2);
+                cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+                cell.setHorizontalAlignment(Element.ALIGN_LEFT); 
+                table.addCell(cell); 
+                
+               for(int j = 8; j < 48; j++){
+           
+                    cell = new PdfPCell(new Phrase(" ",smFont));
+                    cell.setPadding(0);
+                    cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+                    cell.setHorizontalAlignment(Element.ALIGN_CENTER); 
+                    table.addCell(cell);
+                } 
+                  
+            }
+        
+        }
+
+        return table; 
+
     }
 
 }   
