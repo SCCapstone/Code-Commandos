@@ -4,7 +4,6 @@
  */
 package dutyroster;
 
-
 import java.io.FileOutputStream;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
@@ -30,12 +29,15 @@ public class PDF {
 
     private final ObservableList<ObservableList<StringProperty>> rowData = FXCollections.observableArrayList();
     private static final String DATE_FORMAT = "d MMM yy";
+    private static final float WIDTH_1 = 1.5f;
+    private static final float WIDTH_2 = 1.7f;
+    private static final float WIDTH_3 = 1f;
     private final String rosterTitle;
     SimpleDateFormat milDate = new SimpleDateFormat(DATE_FORMAT);
     
     private final int cYear;
     private final int cMonth;
- 
+    private String gTitle,gRef,gVer,gNote,gOrg;
     
     public PDF(ObservableList<ObservableList<StringProperty>> tempRows, String roster, int year, int month){
 
@@ -43,6 +45,17 @@ public class PDF {
         cYear = year;
         cMonth = month;
         rosterTitle = roster;
+        
+        SettingsController settings = new SettingsController();
+        //"fTitle","fRef","fVer","fNote"
+        gTitle = settings.getSetting("fTitle");
+        gRef = settings.getSetting("fRef");
+        gVer = settings.getSetting("fVer");
+        gNote = settings.getSetting("fNote");
+        gOrg = settings.getSetting("fOrg");
+        
+        
+
     }
     
     
@@ -57,7 +70,7 @@ public class PDF {
         int pages = (int) Math.ceil( (double) rowSize / (double) 40 );
            
         document.setPageCount(pages);
-        document.setMargins(50f, 50f, 30f, 20f);
+        document.setMargins(50f, 50f, 20f, 10f);
         document.open();        
         
         for (int i = 0; i < pages; i++){
@@ -97,17 +110,21 @@ public class PDF {
             columnWidths[i] = .8f;
         
         table.setWidths(columnWidths);
-        
+                
         Font smFont = new Font(FontFamily.HELVETICA,6);
+        Font smBold = new Font(FontFamily.HELVETICA,6,Font.BOLD);
         Font mdFont = new Font(FontFamily.HELVETICA,8);
-        Font lgFont = new Font(FontFamily.HELVETICA,10,Font.BOLD);
+        Font mdBold = new Font(FontFamily.HELVETICA,8,Font.BOLD);
+        Font lgBold = new Font(FontFamily.HELVETICA,10,Font.BOLD);
         PdfPCell cell;
         
         //Row 1
-        cell = new PdfPCell(new Phrase("DUTY ROSTER",lgFont));
+        cell = new PdfPCell(new Phrase("DUTY ROSTER",lgBold));
         cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
         cell.setFixedHeight(25f);
+        cell.setBorderWidthTop(WIDTH_1);
+        cell.setBorderWidthLeft(WIDTH_2);
         cell.setColspan(2);
         cell.setRowspan(2);
         table.addCell(cell);
@@ -115,12 +132,14 @@ public class PDF {
         cell = new PdfPCell(new Phrase("NATURE OF DUTY",mdFont));
         cell.setFixedHeight(10f);
         cell.setColspan(12);
+        cell.setBorderWidthTop(WIDTH_1);
         cell.setPaddingTop(1);
-        cell.setBorder(Rectangle.TOP | Rectangle.RIGHT);
+        cell.setBorder(Rectangle.TOP |Rectangle.RIGHT);
         table.addCell(cell);
         
         cell = new PdfPCell(new Phrase("ORGANIZATION",mdFont));
         cell.setColspan(14);
+        cell.setBorderWidthTop(WIDTH_1);
         cell.setBorder(Rectangle.TOP | Rectangle.RIGHT);
         cell.setPaddingTop(1);
         table.addCell(cell);
@@ -128,12 +147,15 @@ public class PDF {
         cell = new PdfPCell(new Phrase("FROM (Date)",mdFont));
         cell.setColspan(8);
         cell.setPaddingTop(1);
+        cell.setBorderWidthTop(WIDTH_1);
         cell.setBorder(Rectangle.TOP | Rectangle.RIGHT);
         table.addCell(cell);
         
         cell = new PdfPCell(new Phrase("TO (Date)",mdFont));
         cell.setColspan(7);
         cell.setPaddingTop(1);
+        cell.setBorderWidthTop(WIDTH_1);
+        cell.setBorderWidthRight(WIDTH_2);
         cell.setBorder(Rectangle.TOP | Rectangle.RIGHT);
         table.addCell(cell);
         
@@ -145,7 +167,7 @@ public class PDF {
         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
         table.addCell(cell);
         
-        cell = new PdfPCell(new Phrase(" ",mdFont));
+        cell = new PdfPCell(new Phrase(gOrg,mdFont));
         cell.setColspan(14);
         cell.setBorder(Rectangle.RIGHT);
         table.addCell(cell);
@@ -159,13 +181,15 @@ public class PDF {
         cell = new PdfPCell(new Phrase(endDate,mdFont));
         cell.setColspan(7);
         cell.setBorder(Rectangle.RIGHT);
+        cell.setBorderWidthRight(WIDTH_2);
         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
         table.addCell(cell);
              
         //Row 3
         cell = new PdfPCell(new Phrase("GRADE",mdFont));
         cell.setRowspan(2);
-        
+        cell.setBorderWidthLeft(WIDTH_2);
+        cell.setBorderWidthRight(0);
         cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
         cell.setHorizontalAlignment(Element.ALIGN_CENTER); 
         table.addCell(cell);
@@ -173,6 +197,7 @@ public class PDF {
         cell = new PdfPCell(new Phrase("NAME",mdFont));
         cell.setRowspan(2);
         cell.setFixedHeight(20f);
+        cell.setBorderWidthRight(0);
         cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
         cell.setHorizontalAlignment(Element.ALIGN_CENTER); 
         table.addCell(cell);
@@ -185,6 +210,7 @@ public class PDF {
        
         cell = new PdfPCell(new Phrase(strMonth, mdFont));
         cell.setColspan(40);
+        cell.setBorderWidthRight(WIDTH_2);
         table.addCell(cell);
         
         //Row 4
@@ -197,7 +223,12 @@ public class PDF {
         for(int i = 1; i < 41; i++){
             String day = (i <= lastDay)? Integer.toString(i) : "";
             cell = new PdfPCell(new Phrase(day,smFont));
+            cell.setBorderWidthTop(0);
             cell.setPadding(0);
+            if(i<40)
+                cell.setBorderWidthRight(0);
+            else
+            cell.setBorderWidthRight(WIDTH_2);
             cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
             cell.setHorizontalAlignment(Element.ALIGN_CENTER); 
             table.addCell(cell);
@@ -208,28 +239,40 @@ public class PDF {
         int endIndex = startIndex + 39;
         int leftOver = 40 - ((pages * 40) - rowData.size());       
                 
-         System.out.println();
-         
-        for(int i = startIndex; i < endIndex; i++){
-       
-            System.out.println(page + " < " + pages + " or  " + i + " < " + leftOver );
+        int hRow=0, pIndex=0;
+        for(int i = startIndex; i <= endIndex; i++){
             
-            if((page < pages) || i < leftOver ){
-                
+            if((page < pages) || pIndex < leftOver ){
                 
                 //Grade
                 cell = new PdfPCell(new Phrase(rowData.get(i).get(0).get(),smFont));
                 cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-                cell.setHorizontalAlignment(Element.ALIGN_CENTER); 
+                cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                cell.setBorderWidthLeft(WIDTH_2);
+                cell.setBorderWidthTop(0);
+                cell.setBorderWidthRight(0);
                 cell.setFixedHeight(12f);
+                
+                 if(i==endIndex)
+                    cell.setBorderWidthBottom(WIDTH_1);    
+                 else if(hRow==3)
+                    cell.setBorderWidthBottom(WIDTH_3);   
+                
                 table.addCell(cell);          
 
                 //Name
                 cell = new PdfPCell(new Phrase(rowData.get(i).get(1).get(),smFont));
                 cell.setColspan(2);
+                cell.setBorderWidthTop(0);
                 cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
                 cell.setHorizontalAlignment(Element.ALIGN_LEFT); 
-                table.addCell(cell); 
+                
+                 if(i==endIndex)
+                    cell.setBorderWidthBottom(WIDTH_1);    
+                 else if(hRow==3)
+                    cell.setBorderWidthBottom(WIDTH_3); 
+                 
+                 table.addCell(cell); 
             
                 for(int j = 8; j < 48; j++){
            
@@ -239,6 +282,18 @@ public class PDF {
                         cell = new PdfPCell(new Phrase("",smFont));
                     
                     cell.setPadding(0);
+                    cell.setBorderWidthTop(0);
+                    
+                    if(j<47)
+                        cell.setBorderWidthRight(0);
+                    else
+                        cell.setBorderWidthRight(WIDTH_2);
+                    
+                    if(i==endIndex)
+                       cell.setBorderWidthBottom(WIDTH_1);    
+                    else if(hRow==3)
+                       cell.setBorderWidthBottom(WIDTH_3);   
+                     
                     cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
                     cell.setHorizontalAlignment(Element.ALIGN_CENTER); 
                     table.addCell(cell);
@@ -250,29 +305,93 @@ public class PDF {
                 cell = new PdfPCell(new Phrase(" ",smFont));
                 cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
                 cell.setHorizontalAlignment(Element.ALIGN_CENTER); 
+                cell.setBorderWidthLeft(WIDTH_2);
+                cell.setBorderWidthTop(0);
+                cell.setBorderWidthRight(0);
                 cell.setFixedHeight(12f);
+                
+                 if(i==endIndex)
+                    cell.setBorderWidthBottom(WIDTH_1);    
+                 else if(hRow==3)
+                    cell.setBorderWidthBottom(WIDTH_3); 
+                
                 table.addCell(cell);          
 
                 //Name
                 cell = new PdfPCell(new Phrase(" ",smFont));
                 cell.setColspan(2);
+                cell.setBorderWidthTop(0);
                 cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
                 cell.setHorizontalAlignment(Element.ALIGN_LEFT); 
+                
+                 if(i==endIndex)
+                    cell.setBorderWidthBottom(WIDTH_1);    
+                 else if(hRow==3)
+                    cell.setBorderWidthBottom(WIDTH_3);   
+                 
                 table.addCell(cell); 
                 
                for(int j = 8; j < 48; j++){
            
                     cell = new PdfPCell(new Phrase(" ",smFont));
                     cell.setPadding(0);
+                    cell.setBorderWidthTop(0);
+                    if(j<47)
+                        cell.setBorderWidthRight(0);
+                    else
+                        cell.setBorderWidthRight(WIDTH_2);
                     cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
                     cell.setHorizontalAlignment(Element.ALIGN_CENTER); 
+                    if(i==endIndex)
+                       cell.setBorderWidthBottom(WIDTH_1);    
+                    else if(hRow==3)
+                    cell.setBorderWidthBottom(WIDTH_3);    
                     table.addCell(cell);
+
                 } 
                   
             }
-        
+            if(hRow==3)
+                hRow=0;
+            else
+               hRow++;
+            
+            
+            if(page==pages)
+                pIndex++;
         }
-
+        
+        //Form ID
+        cell = new PdfPCell(new Phrase(gTitle,mdBold));
+        cell.setColspan(6);
+        cell.setVerticalAlignment(Element.ALIGN_TOP);
+        cell.setHorizontalAlignment(Element.ALIGN_LEFT); 
+        cell.setBorder(0);
+        table.addCell(cell); 
+        
+        //Notice
+        cell = new PdfPCell(new Phrase(gNote,mdFont));
+        cell.setColspan(17);
+        cell.setVerticalAlignment(Element.ALIGN_TOP);
+        cell.setHorizontalAlignment(Element.ALIGN_LEFT); 
+        cell.setBorder(0);
+        table.addCell(cell); 
+        
+        //Information
+        cell = new PdfPCell(new Phrase(gRef,smBold));
+        cell.setColspan(20);
+        cell.setVerticalAlignment(Element.ALIGN_TOP);
+        cell.setHorizontalAlignment(Element.ALIGN_RIGHT); 
+        cell.setBorder(0);
+        table.addCell(cell);      
+        
+         //Form Version
+        cell = new PdfPCell(new Phrase(gVer,mdFont));
+        cell.setColspan(43);
+        cell.setVerticalAlignment(Element.ALIGN_TOP);
+        cell.setHorizontalAlignment(Element.ALIGN_RIGHT); 
+        cell.setBorder(0);
+        table.addCell(cell);           
         return table; 
 
     }

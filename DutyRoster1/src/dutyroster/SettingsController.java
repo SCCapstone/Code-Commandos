@@ -1,7 +1,7 @@
 /**
  * FXML Controller class
   * @author ISHU, Othen
- * @version 2, 4/1/2018
+ * @version 7, 4/7/2018
  */
 
 package dutyroster;
@@ -36,21 +36,26 @@ public class SettingsController implements Initializable {
         {"Title","Reference","Version","Notice"},
         {"First Paragraph","Conclusion","Signature Block"}};
     private final static String[] ISTEXTAREA = {"fFirst","fConc", "fSig"};
-  
     private ArrayList<Setting> sList;
 
+    
+    public SettingsController(){
+        startUp();
+    }    
+ 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        sList = new ArrayList<>();   
-        setupForm();
-        retrieveData();
         buildForm();
-
     } 
-        
+
+    public void startUp(){
+        sList = new ArrayList<>();
+        setupArray();
+        retrieveData();
+    }   
+       
     @FXML public void updateSave(){
-        
-        
+          
         for(Setting s: sList){
                         
             if(s.isTextArea()){
@@ -74,7 +79,7 @@ public class SettingsController implements Initializable {
         storeData();
     }
    
-    public void setupForm(){
+    public void setupArray(){
      
         for(int i = 0; i < SETTINGS.length; i++)
             for (String item : SETTING_IDS[i]) 
@@ -82,7 +87,6 @@ public class SettingsController implements Initializable {
 
     }
     
-  
     private void buildForm(){
       
         for(int i = 0; i < SETTINGS.length; i++)
@@ -167,6 +171,35 @@ public class SettingsController implements Initializable {
             sList.get(i).setText(aArry[i]);             
 
     }
-    
-  
+   
+    public String getSetting(String sID){ 
+        
+        for(Setting s : sList){
+            
+            if(s.getId().equals(sID)){
+              
+                if(s.getText().isEmpty()){
+                    
+                    //Set defaults for "fTitle","fRef","fVer","fNote"
+                    switch (sID) {
+                        case "fTitle":  return "DA FORM 6, JUL 1974";
+                        case "fRef":  return "For use of this form, see AR 220-45; the proponent agency is DCS, G-1.";
+                        case "fVer":  return "APD ALD v1.02";
+                        case "fNote":  return "PREVIOUS EDITIONS OF THIS FORM ARE OBSOLETE.";
+                        default: return "";
+                    }
+                
+                } 
+                else{
+                    return s.getText(); 
+                }
+                    
+            }
+
+        }
+
+        return "";
+
+    }
+
 }
