@@ -137,14 +137,14 @@ public class RankController implements Initializable {
         Alert alert;
         
         if (rankExists(rankField.getText())){
-             alert = new Alert(Alert.AlertType.ERROR, "Each rank must be a unique value.");
-             alert.setTitle("Rank Already Exists");
+             alert = new Alert(Alert.AlertType.ERROR, "Each grade must be a unique value.");
+             alert.setTitle("Grade Already Exists");
              alert.showAndWait();
           return;
         }
         if (rankField.getText().isEmpty()){
-         alert = new Alert(Alert.AlertType.ERROR, " Enter a Rank ");
-         alert.setTitle("Missing Rank");
+         alert = new Alert(Alert.AlertType.ERROR, " Enter a Grade ");
+         alert.setTitle("Missing Grade");
          alert.showAndWait();
       return;
         }
@@ -273,10 +273,10 @@ public class RankController implements Initializable {
         
         for(Rank currentRank : rankList)
             if(currentRank.getRank().equalsIgnoreCase(rank)) 
-                throw new IllegalArgumentException("Rank already exists");
+                throw new IllegalArgumentException("Grade already exists");
         
         if (rank.isEmpty()){
-          throw new IllegalArgumentException("No rank entered");
+          throw new IllegalArgumentException("No grade entered");
         }
         
         rankList.add(new Rank(countRanks()+1,rank));
@@ -287,7 +287,7 @@ public class RankController implements Initializable {
     public void delRanks(String[] ranks){
                                    
         if (ranks==null)
-            throw new IllegalArgumentException("No rank entered");
+            throw new IllegalArgumentException("No grade entered");
         
         for (String rank : ranks) {
             for (int j = 0; j<rankList.size(); j++) {

@@ -175,7 +175,7 @@ public class EmployeeController implements Initializable {
                 if(bArry[0].length() > 0 && bArry[1].length() > 0){
                     
                     int rankSort = Tools.getSortIndex(rankOptions, bArry[0]);
-                    String chRank = (rankSort < 1000)? bArry[0] : "No rank";
+                    String chRank = (rankSort < 1000)? bArry[0] : "No grade";
                     
                     employeeList.add( new Employee( rankSort , chRank, bArry[1]) );
                 }
@@ -312,10 +312,10 @@ public class EmployeeController implements Initializable {
            Alert alert;
         
         if (rankCombo.getValue()==null){
-             alert = new Alert(Alert.AlertType.ERROR, "Each employee must have a rank."
-                     + " If there are no ranks avaiable, you can add ranks using Rank "
+             alert = new Alert(Alert.AlertType.ERROR, "Each employee must have a grade."
+                     + " If there are no grades avaiable, you can add grades using Grade "
                      + "editor in the Tools menu.");
-             alert.setTitle("No Ranks Exists");
+             alert.setTitle("No Grades Exists");
              alert.showAndWait();
             return;
         }

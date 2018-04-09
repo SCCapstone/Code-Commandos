@@ -35,7 +35,7 @@
             </Menu>
             <Menu text="_Tools">
               <items>
-                <MenuItem fx:id="menu_rankEditor" onAction="#openRankEditor" text="_Ranks" />
+                <MenuItem fx:id="menu_rankEditor" onAction="#openRankEditor" text="_Grades" />
                 <MenuItem fx:id="menu_nameEditor" onAction="#openEmployeeEditor" text="_Employees" />
                 <MenuItem fx:id="menu_statusEditor" onAction="#openStatusEditor" text="_Status" />
                 <MenuItem fx:id="menu_blockoutEditor" onAction="#openBlockout" text="_Blockouts" />

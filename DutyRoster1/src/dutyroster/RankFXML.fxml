@@ -12,9 +12,6 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-
-
-
 <GridPane alignment="CENTER" hgap="5.0" prefHeight="483.0" prefWidth="394.0" vgap="5.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dutyroster.RankController">
    <padding>
       <Insets bottom="10.0" left="10.0" right="10.0" top="5.0" />
@@ -29,14 +26,14 @@
       <RowConstraints maxHeight="617.0" minHeight="36.0" prefHeight="44.0" />
    </rowConstraints>
    <children>
-      <TableView fx:id="tableView" styleClass="table" prefHeight="409.0" prefWidth="215.0" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1">
+      <TableView fx:id="tableView" prefHeight="409.0" prefWidth="215.0" styleClass="table" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1">
          <columns>
             <TableColumn fx:id="sort" minWidth="-Infinity" prefWidth="142.0" resizable="false" sortable="true" text="Sort Order" visible="false">
                <cellValueFactory>
                   <PropertyValueFactory property="sort" />
                </cellValueFactory>
             </TableColumn>
-            <TableColumn fx:id="rank" maxWidth="1.7976931348623157E308" minWidth="-1.0" prefWidth="255.0" resizable="false" sortable="false" text="Rank">
+            <TableColumn fx:id="rank" maxWidth="1.7976931348623157E308" minWidth="-1.0" prefWidth="255.0" resizable="false" sortable="false" text="Grade">
                <cellValueFactory>
                   <PropertyValueFactory property="rank" />
                </cellValueFactory>
@@ -48,7 +45,7 @@
       </TableView>
       <HBox alignment="bottom_right" prefHeight="309.0" prefWidth="334.0" spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="2">
          <children>
-            <TextField fx:id="rankField" prefHeight="31.0" prefWidth="145.0" promptText="Rank" />
+            <TextField fx:id="rankField" prefHeight="31.0" prefWidth="145.0" promptText="Enter Grade" />
             <Button fx:id="addButton" onAction="#addRank" text="Add" />
          </children>
       </HBox>

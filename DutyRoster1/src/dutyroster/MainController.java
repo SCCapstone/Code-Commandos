@@ -331,7 +331,7 @@ public class MainController implements Initializable {
             Parent root1 = loader.load();
             RankController eController = loader.getController();
             Stage stage = new Stage();
-            stage.setTitle("Rank Editor");
+            stage.setTitle("Grade Editor");
             stage.setResizable(false);
             Scene sceneRank = new Scene(root1);
             stage.initModality(Modality.APPLICATION_MODAL);
@@ -357,7 +357,7 @@ public class MainController implements Initializable {
             stage.setTitle("Status Editor");
             stage.setResizable(false);
             Scene sceneStatus2 = new Scene(root1);
-            //sceneRank.getStylesheets().add("stylesheet.css");
+           
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setScene(sceneStatus2);
             stage.setOnHidden(e -> eController.shutDown());
@@ -380,7 +380,7 @@ public class MainController implements Initializable {
             stage.setTitle("Blockout Editor");
             stage.setResizable(false);
             Scene sceneStatus2 = new Scene(root1);
-            //sceneRank.getStylesheets().add("stylesheet.css");
+            
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setScene(sceneStatus2);
             stage.setOnHidden(e -> {
@@ -406,7 +406,7 @@ public class MainController implements Initializable {
             stage.setTitle("Holidays Editor");
             stage.setResizable(false);
             Scene sceneStatus2 = new Scene(root1);
-            //sceneRank.getStylesheets().add("stylesheet.css");
+           
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setScene(sceneStatus2);
             stage.setOnHidden(e -> {
@@ -565,7 +565,7 @@ public class MainController implements Initializable {
         
         tableView.getColumns().clear();
  
-        TableColumn colRank = createColumn(0, "Rank");
+        TableColumn colRank = createColumn(0, "Grade");
         colRank.setPrefWidth(150);
         colRank.setMaxWidth(300);
         colRank.setEditable(false);

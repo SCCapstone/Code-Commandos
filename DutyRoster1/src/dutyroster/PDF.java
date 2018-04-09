@@ -37,7 +37,11 @@ public class PDF {
     
     private final int cYear;
     private final int cMonth;
-    private String gTitle,gRef,gVer,gNote,gOrg;
+    private final String gTitle;
+    private final String gRef;
+    private final String gVer;
+    private final String gNote;
+    private final String gOrg;
     
     public PDF(ObservableList<ObservableList<StringProperty>> tempRows, String roster, int year, int month){
 
@@ -53,8 +57,6 @@ public class PDF {
         gVer = settings.getSetting("fVer");
         gNote = settings.getSetting("fNote");
         gOrg = settings.getSetting("fOrg");
-        
-        
 
     }
     
@@ -397,4 +399,3 @@ public class PDF {
     }
 
 }   
-

@@ -65,8 +65,6 @@ public class RosterData {
     }
     
     
-    
-    
     /**
      * This function will get a specific row from the crew table. 
      * @param filePath

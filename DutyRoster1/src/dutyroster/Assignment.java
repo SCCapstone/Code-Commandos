@@ -27,7 +27,7 @@ public class Assignment {
     private final ArrayList<ArrayList<ArrayList<String>>> crewsArray = new ArrayList();
     private final ArrayList<Holiday> holidayArray = new ArrayList();
     
-    private final static String DUTY="X", DETAIL="D", REST="A", BLANK="";
+    private final static String DUTY="///", DETAIL="D", REST="A", BLANK="";
     
     private final int year;
     private final int month;
@@ -285,9 +285,9 @@ public class Assignment {
                 
                 if(a.getName().equals(name)){
 
-                    if(a.getStatusCode().equals("X"))
+                    if(a.getStatusCode().equals(DUTY))
                         return 1;
-                    else if(!a.getStatusCode().equals("X") && a.getOnDuty() <= rRInterval)
+                    else if(!a.getStatusCode().equals(DUTY) && a.getOnDuty() <= rRInterval)
                         return -1;
                 
                 }
