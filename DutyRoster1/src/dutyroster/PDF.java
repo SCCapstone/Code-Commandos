@@ -4,6 +4,7 @@
  */
 package dutyroster;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
@@ -63,11 +64,16 @@ public class PDF {
     
     public void makePDF() throws DocumentException, IOException{
 
-        String rTitle = "DA6_" + cYear + "_" + cMonth; 
-       
+        String rTitle = "DA6_" + rosterTitle + "_" + cYear + "_" + cMonth; 
+        ExportFile ex = new ExportFile(rTitle);
+        File file = ex.getFilePath();
+        
         Document document = new Document(PageSize.A4.rotate());
-        PdfWriter.getInstance(document, new FileOutputStream(rTitle + ".pdf"));
-
+        
+        System.out.println(file.getPath());
+        
+        PdfWriter.getInstance(document, new FileOutputStream(file.getPath()));
+        
         int rowSize = rowData.size();        
         int pages = (int) Math.ceil( (double) rowSize / (double) 40 );
            
@@ -353,7 +359,7 @@ public class PDF {
                 } 
                   
             }
-            
+              
             if(hRow==3)
                 hRow=0;
             else
