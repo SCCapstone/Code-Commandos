@@ -66,6 +66,8 @@ public class PDF {
 
         String rTitle = "DA6_" + rosterTitle + "_" + cYear + "_" + cMonth; 
         ExportFile ex = new ExportFile(rTitle);
+        
+        
         File file = ex.getFilePath();
         
         Document document = new Document(PageSize.A4.rotate());
@@ -171,18 +173,18 @@ public class PDF {
         cell = new PdfPCell(new Phrase(rosterTitle,mdFont)); //Title
         cell.setFixedHeight(15f);
         cell.setColspan(12);
-        cell.setBorder(Rectangle.RIGHT);
+        cell.setBorder(Rectangle.LEFT);
         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
         table.addCell(cell);
         
         cell = new PdfPCell(new Phrase(gOrg,mdFont));
         cell.setColspan(14);
-        cell.setBorder(Rectangle.RIGHT);
+        cell.setBorder(Rectangle.LEFT);
         table.addCell(cell);
         
         cell = new PdfPCell(new Phrase(startDate,mdFont));
         cell.setColspan(8);
-        cell.setBorder(Rectangle.RIGHT);
+        cell.setBorder(Rectangle.LEFT);
         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
         table.addCell(cell);
         

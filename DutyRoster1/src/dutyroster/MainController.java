@@ -833,6 +833,7 @@ public class MainController implements Initializable {
             rowData.add(row);
         }
         
+        tableView.setItems(null);
         tableView.setItems(rowData);
         tableView.refresh();
 
