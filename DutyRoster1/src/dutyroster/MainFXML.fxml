@@ -17,7 +17,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="800.0" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dutyroster.MainController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="800.0" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dutyroster.MainController">
   <children>
         <MenuBar minWidth="400.0">
           <menus>
@@ -77,7 +77,12 @@
                   <Font name="System Bold" size="12.0" />
                </font>
             </Button>
-            <Button layoutX="706.0" layoutY="20.0" maxHeight="31.0" maxWidth="114.0" minHeight="-Infinity" minWidth="30.0" mnemonicParsing="false" onAction="#printDA6" prefHeight="31.0" prefWidth="50.0" text="Open DA6">
+            <Button layoutX="706.0" layoutY="20.0" maxHeight="31.0" maxWidth="114.0" minHeight="-Infinity" minWidth="30.0" mnemonicParsing="false" onAction="#printDA6" prefHeight="31.0" prefWidth="50.0" text="Export Roster">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Button>
+            <Button maxHeight="31.0" maxWidth="114.0" minHeight="-Infinity" minWidth="30.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="50.0" text="Export Memo">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>
