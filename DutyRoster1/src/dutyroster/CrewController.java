@@ -21,11 +21,11 @@ import javafx.scene.control.TableView;
 public final class CrewController implements Initializable {
  
     //for entering a new rank
-    @FXML private ComboBox rankCombo;
+   // @FXML private ComboBox rankCombo;
     //@FXML private TextField nameField;
     //used for tableview 
     @FXML private TableView<Employee> tableView;
-    @FXML private TableColumn<Employee,String> rank;
+   // @FXML private TableColumn<Employee,String> rank;
     @FXML private TableColumn<Employee,String> name;
     @FXML private TableColumn<Employee,Integer> sort;
     @FXML private CheckBox selectAll;
@@ -68,7 +68,7 @@ public final class CrewController implements Initializable {
  
         startUp();
         //  load the rankListing into rankCombo
-        rankCombo.getItems().setAll(rankListing);
+       // rankCombo.getItems().setAll(rankListing);
         
         //pull the employess from secureFile and loads it into crews.
         loadCrews();

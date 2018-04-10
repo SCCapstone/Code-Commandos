@@ -353,11 +353,12 @@ public class PDF {
                 } 
                   
             }
+            
             if(hRow==3)
                 hRow=0;
             else
                hRow++;
-            
+           
             
             if(page==pages)
                 pIndex++;
