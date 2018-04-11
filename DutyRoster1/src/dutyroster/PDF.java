@@ -226,7 +226,7 @@ public class PDF {
         cell.setRowspan(2);
         cell.setBorderWidthTop(WIDTH_4);
         cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-        cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
         table.addCell(cell);
         
         cell = new PdfPCell(new Phrase("Month",mdFont));
@@ -235,7 +235,7 @@ public class PDF {
         cell.setRowspan(1);
         cell.setBorderWidthLeft(WIDTH_5);
         cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-        cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
         table.addCell(cell);
        
         cell = new PdfPCell(new Phrase(strMonth, mdFont));
@@ -252,7 +252,7 @@ public class PDF {
         cell.setBorderWidthTop(WIDTH_5);
         cell.setBorderWidthLeft(WIDTH_5);
         cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-        cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
         table.addCell(cell);
             
         for(int i = 1; i < 41; i++){
