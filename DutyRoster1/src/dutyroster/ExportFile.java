@@ -7,8 +7,6 @@ package dutyroster;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-
-
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
