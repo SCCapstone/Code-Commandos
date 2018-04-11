@@ -152,7 +152,6 @@ public class Assignment {
             boolean rHolidays = rosterArray.get(i).getHolidays();
             int rDInterval =  rosterArray.get(i).getDInterval();
             int rAmount =  rosterArray.get(i).getAmount();
-            int rRInterval =  rosterArray.get(i).getRInterval();    
             int n,w,h,d;
                         
             //====Day Columns Loop
@@ -211,12 +210,9 @@ public class Assignment {
                     String onBlock = blockStatus(assignees.get(c).getName(), thisDate);
                     String tName = assignees.get(c).getName();
                     int tResting = assignees.get(c).getOnDuty();
-                    int hasDuty = (i > 0) ? hasDutyConflict(rosterLevel,rRInterval,tName,i,j-1) : 0;//today
-                    int willHaveDuty = (i > 0 && j < lastDay) ? hasDutyConflict(rosterLevel,rRInterval,tName,i,j) : 0; //tomorrow
-                     
-                    if(tResting < rRInterval)
-                        hasDuty = -1;
-
+                    int hasDuty = (i > 0) ? hasDutyConflict(rosterLevel,tName,i,j-1) : 0;//today
+                    int willHaveDuty = (i > 0 && j < lastDay) ? hasDutyConflict(rosterLevel,tName,i,j) : 0; //tomorrow
+                    
                     if(c < needed && onBlock.isEmpty() && hasDuty==0 && willHaveDuty==0){
                         
                         assignees.get(c).setStatusCode(DUTY);
@@ -277,13 +273,11 @@ public class Assignment {
     }
     
      private int hasDutyConflict(ArrayList<ArrayList<ArrayList<Assignee>>> rosters,
-             int cRInterval,String name,int rIndex, int thisDay){
+             String name,int rIndex, int thisDay){
          
         for(int i = rIndex - 1; i >= 0; i--){
         
-            int rRInterval =  rosterArray.get(i).getRInterval(); 
-            
-            rRInterval = (rRInterval > cRInterval)? rRInterval : cRInterval;
+            int rRInterval =  rosterArray.get(i).getRInterval();    
             
             ArrayList<Assignee> assignees = rosters.get(i).get(thisDay);
            
@@ -293,7 +287,7 @@ public class Assignment {
 
                     if(a.getStatusCode().equals(DUTY))
                         return 1;
-                    else if(a.getOnDuty() <= rRInterval)
+                    else if(!a.getStatusCode().equals(DUTY) && a.getOnDuty() <= rRInterval)
                         return -1;
                 
                 }

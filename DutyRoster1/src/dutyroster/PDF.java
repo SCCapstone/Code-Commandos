@@ -68,10 +68,13 @@ public class PDF {
         String rTitle = "DA6_" + rosterTitle + "_" + cYear + "_" + cMonth; 
         ExportFile ex = new ExportFile(rTitle);
         
+        
         File file = ex.getFilePath();
         
         Document document = new Document(PageSize.A4.rotate());
-          
+        
+        System.out.println(file.getPath());
+        
         PdfWriter.getInstance(document, new FileOutputStream(file.getPath()));
         
         int rowSize = rowData.size();        

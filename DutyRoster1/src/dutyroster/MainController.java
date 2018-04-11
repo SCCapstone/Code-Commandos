@@ -827,9 +827,7 @@ public class MainController implements Initializable {
                         
                         row.add(fill); 
                     } 
-                
                 }
-            
             }
             
             rowData.add(row);
