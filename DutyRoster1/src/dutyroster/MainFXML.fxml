@@ -12,6 +12,7 @@
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
@@ -71,26 +72,50 @@
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>
+               <tooltip>
+                  <Tooltip maxWidth="170.0" minWidth="140.0" text="Continues the increments from the previous month." wrapText="true" />
+               </tooltip>
             </Button>
             <Button layoutX="830.0" layoutY="20.0" maxHeight="31.0" maxWidth="114.0" minHeight="-Infinity" minWidth="50.0" mnemonicParsing="false" onAction="#assignDuty" prefHeight="31.0" prefWidth="50.0" text="Update Rosters">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>
+               <tooltip>
+                  <Tooltip maxWidth="170.0" minWidth="140.0" text="Updates all roster assignments with the current settings." wrapText="true" />
+               </tooltip>
             </Button>
             <Button layoutX="706.0" layoutY="20.0" maxHeight="31.0" maxWidth="114.0" minHeight="-Infinity" minWidth="30.0" mnemonicParsing="false" onAction="#printDA6" prefHeight="31.0" prefWidth="50.0" text="Export Roster">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>
+               <tooltip>
+                  <Tooltip maxWidth="170.0" minWidth="140.0" text="Save the current roster in PDF format." wrapText="true" />
+               </tooltip>
             </Button>
             <Button maxHeight="31.0" maxWidth="114.0" minHeight="-Infinity" minWidth="30.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="50.0" text="Export Memo">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>
+               <tooltip>
+                  <Tooltip maxWidth="170.0" minWidth="140.0" text="Save a memorandum for the current roster in PDF format." wrapText="true" />
+               </tooltip>
             </Button>
-            <Button maxHeight="31.0" maxWidth="50.0" minHeight="-Infinity" minWidth="50.0" mnemonicParsing="false" onAction="#goDown" prefHeight="31.0" prefWidth="50.0" text="&lt;&lt;" />
-            <ComboBox fx:id="comboMonth" maxWidth="200.0" minWidth="200.0" onAction="#newDate" prefHeight="31.0" prefWidth="200.0" />
-            <ComboBox fx:id="comboYear" maxWidth="120.0" minWidth="-Infinity" onAction="#newDate" prefHeight="31.0" prefWidth="120.0" />
-          <Button maxHeight="-Infinity" maxWidth="50.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#goUp" prefHeight="31.0" prefWidth="50.0" text="&gt;&gt;" />
+            <Button maxHeight="31.0" maxWidth="50.0" minHeight="-Infinity" minWidth="50.0" mnemonicParsing="false" onAction="#goDown" prefHeight="31.0" prefWidth="50.0" text="&lt;&lt;">
+               <tooltip>
+                  <Tooltip text="Previous Month" />
+               </tooltip></Button>
+            <ComboBox fx:id="comboMonth" maxWidth="200.0" minWidth="200.0" onAction="#newDate" prefHeight="31.0" prefWidth="200.0">
+               <tooltip>
+                  <Tooltip text="Month Selection" />
+               </tooltip></ComboBox>
+            <ComboBox fx:id="comboYear" maxWidth="120.0" minWidth="-Infinity" onAction="#newDate" prefHeight="31.0" prefWidth="120.0">
+               <tooltip>
+                  <Tooltip text="Year Selection" />
+               </tooltip></ComboBox>
+          <Button maxHeight="-Infinity" maxWidth="50.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#goUp" prefHeight="31.0" prefWidth="50.0" text="&gt;&gt;">
+               <tooltip>
+                  <Tooltip text="Next Month" />
+               </tooltip></Button>
         </buttons>
          <padding>
             <Insets right="10.0" />
@@ -102,21 +127,45 @@
                <HBox.margin>
                   <Insets />
                </HBox.margin>
+               <tooltip>
+                  <Tooltip maxWidth="170.0" minWidth="140.0" text="Select/Deselect members for the current roster." wrapText="true" />
+               </tooltip>
             </Button>
             <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" maxWidth="50.0" minWidth="50.0" prefWidth="50.0" text="Title" />
-            <TextField fx:id="fTitle" maxHeight="-Infinity" maxWidth="200.0" minHeight="-Infinity" minWidth="123.0" prefWidth="123.0" />
+            <TextField fx:id="fTitle" maxHeight="-Infinity" maxWidth="200.0" minHeight="-Infinity" minWidth="123.0" prefWidth="123.0">
+               <tooltip>
+                  <Tooltip maxWidth="170.0" minWidth="140.0" text="Unique name for the duty that this roster is needed for." wrapText="true" />
+               </tooltip></TextField>
             <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" maxWidth="77.0" minWidth="60.0" prefHeight="17.0" prefWidth="77.0" text="Duty Interval" />
-            <ComboBox fx:id="cDInterval" maxWidth="200.0" />
+            <ComboBox fx:id="cDInterval" maxWidth="200.0">
+               <tooltip>
+                  <Tooltip maxWidth="170.0" minWidth="140.0" text="Time needed for the duty of this roster." wrapText="true" />
+               </tooltip></ComboBox>
             <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="404.0" layoutY="27.0" maxWidth="77.0" minWidth="60.0" prefHeight="17.0" prefWidth="77.0" text="Rest Interval" />
-            <ComboBox fx:id="cRInterval" maxWidth="200.0" />
+            <ComboBox fx:id="cRInterval" maxWidth="200.0">
+               <tooltip>
+                  <Tooltip maxWidth="170.0" minWidth="140.0" text="Rest time needed before/after working this rosters duty." wrapText="true" />
+               </tooltip></ComboBox>
             <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" maxWidth="60.0" minWidth="60.0" prefHeight="21.0" prefWidth="60.0" text="Amount" />
-            <TextField fx:id="fAmount" alignment="CENTER" maxHeight="-Infinity" maxWidth="38.0" minHeight="-Infinity" minWidth="38.0" prefWidth="38.0" />
+            <TextField fx:id="fAmount" alignment="CENTER" maxHeight="-Infinity" maxWidth="38.0" minHeight="-Infinity" minWidth="38.0" prefWidth="38.0">
+               <tooltip>
+                  <Tooltip maxWidth="170.0" minWidth="140.0" text="Number of members required for this rosters duty during the interval." wrapText="true" />
+               </tooltip></TextField>
             <CheckBox fx:id="cWeekends" maxHeight="-Infinity" maxWidth="100.0" minHeight="-Infinity" minWidth="100.0" mnemonicParsing="false" prefHeight="21.0" prefWidth="100.0" text="Weekends">
                <HBox.margin>
                   <Insets left="10.0" />
-               </HBox.margin></CheckBox>
-            <CheckBox fx:id="cHolidays" maxHeight="-Infinity" maxWidth="100.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="21.0" prefWidth="100.0" text="Holidays" />
-            <Button fx:id="bSave" disable="true" mnemonicParsing="false" onAction="#saveFields" text="Save" />
+               </HBox.margin>
+               <tooltip>
+                  <Tooltip maxWidth="170.0" minWidth="140.0" text="When selected weekendss are incremented independent from week." wrapText="true" />
+               </tooltip></CheckBox>
+            <CheckBox fx:id="cHolidays" maxHeight="-Infinity" maxWidth="100.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="21.0" prefWidth="100.0" text="Holidays">
+               <tooltip>
+                  <Tooltip maxWidth="170.0" minWidth="140.0" text="When selected holidays are incremented independent from week/weekend." wrapText="true" />
+               </tooltip></CheckBox>
+            <Button fx:id="bSave" disable="true" mnemonicParsing="false" onAction="#saveFields" text="Save">
+               <tooltip>
+                  <Tooltip maxWidth="170.0" minWidth="140.0" text="Save roster conditions." wrapText="true" />
+               </tooltip></Button>
             <TextField fx:id="fDInterval" alignment="CENTER" maxHeight="-Infinity" maxWidth="80.0" minHeight="-Infinity" minWidth="80.0" prefHeight="31.0" prefWidth="40.0" visible="false" />
             <TextField fx:id="fRInterval" alignment="CENTER" maxHeight="-Infinity" maxWidth="80.0" minHeight="-Infinity" minWidth="80.0" prefHeight="31.0" prefWidth="40.0" visible="false" />
 
