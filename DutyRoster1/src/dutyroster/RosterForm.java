@@ -186,13 +186,14 @@ public class RosterForm {
         cell.setColspan(12);
         cell.setBorder(Rectangle.RIGHT);
         cell.setBorderWidthRight(WIDTH_4);
-        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        cell.setHorizontalAlignment(Element.ALIGN_LEFT);
         table.addCell(cell);
         
         cell = new PdfPCell(new Phrase(gOrg,mdFont));
         cell.setBorderWidth(WIDTH_4);
         cell.setColspan(14);
         cell.setBorder(Rectangle.RIGHT);
+        cell.setHorizontalAlignment(Element.ALIGN_LEFT);
         cell.setBorderWidthRight(WIDTH_4);
         table.addCell(cell);
         
