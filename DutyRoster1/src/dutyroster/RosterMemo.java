@@ -111,7 +111,7 @@ public class RosterMemo {
         doc.add(table);
        
         //Spacing 1
-               doc.add( Chunk.NEWLINE );       
+        doc.add( Chunk.NEWLINE );       
         
         //Subject
         p = new Paragraph("SUBJECT: " + rosterTitle + " Roster for " + rosterDate);
@@ -119,7 +119,7 @@ public class RosterMemo {
         
         //Spacing 2
         for(int i = 0; i < 2; i++)
-               doc.add( Chunk.NEWLINE );        
+            doc.add( Chunk.NEWLINE );        
         
         //First Paragraph
         p = new Paragraph(gFirst);
@@ -132,7 +132,8 @@ public class RosterMemo {
             p = new Paragraph("Duty Roster Goes Here!");
             doc.add(p); 
         
-         if(gFirst.length()>0)
+        //Add space only if there is a first column
+        if(gFirst.length()>0)
             doc.add( Chunk.NEWLINE ); //Spacing 1    
         
         //Conclusion
@@ -141,7 +142,7 @@ public class RosterMemo {
 
         //Spacing 4
         for(int i = 0; i < 4; i++)
-               doc.add( Chunk.NEWLINE );   
+            doc.add( Chunk.NEWLINE );   
         
         //Signature Block  
         table = new PdfPTable(2);
@@ -150,16 +151,17 @@ public class RosterMemo {
         table.addCell(getCell(gSig, PdfPCell.ALIGN_LEFT));
         doc.add(table);
         
+        //Close document
         doc.close();       
            
     }
     
     public PdfPCell getCell(String text, int alignment) {
-    PdfPCell cell = new PdfPCell(new Phrase(text));
-    cell.setPadding(0);
-    cell.setHorizontalAlignment(alignment);
-    cell.setBorder(PdfPCell.NO_BORDER);
-    return cell;
+        PdfPCell cell = new PdfPCell(new Phrase(text));
+        cell.setPadding(0);
+        cell.setHorizontalAlignment(alignment);
+        cell.setBorder(PdfPCell.NO_BORDER);
+        return cell;
     }
     
 }
