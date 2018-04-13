@@ -13,6 +13,7 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.input.KeyCodeCombination?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
@@ -25,8 +26,9 @@
             <Menu text="_File">
               <items>
                 <MenuItem fx:id="menu_fileClose" onAction="#exitProgram" text="_Close">
-
-                </MenuItem>
+                     <accelerator>
+                        <KeyCodeCombination alt="DOWN" code="F4" control="UP" meta="UP" shift="UP" shortcut="UP" />
+                     </accelerator></MenuItem>
               </items>
             </Menu>
             <Menu mnemonicParsing="false" text="Edit">
@@ -46,8 +48,10 @@
             </Menu>
             <Menu text="_Help">
               <items>
-                <MenuItem text="_About">
-                </MenuItem>
+                <MenuItem mnemonicParsing="false" onAction="#openHelp" text="About" >
+                     <accelerator>
+                        <KeyCodeCombination code="F1" alt="UP" control="UP" meta="UP" shift="UP" shortcut="UP" />
+                     </accelerator></MenuItem>
               </items>
             </Menu>
 

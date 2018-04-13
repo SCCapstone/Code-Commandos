@@ -1,7 +1,7 @@
 /**
  * FXML Controller class
-  * @author ISHU, Othen
- * @version 7, 4/7/2018
+  * @author Othen, Austin, Tanya, Harini, Michael
+ * @version 1, 4/13/2018
  */
 
 package dutyroster;
@@ -23,12 +23,12 @@ import javafx.scene.layout.VBox;
 
 
 
-public class SettingsController implements Initializable {
+public class HelpController implements Initializable {
 
     @FXML private TabPane tabPane;
     
-    private static final String SETTINGS_FILE = "Settings2";
-    private final static String[] CATEGORYS = {"General","DA Form 6", "Memorandum"};
+    private static final String SETTINGS_FILE = "Help";
+    private final static String[] CATEGORYS = {"About","Rosters", "Employees","Blackouts","Holidays","Settings"};
     private final static String[][] SETTING_IDS = {{"fOrg","fAdd","fPhone","fWeb"},
         {"fTitle","fRef","fVer","fNote"},
         {"fFirst","fConc","fSig"}};
@@ -39,7 +39,7 @@ public class SettingsController implements Initializable {
     private ArrayList<Setting> sList;
 
     
-    public SettingsController(){
+    public HelpController(){
         startUp();
     }    
  
