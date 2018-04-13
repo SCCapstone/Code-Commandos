@@ -30,8 +30,8 @@ public class SettingsController implements Initializable {
     private static final int CONTROL_WIDTH = 500;
     private static final String SETTINGS_FILE = "Settings2";
     private final static String[] CATEGORYS = {"Roster", "Memorandum"};
-    private final static String[][] SETTING_IDS = {{"fTitle","fNote","fRef","fVer"},{"fSymbol", "fHead","fFirst","fConc","fSig"}};
-    private final static String[][] SETTINGS = {{"Title","Notice","Reference","Version",},
+    private final static String[][] SETTING_IDS = {{"fOrg","fTitle","fNote","fRef","fVer"},{"fSymbol", "fHead","fFirst","fConc","fSig"}};
+    private final static String[][] SETTINGS = {{"Organization", "Title","Notice","Reference","Version",},
         {"Office Symbol","Header","First Paragraph","Conclusion","Signature Block"}};
     private final static String[] ISTEXTAREA = {"fHead","fFirst","fConc","fSig"};
     private ArrayList<Setting> sList;
