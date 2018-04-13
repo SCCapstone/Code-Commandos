@@ -1,7 +1,7 @@
 /**
  * FXML Controller class
   * @author ISHU, Othen
- * @version 7, 4/7/2018
+ * @version 8, 4/13/2018
  */
 
 package dutyroster;
@@ -27,15 +27,13 @@ public class SettingsController implements Initializable {
 
     @FXML private TabPane tabPane;
     
+    private static final int CONTROL_WIDTH = 500;
     private static final String SETTINGS_FILE = "Settings2";
-    private final static String[] CATEGORYS = {"General","DA form 6", "Memorandum"};
-    private final static String[][] SETTING_IDS = {{"fOrg","fAdd","fPhone","fWeb"},
-        {"fTitle","fRef","fVer","fNote"},
-        {"fFirst","fConc","fSig"}};
-    private final static String[][] SETTINGS = {{"Organization","Address","Phone","Website"},
-        {"Title","Reference","Version","Notice"},
-        {"First Paragraph","Conclusion","Signature Block"}};
-    private final static String[] ISTEXTAREA = {"fFirst","fConc", "fSig"};
+    private final static String[] CATEGORYS = {"Roster", "Memorandum"};
+    private final static String[][] SETTING_IDS = {{"fTitle","fNote","fRef","fVer"},{"fSymbol", "fHead","fFirst","fConc","fSig"}};
+    private final static String[][] SETTINGS = {{"Title","Notice","Reference","Version",},
+        {"Office Symbol","Header","First Paragraph","Conclusion","Signature Block"}};
+    private final static String[] ISTEXTAREA = {"fHead","fFirst","fConc","fSig"};
     private ArrayList<Setting> sList;
 
     
@@ -115,12 +113,12 @@ public class SettingsController implements Initializable {
                 TextField textField = new TextField();
                     textField.setId(s.getId());
                     textField.setText(text);
-                    textField.setMinWidth(300);
+                    textField.setMinWidth(CONTROL_WIDTH);
  
                     TextArea textArea = new TextArea(s.getId());
                     textArea.setId(s.getId());
                     textArea.setText(text);
-                    textArea.setMaxSize(300, 150);
+                    textArea.setMaxSize(CONTROL_WIDTH, 150);
                 
                     hbox.getChildren().addAll(new Label(SETTINGS[tabIndex][i++]), (s.isTextArea())? textArea : textField);
                 vbox.getChildren().add(hbox); 

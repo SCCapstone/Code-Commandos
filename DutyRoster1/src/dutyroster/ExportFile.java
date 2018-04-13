@@ -35,6 +35,9 @@ public class ExportFile {
         
         file = fileChooser.showSaveDialog(mainStage);
         
+        if(file==null)
+            return;
+        
         boolean result = Files.deleteIfExists(file.toPath());
     
     }

@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox prefWidth="420.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dutyroster.StatusController">
+<VBox prefWidth="420.0" xmlns="http://javafx.com/javafx/8.0.161" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dutyroster.StatusController">
    <children>
       <TableView fx:id="tableView" maxWidth="400.0" minWidth="400.0" prefHeight="406.0" prefWidth="400.0" styleClass="table">
          <columns>

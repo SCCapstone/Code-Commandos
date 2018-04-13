@@ -495,16 +495,28 @@ public class MainController implements Initializable {
         comboYear.getSelectionModel().select(Integer.toString(curYear));
     }
     
-    @FXML public void printDA6(ActionEvent event){
+    @FXML public void printRosterForm(ActionEvent event){
         
-        PDF da6 = new PDF(rowData,currentRoster.getTitle(),curYear,curMonth);
+        RosterForm form = new RosterForm(rowData,currentRoster.getTitle(),curYear,curMonth);
         
         try {
-            da6.makePDF();
+            form.makePDF();
         } catch (DocumentException | IOException ex) {
             Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex);
         }
        
+    }
+    
+    @FXML public void printRosterMemo(ActionEvent event){
+        
+        RosterMemo memo = new RosterMemo(rowData,currentRoster.getTitle(),curYear,curMonth);
+        
+        try {
+            memo.makePDF();
+        } catch (DocumentException | IOException ex) {
+            Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+      
     }
     
     @FXML public void newDate(ActionEvent event){

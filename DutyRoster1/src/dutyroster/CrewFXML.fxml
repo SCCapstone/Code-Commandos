@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<GridPane alignment="CENTER" hgap="5.0" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="483.0" prefWidth="480.0" style="-fx-background-color: lightgrey;" vgap="5.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dutyroster.CrewController">
+<GridPane alignment="CENTER" hgap="5.0" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="483.0" prefWidth="480.0" style="-fx-background-color: lightgrey;" vgap="5.0" xmlns="http://javafx.com/javafx/8.0.161" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dutyroster.CrewController">
     <padding>
         <Insets bottom="10.0" left="10.0" right="10.0" top="5.0" />
     </padding>
