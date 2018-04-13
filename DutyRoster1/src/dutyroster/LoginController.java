@@ -41,7 +41,8 @@ public class LoginController implements Initializable {
         fieldPass1.setVisible(true);
         fieldPass2.setVisible(false);
         labelPass1.setVisible(false);
-        labelPass2.setVisible(false); 
+        labelPass2.setVisible(true);
+        labelPass2.setText("Enter Your Password");
       
         fieldPass1.setOnKeyPressed((event) -> { 
             if(event.getCode() == KeyCode.ENTER) checkPass(); 
@@ -114,14 +115,10 @@ public class LoginController implements Initializable {
         sc.store(fieldPass1.getText());
         fieldPass1.clear();
         fieldPass2.clear();
-        
-        Alert alert = new Alert(AlertType.INFORMATION, "Password Saved");
-        alert.showAndWait();
-
         Stage stage = (Stage) fieldPass2.getScene().getWindow();
         stage.close();
         
-        openWizard();
+        openMainScene();
     }
     
     @FXML private void exitProgram(ActionEvent event) {   
@@ -142,29 +139,6 @@ public class LoginController implements Initializable {
         }
 
     }
-    
-    public void openWizard(){
-
-         try{
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("MainFXML.fxml")); 
-            Parent root1 = loader.load();
-            MainController mController = loader.getController();
-            Stage stage = new Stage();
-            stage.setTitle("Duty Roster 1.0");
-            stage.setResizable(true);
-            Scene sceneMain = new Scene(root1);
-            stage.setScene(sceneMain);
-            //sceneMain.getStylesheets().add("stylesheet.css");
-            stage.setMaximized(true);
-            stage.setOnHidden(e -> mController.shutDown());
-            stage.show(); 
-          
-        }
-        catch(IOException e){
-           System.out.println("Can't load new scene: " + e); 
-        }   
-        
-    } 
     
     public void openMainScene(){
 
@@ -188,6 +162,3 @@ public class LoginController implements Initializable {
     }      
     
 }
-
-
-
