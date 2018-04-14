@@ -102,7 +102,7 @@ public class Assignment {
                         }  
                         else{
                             daily = a.getLastN();
-                             member.set(2, new SimpleStringProperty(Integer.toString(a.getLastN())) );  
+                            member.set(2, new SimpleStringProperty(Integer.toString(a.getLastN())) );  
                         }
                         
                         if (j==roster.size()-1){
@@ -124,13 +124,13 @@ public class Assignment {
                         }
                     
                     }
-                
+                    
                 }
                 rowData.add(member);
             }
             dr.storeData(pathName, rowData); 
         }
-        
+    
     }
     
     public ArrayList<ArrayList<ArrayList<Assignee>>> getUpdate(){
@@ -144,7 +144,7 @@ public class Assignment {
         
         Calendar thisDate = Calendar.getInstance();       
 
-        // Loop through rosters==============
+        //Loop through rosters==============
         for(int i = 0; i < crewsArray.size(); i++){ 
             
             ArrayList<ArrayList<Assignee>> dayLevel = new ArrayList();
@@ -169,7 +169,6 @@ public class Assignment {
                 for(ArrayList<String> row : crewsArray.get(i)){
                     
                     d = (j>1) ? lookupDuty( dayLevel,j-1,row.get(1)) : 500;
-                    
                     
                     if(isHol && rHolidays){
                         n = lookupInc( dayLevel,row,'n',j-1,row.get(1));
@@ -215,8 +214,15 @@ public class Assignment {
                     int hasDuty = (i > 0) ? hasDutyConflict(rosterLevel,rRInterval,tName,i,j-1) : 0;//today 
                     int willHaveDuty = (i > 0 && j < lastDay) ? hasDutyConflict(rosterLevel,rRInterval,tName,i,j) : 0; //tomorrow 
                       
+                    
+                    //Check for current roster weekend, holiday, normal conflicts
                     if(tResting < rRInterval) 
                         hasDuty = -1; 
+
+                    //Don't give pass days unless they're needed
+                    hasDuty = (c < needed && hasDuty != 0)? hasDuty : 0;
+                    willHaveDuty = (c < needed && willHaveDuty != 0)? willHaveDuty : 0;   
+                    
                     
                     if(c < needed && onBlock.isEmpty() && hasDuty==0 && willHaveDuty==0){
                         
@@ -251,8 +257,7 @@ public class Assignment {
                                 assignees.get(c).setStatusCode(REST);
                             else 
                                 assignees.get(c).setStatusCode(BLANK);
-                                
-                            
+                                 
                             if(  hasDuty==0 && willHaveDuty==0 && !doesStatusInc(onBlock)  ){
 
                                 //If status for blockout doesn't increment, then just take one back here
@@ -295,7 +300,6 @@ public class Assignment {
                         return 1;
                     else if(a.getOnDuty() <= rRInterval) 
                         return -1;
-                
                 }
 
             }
@@ -410,7 +414,6 @@ public class Assignment {
         for(Holiday h : holidayArray){
             
             try {
-                
                 startDate.setTime( sdf.parse( h.getFromDate() ) );
                 endDate.setTime( sdf.parse( h.getToDate() ) );
                 endDate.add(Calendar.DATE, 1);

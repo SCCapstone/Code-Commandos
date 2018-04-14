@@ -28,7 +28,6 @@ import javafx.collections.ObservableList;
 
 public class RosterMemo {
     
-    
     private final ObservableList<ObservableList<StringProperty>> rowData = FXCollections.observableArrayList();
     private static final String DATE_FORMAT = "d MMM yy";
     private final String rosterTitle;
@@ -67,7 +66,7 @@ public class RosterMemo {
         if (file==null)
             return;
               
-        ///Today
+        //Today
         Calendar c = Calendar.getInstance();
         c.setTime(new Date());
         String now = milDate.format(c.getTime()); 
@@ -129,8 +128,8 @@ public class RosterMemo {
                doc.add( Chunk.NEWLINE ); //Spacing 1   
 
         //Duty Roster Data goes here
-            p = new Paragraph("Duty Roster Goes Here!");
-            doc.add(p); 
+        p = new Paragraph("Duty Roster Goes Here!");
+        doc.add(p); 
         
         //Add space only if there is a first column
         if(gFirst.length()>0)
@@ -164,6 +163,7 @@ public class RosterMemo {
         return cell;
     }
     
+ 
 }
 
 
