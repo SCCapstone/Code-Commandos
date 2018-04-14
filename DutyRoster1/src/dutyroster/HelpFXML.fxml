@@ -1,30 +1,133 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-<AnchorPane id="AnchorPane" prefHeight="473.0" prefWidth="461.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dutyroster.HelpController">
+<AnchorPane id="anchorPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dutyroster.HelpController">
    <children>
-      <VBox alignment="TOP_RIGHT" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-         <children>
-            <TabPane fx:id="tabPane" prefHeight="419.0" prefWidth="461.0" tabClosingPolicy="UNAVAILABLE">
-              <tabs>
-
-              </tabs>
-            </TabPane>
-            <HBox alignment="BOTTOM_RIGHT" prefHeight="51.0" prefWidth="461.0">
-               <padding>
-                  <Insets bottom="10.0" right="10.0" />
-               </padding>
-               <children>
-                  <Button alignment="BOTTOM_RIGHT" mnemonicParsing="false" onAction="#updateSave" text="Save" />
-               </children>
-            </HBox>
-         </children>
-      </VBox>
+      <Button fx:id="exitButton" layoutX="524.0" layoutY="360.0" mnemonicParsing="false" onAction="#exitWindow" prefHeight="25.0" prefWidth="62.0" text="Exit" />
+      <TabPane prefHeight="355.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE">
+        <tabs>
+          <Tab text="About">
+               <content>
+                  <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                     <children>
+                        <Text layoutX="14.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="About this Program" wrappingWidth="172.80336952209473">
+                           <font>
+                              <Font name="System Bold" size="18.0" />
+                           </font>
+                        </Text>
+                        <TextArea editable="false" layoutX="27.0" layoutY="40.0" prefHeight="271.0" prefWidth="540.0" text="Welcome to the Duty Roster 1.0 Demo!&#10;&#10;Duty Roster 1.0 is an automated military-based scheduling system which has been adapted for public use. This is a basic implementation of a desktop app using JavaFX and NetBeans IDE.&#10;&#10;&#10;Contributors:&#10;Austin Freed, Mike Harlow, Harini Karnati, Tanya Peyush and Othen Prock" wrapText="true" />
+                     </children>
+                  </AnchorPane>
+               </content></Tab>
+          <Tab text="Rosters">
+               <content>
+                  <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                     <children>
+                        <Text layoutX="14.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="About the Rosters" wrappingWidth="172.80336952209473">
+                           <font>
+                              <Font name="System Bold" size="18.0" />
+                           </font>
+                        </Text>
+                        <TextArea editable="false" layoutX="27.0" layoutY="40.0" prefHeight="271.0" prefWidth="540.0" text="Add Roster &#10; - To create an new roster, you can either select plus button (+) on the top left side of the screen or click on Tools select add roster in the drop down list and a new roster will appear.&#10;&#10;Increments&#10; - There are three separate types of increments that can be used to track the longest time gap from when an employee last pulled duty on a specific roster. Those types are “n” for normal, “w” for weekends, and “h” for holidays. The employee having the highest increment is next in line to pull duty.&#10; - The initial increment starting numbers can be edited directly in the roster itself by changing the values in the increment columns labeled ‘n’, ‘w’, or ‘h’. The normal ‘n’ increment is always used to mark regular days, or weekdays when the ‘weekends’ option is enabled in the roster settings. The weekend ‘w’ increment only increments when the ‘weekends’ option is enabled. &#10; - The holidays ‘h’ increment only increments when the ‘holidays’ option is enabled, and only on holidays that are added to the holiday editor.&#10;&#10;Roster Priority, Duty Conflicts, and Rest Periods&#10; - An employee that is currently pulling duty, or detailed (depicted by the letter ‘D’) on a higher priority roster is exempt from pulling duty on all lower priority rosters for that time period, plus the additional rest time period (depicted by the letter ‘A’) on both rosters. When an employee has been detailed, the increment number will continue to increase for that specific day. The rest time period is determined by the longest rest time between both rosters that are being compared. Rest time is considered a pass, so the increment number does not increase during that period.&#10;&#10;" wrapText="true" />
+                     </children>
+                  </AnchorPane>
+               </content></Tab>
+          <Tab text="Grade/Employees">
+               <content>
+                  <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                     <children>
+                        <Text layoutX="14.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="About Grade and Employees" wrappingWidth="267.4700107574463">
+                           <font>
+                              <Font name="System Bold" size="18.0" />
+                           </font>
+                        </Text>
+                        <TextArea editable="false" layoutX="27.0" layoutY="40.0" prefHeight="160.0" prefWidth="540.0" text="Grade Editor&#10; - Grades are used to assigned employees with a specific title, pay grade or rank. Grades could be imported through employee roster or they can be added in manually.  To add a grade, click on Tools select Grades in the drop down list and the grade on the list. Enter the name of the grade in the text box down below and select add. Grades can be prioritized by selecting the grade on the list by using move up and move down buttons. To delete a Grade simply right click on the grade and select delete option. &#10;&#10;Employee Editor &#10; - The employee editor provides the tools to assign each employee to a duty. To access the editor, go to Tools and select Employees in the drop down list. There are two options to add employees:&#10; - Select the “import from .csv” option to import an employee list, or manually insert each employee by entering in a name, selecting grade and clicking the add button.  The employee name should be unique, and it is recommended to have the employee name be in the following format: Last, First. M. To edit an employee you can double click on the name and grade and you press enter once the correction is made. To delete an employee simply right click on the employee and select delete option.&#10;&#10;Import Format&#10; - To import a list of employees into the program you can create a .csv file using microsoft excel. CSV file should contain grade and employee in separate columns with grade first and employee second. When saving the file, make sure it is saved as a .csv file. Once it’s saved, you can import the file from the employee editor. " wrapText="true" />
+                        <Text layoutX="313.0" layoutY="248.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Add Grade:">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </Text>
+                        <Text layoutX="286.0" layoutY="289.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Add Employees:">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </Text>
+                        <Button fx:id="gradeButton" layoutX="398.0" layoutY="231.0" mnemonicParsing="false" onAction="#gradeEditor" prefHeight="25.0" prefWidth="103.0" text="Grade Editor" />
+                        <Button fx:id="employeeButton" layoutX="398.0" layoutY="271.0" mnemonicParsing="false" onAction="#employeeEditor" text="Employee Editor" />
+                     </children>
+                  </AnchorPane>
+               </content></Tab>
+          <Tab text="Status/Blockouts">
+               <content>
+                  <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                     <children>
+                        <Text layoutX="14.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="About Status and Blockouts" wrappingWidth="270.13669776916504">
+                           <font>
+                              <Font name="System Bold" size="18.0" />
+                           </font>
+                        </Text>
+                        <TextArea editable="false" layoutX="27.0" layoutY="40.0" prefHeight="160.0" prefWidth="540.0" text="Status Editor&#10; - The status editor is used to state a reason behind an employee leave of absence. To enter a status click on Tools select Status in the drop down list and status editor will appear. To enter a status, enter a name in the title textbox and enter a name shortcut in the code textbox. For example: Title could be Leave and Code could be L. You can select the allow increment checkbox if they deem the leave to be unauthorized and you can uncheck the box if the leave is deemed to be authorized. More information about the increments can be found in Roster Priority, Duty Conflicts, and Rest Periods. Once all the information from the status has been entered, select the add button and it will appear in the editor list. To delete a status simply right click on the code and select delete option. If you choose to change the increment of the status, you can select or unselect the checkbox under ‘Inc’. If you would like to change the viewing order of the list select the title header and click on the arrow. &#10;&#10;Blockout Editor&#10; - The blockout editor is used to specify a leave time for an employee. To access the blockout editor, go to Tools and select the Blockout Editor in the drop down list and blockout editor will appear. Select a status and the name, to select the time frame of the leave, select the calendar icon and click a date or you can manually add the dates. Once the information is added, you can select the add button. If you would like to change the viewing order of the list select the title header and click on the arrow. To edit a blockout date, double click the row and it will appear again on the bottom of the editor, where you can edit the information. To save the new edits, select update button and to cancel select the cancel button. To delete a blockout date simply right click on the line and select delete option." wrapText="true" />
+                        <Text layoutX="312.0" layoutY="248.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Add Status:">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </Text>
+                        <Text layoutX="297.0" layoutY="289.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Add Blockout:">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </Text>
+                        <Button fx:id="statusButton" layoutX="398.0" layoutY="231.0" mnemonicParsing="false" onAction="#statusEditor" prefHeight="25.0" prefWidth="97.0" text="Status Editor" />
+                        <Button fx:id="blockButton" layoutX="398.0" layoutY="271.0" mnemonicParsing="false" onAction="#blockoutEditor" text="Blockout Editor" />
+                     </children>
+                  </AnchorPane>
+               </content></Tab>
+          <Tab text="Holidays">
+               <content>
+                  <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                     <children>
+                        <Text layoutX="14.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="About Holidays" wrappingWidth="172.80336952209473">
+                           <font>
+                              <Font name="System Bold" size="18.0" />
+                           </font>
+                        </Text>
+                        <TextArea editable="false" layoutX="27.0" layoutY="39.0" prefHeight="160.0" prefWidth="540.0" text="Holiday Editor&#10; - Holiday Editor places all employees on leave for a certain time period. To access the Holiday editor, click on Tools select Holiday Editor in the drop down list and blockout editor will appear. To input a holiday, enter a name in the holiday textbox, to select the time frame of the holiday, select the calendar icon and click a date or you can manually add the dates. Once the information is added, you can select the add button. If you would like to change the viewing order of the list select the title header and click on the arrow. To edit a holiday time, double click the row and it will appear again on the bottom of the editor, where you can edit the information. To save the new edits, select update button and to cancel select the cancel button. To delete a holiday time simply right click on the line and select delete option." wrapText="true" />
+                        <Text layoutX="297.0" layoutY="289.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Add Holidays:">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </Text>
+                        <Button fx:id="holidayButton" layoutX="398.0" layoutY="271.0" mnemonicParsing="false" onAction="#holidayEditor" text="Holiday Editor" />
+                     </children>
+                  </AnchorPane>
+               </content></Tab>
+          <Tab text="Settings">
+               <content>
+                  <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                     <children>
+                        <Text layoutX="14.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="About Settings" wrappingWidth="172.80336952209473">
+                           <font>
+                              <Font name="System Bold" size="18.0" />
+                           </font>
+                        </Text>
+                        <TextArea editable="false" layoutX="27.0" layoutY="40.0" prefHeight="160.0" prefWidth="540.0" text="Settings&#10; - Adds form data specific to the organization using the program" wrapText="true" />
+                        <Text layoutX="297.0" layoutY="289.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Add Settings:">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </Text>
+                        <Button fx:id="settingsButton" layoutX="398.0" layoutY="271.0" mnemonicParsing="false" onAction="#settingsEditor" text="Settings Editor" />
+                     </children>
+                  </AnchorPane>
+               </content></Tab>
+        </tabs>
+      </TabPane>
    </children>
 </AnchorPane>

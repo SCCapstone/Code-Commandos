@@ -1,205 +1,196 @@
-/**
- * FXML Controller class
-  * @author Othen, Austin, Tanya, Harini, Michael
- * @version 1, 4/13/2018
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
  */
-
 package dutyroster;
 
+import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.ResourceBundle;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.control.Label;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
-
-
+/**
+ * FXML Controller class
+ *
+ * @author Michael Harlow
+ */
 public class HelpController implements Initializable {
 
-    @FXML private TabPane tabPane;
+    @FXML private javafx.scene.control.Button exitButton;
+    @FXML private Button gradeButton, employeeButton, statusButton, blockButton, holidayButton, settingsButton;
     
-    private static final String SETTINGS_FILE = "Help";
-    private final static String[] CATEGORYS = {"About","Rosters", "Employees","Blackouts","Holidays","Settings"};
-    private final static String[][] SETTING_IDS = {{"fOrg","fAdd","fPhone","fWeb"},
-        {"fTitle","fRef","fVer","fNote"},
-        {"fFirst","fConc","fSig"}};
-    private final static String[][] SETTINGS = {{"Organization","Address","Phone","Website"},
-        {"Title","Reference","Version","Notice"},
-        {"First Paragraph","Conclusion","Signature Block"}};
-    private final static String[] ISTEXTAREA = {"fFirst","fConc", "fSig"};
-    private ArrayList<Setting> sList;
-
     
+    /**
+     * Initializes the controller class.
+     */
     public HelpController(){
-        startUp();
+        //startUp();
     }    
  
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        buildForm();
-    } 
-
-    public void startUp(){
-        sList = new ArrayList<>();
-        setupArray();
-        retrieveData();
-    }   
-       
-    @FXML public void updateSave(){
-          
-        for(Setting s: sList){
-                        
-            if(s.isTextArea()){
-                
-                TextArea textA = (TextArea) tabPane.lookup("#" + s.getId());
-                
-                if( textA!=null && !(textA.getText().equals( s.getText() ) ) )
-                        s.setText(textA.getText());   
-
-            }
-            else{
-                
-                TextField textF = (TextField) tabPane.lookup("#" + s.getId());
-            
-                if( textF!=null && !(textF.getText().equals( s.getText() ) ) )
-                    s.setText(textF.getText()); 
-
-            }
-        }
-        
-        storeData();
+        //buildForm();
+    }    
+    
+    @FXML public void exitWindow(ActionEvent event){
+        //final Node source = (Node) e.getSource();
+        Stage stage = (Stage) exitButton.getScene().getWindow();
+        stage.close();
     }
-   
-    public void setupArray(){
+    
+    @FXML public void gradeEditor(ActionEvent event){
      
-        for(int i = 0; i < SETTINGS.length; i++)
-            for (String item : SETTING_IDS[i]) 
-                sList.add(new Setting(i, item, "", isTextArea(item)));
-
-    }
-    
-    private void buildForm(){
-      
-        for(int i = 0; i < SETTINGS.length; i++)
-            tabPane.getTabs().add( newTab(i) ); 
+        //DutyRoster.MainControlller().
         
-    }
-    
-    private Tab newTab(int tabIndex){
-      
-        //Create Tabs
-        Tab tab = new Tab();
-        tab.setText(CATEGORYS[tabIndex]);
-        VBox vbox = new VBox();
-        vbox.setPadding(new Insets(10, 10, 10, 10));
-        vbox.setSpacing(5);
+        try{
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("RankFXML.fxml")); 
+            Parent root1 = loader.load();
+            RankController eController = loader.getController();
+            Stage stage = new Stage();
+            stage.setTitle("Grade Editor");
+            stage.setResizable(false);
+            Scene sceneRank = new Scene(root1);
+            stage.initModality(Modality.APPLICATION_MODAL);
+
+            stage.setScene(sceneRank);
+            stage.setOnHidden(e -> eController.shutDown());
+            stage.show(); 
           
-        int i = 0;
-        for(Setting s: sList){
-            if(s.getCat()==tabIndex){
-                HBox hbox = new HBox();
-                hbox.setPadding(new Insets(10, 10, 10, 10));
-                hbox.setSpacing(5);
-                hbox.setAlignment(Pos.TOP_RIGHT);
-                String text = s.getText();
-                
-                TextField textField = new TextField();
-                    textField.setId(s.getId());
-                    textField.setText(text);
-                    textField.setMinWidth(300);
- 
-                    TextArea textArea = new TextArea(s.getId());
-                    textArea.setId(s.getId());
-                    textArea.setText(text);
-                    textArea.setMaxSize(300, 150);
-                
-                    hbox.getChildren().addAll(new Label(SETTINGS[tabIndex][i++]), (s.isTextArea())? textArea : textField);
-                vbox.getChildren().add(hbox); 
-            }
         }
-     
-        tab.setContent(vbox);
-        return tab;
-    }
-   
-    private boolean isTextArea(String id){
+        catch(IOException e){
+           System.out.println("Can't load new scene: " + e); 
+        }
         
-        for (String b : ISTEXTAREA) {
-            if (id.equals(b)) {
-                return true; 
-            }
+    }
+        
+    @FXML public void employeeEditor(ActionEvent event){
+        
+        try{
+         FXMLLoader loader = new FXMLLoader(getClass().getResource("EmployeeFXML.fxml")); 
+         Parent root1 = loader.load();
+         EmployeeController eController = loader.getController();
+         Stage stage = new Stage();
+         stage.setTitle("Employee Editor");
+         stage.setResizable(false);
+         stage.initModality(Modality.APPLICATION_MODAL);
+         stage.setScene(new Scene(root1));
+         stage.setOnHidden(e -> eController.shutDown());
+         stage.show(); 
+          
         }
-     return false;   
+        catch(IOException e){
+           System.out.println("Can't load new scene: " + e); 
+        }
+        
     }
     
-    //Converting store data into an array string
-    public void storeData(){
-
-        SecureFile sc = new SecureFile(SETTINGS_FILE);
+    @FXML public void statusEditor(ActionEvent event){
         
-        String strData = "";
-        
-        for(Setting s : sList)
-            strData +=  s.getText() + "|";          
-        
-        strData = Tools.removeLastChar(strData);
-        
-        sc.store(strData);
-
-    }
-    
-    //retrieve data from secure file
-    public void retrieveData(){
-        
-        SecureFile sc = new SecureFile(SETTINGS_FILE);
-        String a = sc.retrieve();
-        String aArry[] = a.split("\\|", -1);
-        
-        if(aArry.length < 1)
-            return;
-      
-        for (int i = 0; i < aArry.length; i++)
-            sList.get(i).setText(aArry[i]);             
-
-    }
-   
-    public String getSetting(String sID){ 
-        
-        for(Setting s : sList){
+        try{
             
-            if(s.getId().equals(sID)){
-              
-                if(s.getText().isEmpty()){
-                    
-                    //Set defaults for "fTitle","fRef","fVer","fNote"
-                    switch (sID) {
-                        case "fTitle":  return "DA FORM 6, JUL 1974";
-                        case "fRef":  return "For use of this form, see AR 220-45; the proponent agency is DCS, G-1.";
-                        case "fVer":  return "APD ALD v1.02";
-                        case "fNote":  return "PREVIOUS EDITIONS OF THIS FORM ARE OBSOLETE.";
-                        default: return "";
-                    }
-                
-                } 
-                else{
-                    return s.getText(); 
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("StatusFXML.fxml")); 
+            Parent root1 = loader.load();
+            StatusController eController = loader.getController();
+            Stage stage = new Stage();
+            stage.setTitle("Status Editor");
+            stage.setResizable(false);
+            Scene sceneStatus2 = new Scene(root1);
+           
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setScene(sceneStatus2);
+            stage.setOnHidden(e -> eController.shutDown());
+            stage.show(); 
+          
+        }
+        catch(IOException e){
+           System.out.println("Can't load new scene: " + e); 
+        }
+        
+    }
+
+    @FXML public void blockoutEditor(ActionEvent event){
+        
+        try{
+            
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("BlockoutFXML.fxml")); 
+            Parent root1 = loader.load();
+            BlockoutController BOController = loader.getController();
+            Stage stage = new Stage();
+            stage.setTitle("Blockout Editor");
+            stage.setResizable(false);
+            Scene sceneStatus2 = new Scene(root1);
+            
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setScene(sceneStatus2);
+            stage.setOnHidden(e -> {
+                BOController.shutDown();
+                //loadBlockouts();
+                //updateCrew();
+                    });
+            stage.show(); 
+        }
+        catch(IOException e){
+           System.out.println("Can't load new scene: " + e); 
+        }
+        
+    }
+    
+    @FXML public void holidayEditor(ActionEvent event){
+        
+        try{
+            
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("HolidayFXML.fxml")); 
+            Parent root1 = loader.load();
+            HolidayController HController = loader.getController();
+            Stage stage = new Stage();
+            stage.setTitle("Holidays Editor");
+            stage.setResizable(false);
+            Scene sceneStatus2 = new Scene(root1);
+           
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setScene(sceneStatus2);
+            stage.setOnHidden(e -> {
+                HController.shutDown();
+                //loadHolidays();
+                //setDate(curYear, curMonth-1);
                 }
-                    
-            }
-
+            );
+            stage.show(); 
+          
         }
-
-        return "";
-
+        catch(IOException e){
+           System.out.println("Can't load new scene: " + e); 
+        }
+        
     }
-
+    
+    @FXML public void settingsEditor(ActionEvent event){
+        
+        try{
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("SettingsFXML.fxml")); 
+            Parent root1 = loader.load();
+           // CrewController eController = loader.getController();
+            Stage stage = new Stage();
+            stage.setTitle("Settings Editor");
+            stage.setResizable(false);
+            Scene scene = new Scene(root1);
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setScene(scene);
+            stage.show(); 
+        }
+        catch(IOException e){
+           System.out.println("Can't load new scene: " + e); 
+        }
+        
+    }
 }
