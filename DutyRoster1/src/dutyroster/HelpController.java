@@ -12,7 +12,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -24,7 +23,7 @@ import javafx.stage.Stage;
  *
  * @author Michael Harlow
  */
-public class HelpController implements Initializable {
+public class HelpController extends MainController implements Initializable {
 
     @FXML private javafx.scene.control.Button exitButton;
     @FXML private Button gradeButton, employeeButton, statusButton, blockButton, holidayButton, settingsButton;
@@ -171,7 +170,7 @@ public class HelpController implements Initializable {
         catch(IOException e){
            System.out.println("Can't load new scene: " + e); 
         }
-        
+                
     }
     
     @FXML public void settingsEditor(ActionEvent event){
