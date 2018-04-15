@@ -18,6 +18,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.Alert;
 
 public class Assignment {
     
@@ -143,6 +144,8 @@ public class Assignment {
         int lastDay = selCal.getActualMaximum(Calendar.DAY_OF_MONTH);
         
         Calendar thisDate = Calendar.getInstance();       
+        
+        ArrayList<String> errorList = new ArrayList<>();
 
         //Loop through rosters==============
         for(int i = 0; i < crewsArray.size(); i++){ 
@@ -154,7 +157,8 @@ public class Assignment {
             int rRInterval =  rosterArray.get(i).getRInterval();
             int rAmount =  rosterArray.get(i).getAmount();
             int n,w,h,d;
-                        
+            boolean errorFlag = false;
+
             //====Day Columns Loop
             for(int j=1; j <= lastDay; j++){ 
                 
@@ -168,7 +172,7 @@ public class Assignment {
                 //===Crew Rows Loop
                 for(ArrayList<String> row : crewsArray.get(i)){
                     
-                    d = (j>1) ? lookupDuty( dayLevel,j-1,row.get(1)) : 500;
+                    d = (j>1) ? lookupDuty( dayLevel,j-1,row.get(1)) : rRInterval + 1;
                     
                     if(isHol && rHolidays){
                         n = lookupInc( dayLevel,row,'n',j-1,row.get(1));
@@ -204,32 +208,52 @@ public class Assignment {
                 }
         
                 //Duty Assignment here==============================
-                int needed = (24/rDInterval) * rAmount;
+                int countAssigned = 0;
+                
+                int dailyRequirement = (24/rDInterval) * rAmount;
+                int needed = dailyRequirement;
                 for(int c = 0; c < assignees.size(); c++){
                     
                     String onBlock = blockStatus(assignees.get(c).getName(), thisDate);
                     String tName = assignees.get(c).getName();
                     int tResting = assignees.get(c).getOnDuty();
                     
-                    int hasDuty = (i > 0) ? hasDutyConflict(rosterLevel,rRInterval,tName,i,j-1) : 0;//today 
-                    int willHaveDuty = (i > 0 && j < lastDay) ? hasDutyConflict(rosterLevel,rRInterval,tName,i,j) : 0; //tomorrow 
-                      
+                    boolean onDuty=false;
+                    boolean onRest=false;
+                    boolean upcomingDuty=false;
+                    boolean upcomingRest=false;
+                    
+                    //Check duty conflicts on higher priority rosters that are happening today
+                    //returns 1 for duty, -1 for resting
+                    int chkToday = (i > 0) ? checkDutyConflict(rosterLevel,rRInterval,tName,i,j-1) : 0;//today                  
+                    
+                    if (chkToday==1)
+                        onDuty = true;
+                    else if (chkToday==-1)
+                        onRest = true;
+
+                    //Check duty conflicts on higher priority rosters that will happen tomorrow
+                    //returns 1 for duty, -1 for resting
+                    int chkTomorrow = (i > 0 && j < lastDay) ? checkDutyConflict(rosterLevel,rRInterval,tName,i,j) : 0; //tomorrow 
+                    
+                    if (chkTomorrow==1)
+                        upcomingDuty = true;
+                    else if (chkTomorrow==-1)
+                        upcomingRest = true;                    
                     
                     //Check for current roster weekend, holiday, normal conflicts
                     if(tResting < rRInterval) 
-                        hasDuty = -1; 
+                        onRest = true; 
 
-                    //Don't give pass days unless they're needed
-                    hasDuty = (c < needed && hasDuty != 0)? hasDuty : 0;
-                    willHaveDuty = (c < needed && willHaveDuty != 0)? willHaveDuty : 0;   
-                    
-                    
-                    if(c < needed && onBlock.isEmpty() && hasDuty==0 && willHaveDuty==0){
+
+                    if( c < needed && onBlock.isEmpty() && !onDuty && !onRest && !upcomingRest && !upcomingDuty){
                         
+                        //Place on duty
                         assignees.get(c).setStatusCode(DUTY);
-                        assignees.get(c).setOnDuty(0); //When on duty, set recovery time to zero
-                        //Need to use OnDuty-rDInterval to determine actual rest period    
-                         
+                        assignees.get(c).setOnDuty(0);
+                        countAssigned++;
+                    
+                        //Reset current increment
                         if(isHol && rHolidays){
                            assignees.get(c).setLastH(0); 
                         }
@@ -237,52 +261,75 @@ public class Assignment {
                             assignees.get(c).setLastW(0); 
                         }
                         else{
-                            assignees.get(c).setLastN(0);
+                            assignees.get(c).setLastN(0); 
                         }
-                       
+                    
                     }
                     else{
-                                                  
-                        int lastDuty = assignees.get(c).getOnDuty(); //Accumalation
-                        assignees.get(c).setOnDuty(lastDuty+rDInterval); 
-
-                        if ( !(hasDuty==0 && willHaveDuty==0 && onBlock.isEmpty()) ){
-                            
-                            //This employee is blocked, so get a replacement
+                        
+                        //Adding rested time should always happen unless the person is pulling duty
+                        int lastDuty = assignees.get(c).getOnDuty(); //Used for rest accumalation
+                        assignees.get(c).setOnDuty(lastDuty+rDInterval); //add more rested time
+                        
+                        if(onDuty){
                             needed++;
+                            assignees.get(c).setStatusCode(DETAIL); 
                             
-                            if(hasDuty==1)
-                                assignees.get(c).setStatusCode(DETAIL);
-                            else if(willHaveDuty!=0 || hasDuty==-1)
+                        }
+                        else if(!onBlock.isEmpty() || onRest || upcomingDuty || upcomingRest){
+                            
+                            needed++;
+                            if(c < needed || !onBlock.isEmpty()){
                                 assignees.get(c).setStatusCode(REST);
-                            else 
-                                assignees.get(c).setStatusCode(BLANK);
-                                 
-                            if(  hasDuty==0 && willHaveDuty==0 && !doesStatusInc(onBlock)  ){
-
-                                //If status for blockout doesn't increment, then just take one back here
+                                //Since the increment already occured, the only way to
+                                //make it seem as if it stopped is to just take one back here
                                 if(isHol && rHolidays)
                                     assignees.get(c).setLastH(assignees.get(c).getLastH()-1);    
                                 else if(rWeekends && (thisDay==1 || thisDay==7) )
                                     assignees.get(c).setLastW(assignees.get(c).getLastW()-1);
                                 else
-                                    assignees.get(c).setLastN(assignees.get(c).getLastN()-1);
- 
-                            }  
-                        
-                        }
+                                    assignees.get(c).setLastN(assignees.get(c).getLastN()-1);     
 
+                            }     
+                        }
+                        else{
+                            assignees.get(c).setStatusCode(BLANK);   
+                        }
+                            
                     }
-                
+
                 }
+                
+                if(dailyRequirement > countAssigned )
+                    errorFlag = true;
                 dayLevel.add(assignees);    
             }
+            
+            if(errorFlag)
+                errorList.add(rosterArray.get(i).getTitle());
+            
             rosterLevel.add(dayLevel);
-        } 
+        }
+        
+        if (!errorList.isEmpty() ) {
+            
+            String roster = "";
+            for (String s : errorList)
+                roster += (roster.isEmpty())? s : ", " + s;
+            
+            roster = (errorList.size()>1) ? " the followin rosters; " + roster : " roster " + roster;
+
+            Alert alert;
+             alert = new Alert(Alert.AlertType.ERROR, "There may not be enough employees on" + roster);
+             alert.setTitle("Possible assignment errors");
+             alert.showAndWait();
+        }
+        
+        
         return rosterLevel;       
     }
     
-     private int hasDutyConflict(ArrayList<ArrayList<ArrayList<Assignee>>> rosters,
+     private int checkDutyConflict(ArrayList<ArrayList<ArrayList<Assignee>>> rosters,
             int cRInterval,String name,int rIndex, int thisDay){ 
          
         for(int i = rIndex - 1; i >= 0; i--){
