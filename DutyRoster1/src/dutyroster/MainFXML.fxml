@@ -43,14 +43,17 @@
                 <MenuItem fx:id="menu_statusEditor" onAction="#openStatusEditor" text="_Status" />
                 <MenuItem fx:id="menu_blockoutEditor" onAction="#openBlockout" text="_Blockouts" />
                 <MenuItem fx:id="menu_Holidays" onAction="#openHolidays" text="Holidays" />
-                <MenuItem fx:id="menu_addRoster" onAction="#addRoster" text="Add Ro_ster" />
+                <MenuItem fx:id="menu_addRoster" onAction="#addRoster" text="Add Ro_ster">
+                     <accelerator>
+                        <KeyCodeCombination alt="UP" code="N" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                     </accelerator></MenuItem>
               </items>
             </Menu>
             <Menu text="_Help">
               <items>
-                <MenuItem mnemonicParsing="false" onAction="#openHelp" text="About" >
+                <MenuItem mnemonicParsing="false" onAction="#openHelp" text="About">
                      <accelerator>
-                        <KeyCodeCombination code="F1" alt="UP" control="UP" meta="UP" shift="UP" shortcut="UP" />
+                        <KeyCodeCombination alt="UP" code="F1" control="UP" meta="UP" shift="UP" shortcut="UP" />
                      </accelerator></MenuItem>
               </items>
             </Menu>

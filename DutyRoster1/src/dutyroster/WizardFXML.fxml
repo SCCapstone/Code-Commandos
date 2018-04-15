@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane id="AnchorPane" prefHeight="549.0" prefWidth="477.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dutyroster.WizardFXMLController">
+   <children>
+      <Text layoutX="127.0" layoutY="40.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Initial Setup Wizard">
+         <font>
+            <Font name="System Bold" size="24.0" />
+         </font>
+      </Text>
+      <Text layoutX="14.0" layoutY="79.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Step One:">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Text>
+      <Text layoutX="392.0" layoutY="141.0" strokeType="OUTSIDE" strokeWidth="0.0" text="(optional)" />
+      <Text layoutX="13.0" layoutY="173.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Step Two:">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Text>
+      <Text layoutX="220.0" layoutY="263.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Manually enter grade" />
+      <Text layoutX="220.0" layoutY="290.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Manually enter Employee and/or import *.csv files" wrappingWidth="139.578125" />
+      <Text layoutX="76.0" layoutY="96.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Form Information:" />
+      <Text layoutX="91.0" layoutY="113.0" strokeType="OUTSIDE" strokeWidth="0.0" text="In the settings editor you have the option to add organization information to both the roster and memorandom printouts" wrappingWidth="282.4980773925781" />
+      <Button fx:id="settingsButton" layoutX="384.0" layoutY="103.0" mnemonicParsing="false" onAction="#settingsEditor" prefHeight="25.0" prefWidth="68.0" text="Settings" />
+      <Button fx:id="gradeButton" layoutX="383.0" layoutY="246.0" mnemonicParsing="false" onAction="#openRankEditor" prefHeight="25.0" prefWidth="68.0" text="Grade" />
+      <Button fx:id="empoyeeButton" layoutX="383.0" layoutY="281.0" mnemonicParsing="false" onAction="#openEmployeeEditor" text="Employee" />
+      <Text layoutX="78.0" layoutY="189.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Import Employees:" />
+      <Text layoutX="91.0" layoutY="206.0" strokeType="OUTSIDE" strokeWidth="0.0" text="A *.csv file of employees is able to be uploaded. The first column consists of grade and the second is the employees name." wrappingWidth="282.49807047843933" />
+      <Button fx:id="continueButton" layoutX="178.0" layoutY="509.0" mnemonicParsing="false" onAction="#openMainScene" text="Continue to Rosters" />
+      <Button fx:id="holidayButton" layoutX="383.0" layoutY="348.0" mnemonicParsing="false" onAction="#openHolidays" prefHeight="25.0" prefWidth="68.0" text="Holidays" />
+      <Text layoutX="13.0" layoutY="324.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Step Three:">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Text>
+      <Text layoutX="78.0" layoutY="340.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Creating Holidays:" />
+      <Text layoutX="91.0" layoutY="357.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Here you can add holidays when schedual adjustments are wanted during the holidays." wrappingWidth="282.49807047843933" />
+      <Button fx:id="statusButton" layoutX="383.0" layoutY="412.0" mnemonicParsing="false" onAction="#openStatusEditor" prefHeight="25.0" prefWidth="68.0" text="Status" />
+      <Text layoutX="13.0" layoutY="392.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Step Four:">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Text>
+      <Text layoutX="78.0" layoutY="408.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Setting Status for Blockouts:" />
+      <Text layoutX="91.0" layoutY="425.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Status codes are used to list reasons for why certain employees are not available to work. After codes are created blockouts will link the code to an indevidual." wrappingWidth="282.49807047843933" />
+      <Button fx:id="blockoutsButton" layoutX="383.0" layoutY="457.0" mnemonicParsing="false" onAction="#openBlockout" prefHeight="25.0" prefWidth="68.0" text="Blockouts" />
+      <Text layoutX="392.0" layoutY="385.0" strokeType="OUTSIDE" strokeWidth="0.0" text="(optional)" />
+      <Text layoutX="391.0" layoutY="495.0" strokeType="OUTSIDE" strokeWidth="0.0" text="(optional)" />
+      <Text layoutX="391.0" layoutY="451.0" strokeType="OUTSIDE" strokeWidth="0.0" text="(optional)" />
+   </children>
+</AnchorPane>
