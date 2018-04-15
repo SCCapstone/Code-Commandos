@@ -195,7 +195,8 @@ public class WizardFXMLController extends MainController implements Initializabl
         catch(IOException e){
            System.out.println("Can't load new scene: " + e); 
         }   
-        
+        Stage stage2 = (Stage) continueButton.getScene().getWindow();
+        stage2.close();
     }
     
     @FXML private void exitProgram(ActionEvent event) {   
