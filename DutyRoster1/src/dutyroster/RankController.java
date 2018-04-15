@@ -86,8 +86,9 @@ public class RankController implements Initializable {
         SecureFile sc = new SecureFile("Ranks");
         
         strData = "";
-        rankList.forEach((rank) -> {  
-            strData +=  rank.getSort() + "@" +  rank.getRank() + "|";    
+        rankList.forEach((rank) -> { 
+            String rankTitle = Tools.removeSpecialChars(rank.getRank());
+            strData +=  rank.getSort() + "@" +  rankTitle + "|";    
         });
         strData = Tools.removeLastChar(strData);
         
@@ -106,16 +107,21 @@ public class RankController implements Initializable {
       
         String aArry[] = a.split("\\|", -1);
         for (String b : aArry){
+
+                   if (b.length() > 2){
+
+                            String bArry[] = b.split("\\@", -1);
+
+                            if(bArry[0].length() > 0 && bArry[1].length() > 0){
+                                    
+                                    String rankTitle = Tools.replaceSpecialChars(bArry[1]);    
+                                
+                                     rankList.add(  new Rank( Integer.parseInt(bArry[0]), rankTitle ) );
+                           }
+                   
+                   }
             
-            if (b.length() > 2){
-                
-                String bArry[] = b.split("\\@", -1);
-                
-                if(bArry[0].length() > 0 && bArry[1].length() > 0)
-                    rankList.add( new Rank(Integer.parseInt(bArry[0]),bArry[1]) );
-            }
-            
-        }
+          }
 
     }
       

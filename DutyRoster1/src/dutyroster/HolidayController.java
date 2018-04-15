@@ -291,8 +291,9 @@ public class HolidayController implements Initializable {
             return;
         
         HolidayList.forEach((b) -> { 
-           
-            strData += b.getName() 
+           String hName = Tools.removeSpecialChars(b.getName());
+
+            strData += hName 
                     + "@" + b.getFromDate()
                     + "@" + b.getToDate()
                     + "|";    
@@ -322,9 +323,10 @@ public class HolidayController implements Initializable {
                 
                 // getSortIndex pulls updated rank order index. 
                 if(bArry[0].length() > 0 && bArry[1].length() > 0){
-                    
+                    String hName = Tools.replaceSpecialChars(bArry[0]);
+
                     HolidayList.add( new Holiday(
-                            bArry[0],
+                            hName,
                             bArry[1],
                             bArry[2]
                     ));
@@ -349,7 +351,9 @@ public class HolidayController implements Initializable {
                 
                 // getSortIndex pulls updated rank order index. 
                 if(bArry[0].length() > 0 && bArry[1].length() > 0){
-                    employeeOptions.add(bArry[1]);
+                    String eName = Tools.replaceSpecialChars(bArry[1]);
+
+                    employeeOptions.add(eName);
                 }
             }    
         
@@ -371,8 +375,12 @@ public class HolidayController implements Initializable {
                 
                 String bArry[] = b.split("\\@", -1);
                 
-                if(bArry[0].length() > 0 && bArry[1].length() > 0)
-                    statusOptions.add( bArry[1] );
+                if(bArry[0].length() > 0 && bArry[1].length() > 0) {
+                    String sName = Tools.replaceSpecialChars(bArry[1]);
+                     
+                    statusOptions.add(sName);
+                }
+            
             }
             
         }

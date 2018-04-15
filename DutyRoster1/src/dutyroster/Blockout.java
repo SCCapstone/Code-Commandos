@@ -19,9 +19,8 @@ public class Blockout {
 
     //Constructor 
     public Blockout() {
-
-        status.set(null);
         name.set(null); 
+        status.set(null);
         fromDate.set(null);
         toDate.set(null);
     }

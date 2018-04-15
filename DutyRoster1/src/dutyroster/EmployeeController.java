@@ -144,8 +144,11 @@ public class EmployeeController implements Initializable {
         if (employeeList == null)
             return;
         
-        employeeList.forEach((employee) -> {  
-            strData += employee.getRank() + "@" + employee.getName() + "|";    
+        employeeList.forEach((e) -> {  
+            String eName = Tools.removeSpecialChars(e.getName());
+            String eRank = Tools.removeSpecialChars(e.getRank());
+
+            strData += eRank + "@" + eName + "|";    
         });
             strData = Tools.removeLastChar(strData);
             
@@ -172,12 +175,16 @@ public class EmployeeController implements Initializable {
                 String bArry[] = b.split("\\@", -1);
                 
                 // getSortIndex pulls updated rank order index. 
-                if(bArry[0].length() > 0 && bArry[1].length() > 0){
+                if(bArry[0].length() > 0 && bArry[1].length() > 0){                   
                     
-                    int rankSort = Tools.getSortIndex(rankOptions, bArry[0]);
-                    String chRank = (rankSort < 1000)? bArry[0] : "No grade";
+                    String eRank = Tools.replaceSpecialChars(bArry[0]);
+                    int rankSort = Tools.getSortIndex(rankOptions, eRank);
+
+                    eRank = (rankSort < 1000)? eRank : "No grade";
+
+                    String eName = Tools.replaceSpecialChars(bArry[1]);
                     
-                    employeeList.add( new Employee( rankSort , chRank, bArry[1]) );
+                    employeeList.add( new Employee( rankSort , eRank, eName) );
                 }
             }    
         }       
@@ -201,9 +208,10 @@ public class EmployeeController implements Initializable {
                 String bArry[] = b.split("\\@", -1);
                 
                 if(bArry[0].length() > 0 && bArry[1].length() > 0){
+                   String rRank = Tools.replaceSpecialChars(bArry[1]);
                    
-                   rankOptions.add( new Rank(Integer.parseInt(bArry[0]), bArry[1] ) );
-                   rankListing.add(bArry[1]);
+                   rankOptions.add( new Rank(Integer.parseInt(bArry[0]), rRank) );
+                   rankListing.add(rRank);
                 }
             
             }
@@ -217,8 +225,11 @@ public class EmployeeController implements Initializable {
 
         SecureFile sc = new SecureFile("Ranks");
         strData = "";
-        rankOptions.forEach((srank) -> {  
-            strData +=  srank.getSort() + "@" +  srank.getRank() + "|";    
+        rankOptions.forEach((r) -> {  
+            String sRank = Tools.removeSpecialChars(r.getRank());
+
+            strData +=  r.getSort() + "@" +  sRank + "|";    
+            
         });
             strData = Tools.removeLastChar(strData);
         

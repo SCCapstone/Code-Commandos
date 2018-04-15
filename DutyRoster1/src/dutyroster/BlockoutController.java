@@ -309,9 +309,10 @@ public class BlockoutController implements Initializable {
             return;
         
         blockoutList.forEach((b) -> { 
-
-            strData += b.getName() 
-                    + "@" + b.getStatus()
+            String eName = Tools.removeSpecialChars(b.getName());
+            String eStatus = Tools.removeSpecialChars(b.getStatus());
+            strData += eName 
+                    + "@" + eStatus
                     + "@" + b.getFromDate()
                     + "@" + b.getToDate()
                     + "|";    
@@ -340,10 +341,11 @@ public class BlockoutController implements Initializable {
                 
                 // getSortIndex pulls updated rank order index. 
                 if(bArry[0].length() > 0 && bArry[1].length() > 0){
-                    
+                    String eName = Tools.replaceSpecialChars(bArry[0]);
+                    String eStatus = Tools.replaceSpecialChars(bArry[1]);
                     blockoutList.add( new Blockout(
-                            bArry[0],
-                            bArry[1],
+                           eName,
+                            eStatus,
                             bArry[2],
                             bArry[3]
                     ));
@@ -368,7 +370,8 @@ public class BlockoutController implements Initializable {
                 
                 // getSortIndex pulls updated rank order index. 
                 if(bArry[0].length() > 0 && bArry[1].length() > 0){
-                    employeeOptions.add(bArry[1]);
+                     String eName = Tools.replaceSpecialChars(bArry[1]);
+                    employeeOptions.add(eName);
                 }
             
             }    
@@ -391,8 +394,11 @@ public class BlockoutController implements Initializable {
                 
                 String bArry[] = b.split("\\@", -1);
                 
-                if(bArry[0].length() > 0 && bArry[1].length() > 0)
-                    statusOptions.add( bArry[1] );
+                if(bArry[0].length() > 0 && bArry[1].length() > 0){
+                    String sTitle = Tools.replaceSpecialChars(bArry[1]);
+                    statusOptions.add( sTitle );
+                }
+            
             }
             
         }

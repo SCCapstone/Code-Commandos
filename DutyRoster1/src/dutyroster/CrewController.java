@@ -121,10 +121,14 @@ public final class CrewController implements Initializable {
         if (cList == null || cList.isEmpty()) 
             return;
 
-        cList.forEach((employee) -> { 
-            if( employee.getCrew() ){
-                strData += employee.getRank() + "@" + employee.getName() + "|"; 
+        cList.forEach((e) -> { 
+            if( e.getCrew() ){
+                String eRank = Tools.removeSpecialChars(e.getRank());
+                String eName = Tools.removeSpecialChars(e.getName());
+                strData += eRank + "@" + eName + "|"; 
             }
+        
+            
         });
         
         if (!strData.isEmpty())
@@ -183,11 +187,17 @@ public final class CrewController implements Initializable {
                 String bArry[] = b.split("\\@", -1);
                 // getSortIndex pulls updated rank order index. 
                 if(bArry[0].length() > 0 && bArry[1].length() > 0){
+                   
+                    String eRank = Tools.replaceSpecialChars(bArry[0]);                    
+                   
+                    int rankSort = getSortIndex(eRank);
+
+                     eRank = (rankSort < 1000)? eRank : "No rank";
                     
-                    int rankSort = getSortIndex(bArry[0]);
-                    String chRank = (rankSort < 1000)? bArry[0] : "No rank";
+                    String eName = Tools.replaceSpecialChars(bArry[1]);
+                  
                     
-                    aReturn.add( new Employee( rankSort, chRank, bArry[1]));
+                    aReturn.add(  new Employee( rankSort, eRank, eName) );
                 }
             }    
         } 
@@ -210,9 +220,10 @@ public final class CrewController implements Initializable {
                 String bArry[] = b.split("\\@", -1);
                 
                 if(bArry[0].length() > 0 && bArry[1].length() > 0){
+                   String rName = Tools.replaceSpecialChars(bArry[1]);
                    
-                   rankOptions.add( new Rank(Integer.parseInt(bArry[0]), bArry[1] ) );
-                   rankListing.add(bArry[1]);
+                   rankOptions.add( new Rank(Integer.parseInt(bArry[0]), rName ) );
+                   rankListing.add(rName);
                 }
             }
         }     
@@ -226,9 +237,9 @@ public final class CrewController implements Initializable {
     private int getSortIndex(String strRank) {
             
         //pulling from the rank, in rankOption pull the current rank to get the index number.
-        for(Rank currentRank : rankOptions) 
-            if ( currentRank.getRank().equals(strRank) )
-                    return currentRank.getSort();
+        for(Rank r : rankOptions) 
+            if ( r.getRank().equals(strRank) )
+                    return r.getSort();
         
         return 1000;
     }

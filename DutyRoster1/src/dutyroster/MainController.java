@@ -729,8 +729,9 @@ public class MainController implements Initializable {
             tableView.setEditable(true);
                
         }
-        
-    updateCrew();    
+            
+        tableView.refresh();
+        updateCrew();    
 
     } 
     
@@ -1077,9 +1078,12 @@ public class MainController implements Initializable {
                 String bArry[] = b.split("\\@", -1);
                 
                 if(bArry[0].length() > 0 && bArry[1].length() > 0) {
+                    
+                    String rTitle = Tools.replaceSpecialChars(bArry[0]);
+                    
                     rosterArray.add( 
                         new Roster(
-                        bArry[0],
+                        rTitle,
                         Integer.parseInt(bArry[1]),
                         Integer.parseInt(bArry[2]),
                         Integer.parseInt(bArry[3]),
@@ -1101,18 +1105,21 @@ public class MainController implements Initializable {
     public void storeData(){
         SecureFile sc = new SecureFile("Rosters");
         strData = "";
-        rosterArray.forEach((roster) -> {  
-            strData +=  roster.getTitle() 
+        rosterArray.forEach((r) -> {  
+            
+            String rTitle = Tools.removeSpecialChars(r.getTitle());
+            
+            strData +=  rTitle
                     + "@" 
-                    +  roster.getDInterval() 
+                    +  r.getDInterval() 
                     + "@"  
-                    +  roster.getRInterval() 
+                    +  r.getRInterval() 
                     + "@"  
-                    +  roster.getAmount() 
+                    +  r.getAmount() 
                     + "@" 
-                    +  roster.getWeekends()
+                    +  r.getWeekends()
                     + "@" 
-                    +  roster.getHolidays() 
+                    +  r.getHolidays() 
                     + "|";    
         });
             strData = Tools.removeLastChar(strData);
@@ -1242,8 +1249,10 @@ public class MainController implements Initializable {
                 String bArry[] = b.split("\\@", -1);
                 
                 if(bArry[0].length() > 0 && bArry[1].length() > 0){
+                    String sCode = Tools.replaceSpecialChars(bArry[0]);
+                    String sTitle = Tools.replaceSpecialChars(bArry[1]);
                     boolean incs = ( bArry[2].equals("1") );
-                    statusArray.add(  new Status(bArry[0], bArry[1], incs)  );  
+                    statusArray.add(  new Status(sCode, sTitle, incs)  );  
                 }
             }
         }
@@ -1266,10 +1275,11 @@ public class MainController implements Initializable {
                 
                 // getSortIndex pulls updated rank order index. 
                 if(bArry[0].length() > 0 && bArry[1].length() > 0){
-                    
+                     String eName = Tools.replaceSpecialChars(bArry[0]);
+                     String eStatus = Tools.replaceSpecialChars(bArry[1]);
                     blockoutArray.add( new Blockout(
-                            bArry[0],
-                            bArry[1],
+                            eName,
+                            eStatus,
                             bArry[2],
                             bArry[3]
                     ));
@@ -1330,7 +1340,8 @@ public class MainController implements Initializable {
                 String bArry[] = b.split("\\@", -1);
                 
                 if(bArry[0].length() > 0 && bArry[1].length() > 0){
-                    holidayArray.add(  new Holiday(bArry[0],bArry[1],bArry[2])  );
+                    String hTitle = Tools.replaceSpecialChars(bArry[0]);
+                    holidayArray.add(  new Holiday(hTitle,bArry[1],bArry[2])  );
                 }
             
             }    

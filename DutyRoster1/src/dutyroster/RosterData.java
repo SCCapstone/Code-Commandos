@@ -7,7 +7,6 @@
 package dutyroster;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import javafx.beans.property.StringProperty;
 import javafx.collections.ObservableList;
 
@@ -32,7 +31,14 @@ public class RosterData {
                 ArrayList<String> innerArray = new ArrayList();
                 String[] bArry = b.split("\\@", -1);
 
-                innerArray.addAll(Arrays.asList(bArry));
+                    for(String c : bArry){
+                        
+                        c = Tools.replaceSpecialChars(c);
+                        
+                       innerArray.add(c);  
+                    }
+                
+               
                 returnArray.add(innerArray);
             }
   
@@ -53,7 +59,10 @@ public class RosterData {
         String strData = "";
         for(ObservableList<StringProperty> innerList: rosterArray){
             for(StringProperty sp: innerList){
-              strData +=  sp.get() + "@";
+                
+               String tmp = Tools.removeSpecialChars(sp.get());
+                
+              strData +=  tmp + "@";
             }
             strData = Tools.removeLastChar(strData);
             strData += "|";   

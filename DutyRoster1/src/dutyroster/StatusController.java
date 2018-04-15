@@ -99,8 +99,11 @@ public final class StatusController implements Initializable {
             return;
         statusList.forEach((status) -> { 
             String incs = (status.getIncrements()==true)? "1" : "0";
-                 
-            strData +=  status.getCode() + "@" +  status.getTitle() + "@" + incs + "|"; });
+            
+            String scTitle = Tools.removeSpecialChars(status.getTitle());
+            String scCode = Tools.removeSpecialChars(status.getCode());
+            
+            strData +=  scCode + "@" +  scTitle + "@" + incs + "|"; });
             strData = Tools.removeLastChar(strData);
         
         //Store string array into secure file
@@ -123,8 +126,12 @@ public final class StatusController implements Initializable {
                 String bArry[] = b.split("\\@", -1);
                 
                 if(bArry[0].length() > 0 && bArry[1].length() > 0){
+                    String scTitle = Tools.replaceSpecialChars(bArry[1]);
+                    String scCode = Tools.replaceSpecialChars(bArry[0]);
+
+                    
                     boolean incs = ( bArry[2].equals("1") );
-                    statusList.add(  new Status(bArry[0], bArry[1], incs)  );  
+                    statusList.add(  new Status(scCode, scTitle, incs)  );  
                 }
             }
         }

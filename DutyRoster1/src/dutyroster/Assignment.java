@@ -443,7 +443,9 @@ public class Assignment {
                 String bArry[] = b.split("\\@", -1);
                 
                 if(bArry[0].length() > 0 && bArry[1].length() > 0){
-                    holidayArray.add(  new Holiday(bArry[0],bArry[1],bArry[2])  );
+                    
+                     String holName = Tools.replaceSpecialChars(bArry[0]);   
+                    holidayArray.add(  new Holiday( holName, bArry[1], bArry[2])  );
                 }
             
             }    
@@ -492,8 +494,12 @@ public class Assignment {
                 String bArry[] = b.split("\\@", -1);
                 
                 if(bArry[0].length() > 0 && bArry[1].length() > 0){
+                    
                     boolean incs = ( bArry[2].equals("1") );
-                    statusArray.add(  new Status(bArry[0], bArry[1], incs)  );  
+                    String sCode = Tools.replaceSpecialChars(bArry[0]);
+                    String sTitle = Tools.replaceSpecialChars(bArry[1]);
+                    
+                    statusArray.add(  new Status(sCode, sTitle, incs)  );  
                 }
             }
         }
@@ -516,9 +522,10 @@ public class Assignment {
                 
                 // getSortIndex pulls updated rank order index. 
                 if(bArry[0].length() > 0 && bArry[1].length() > 0){
-                    
+                     String sTitle = Tools.replaceSpecialChars(bArry[0]);
+                     
                     blockoutArray.add( new Blockout(
-                            bArry[0],
+                            sTitle,
                             bArry[1],
                             bArry[2],
                             bArry[3]
