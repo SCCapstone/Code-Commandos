@@ -528,7 +528,7 @@ public class MainController implements Initializable {
     
     @FXML public void printRosterMemo(ActionEvent event){
         
-        RosterMemo memo = new RosterMemo(rowData,currentRoster.getTitle(),curYear,curMonth);
+        RosterMemo memo = new RosterMemo(rowData,currentRoster,curYear,curMonth);
         
         try {
             memo.makePDF();
