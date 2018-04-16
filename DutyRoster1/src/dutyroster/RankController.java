@@ -1,7 +1,6 @@
 /**
  * @authors Austin Freed, Tanya Peyush
- * @version 2
- * 3/11/18
+ * @version 3, 4/15/18
  */
 package dutyroster;
 
@@ -48,12 +47,12 @@ public class RankController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         
-        rankField.setOnKeyPressed((event) -> { 
-            if(event.getCode() == KeyCode.ENTER)         
-                if ( !( rankExists(rankField.getText()) || rankField.getText().isEmpty()) ) 
-                    rankAdd();
-             
-        }
+            rankField.setOnKeyPressed((event) -> { 
+                if(event.getCode() == KeyCode.ENTER)         
+                    if ( !( rankExists(rankField.getText()) || rankField.getText().isEmpty()) ) 
+                        rankAdd();
+
+            }
         );
         //Add multi select to table
         tableView.getSelectionModel().setSelectionMode(
@@ -61,7 +60,7 @@ public class RankController implements Initializable {
         );
         //Create the Delete menu item
         MenuItem mi1 = new MenuItem("Delete");
-            mi1.setOnAction((ActionEvent event) -> { 
+            mi1.setOnAction((ActionEvent event) -> {
                 ObservableList<Rank> items = tableView.getSelectionModel().getSelectedItems();
                 deleteRank(items);
             });
@@ -102,26 +101,26 @@ public class RankController implements Initializable {
     //retrieve data from secure file
     public void retrieveData(){
         SecureFile sc = new SecureFile("Ranks");
-        
+
         String a = sc.retrieve();
-      
+
         String aArry[] = a.split("\\|", -1);
         for (String b : aArry){
 
-                   if (b.length() > 2){
+            if (b.length() > 2){
 
-                            String bArry[] = b.split("\\@", -1);
+                String bArry[] = b.split("\\@", -1);
 
-                            if(bArry[0].length() > 0 && bArry[1].length() > 0){
-                                    
-                                    String rankTitle = Tools.replaceSpecialChars(bArry[1]);    
-                                
-                                     rankList.add(  new Rank( Integer.parseInt(bArry[0]), rankTitle ) );
-                           }
-                   
-                   }
-            
-          }
+                if(bArry[0].length() > 0 && bArry[1].length() > 0){
+
+                    String rankTitle = Tools.replaceSpecialChars(bArry[1]);    
+
+                    rankList.add(  new Rank( Integer.parseInt(bArry[0]), rankTitle ) );
+                }
+
+            }
+
+        }
 
     }
       
@@ -246,20 +245,27 @@ public class RankController implements Initializable {
         return false;    
         
     }
+   
+
     
     //Delete rank function
     public void deleteRank(ObservableList<Rank> tmpList){
                                    
         if (tmpList==null)
             return;
- 
-        for(int i = 0; i<tmpList.size(); i++)
-            for(int j = 0; j<rankList.size(); j++)  
-                if (tmpList.get(i).equals(rankList.get(j)))  
-                    rankList.remove(j);
-        
-        updateSort();
-    
+       
+        for(Rank a : tmpList){
+            System.out.println(a.getRank());
+            for(int j = 0; j < rankList.size(); j++){
+                 
+                if (a.getRank().equals(rankList.get(j).getRank())){ 
+                    rankList.remove(j); 
+                }
+            
+            } 
+
+        }
+        updateSort();  
     }
     
     private void updateSort(){

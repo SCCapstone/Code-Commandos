@@ -801,7 +801,10 @@ public class MainController implements Initializable {
         //This will pull daily data for each roster member        
         RosterData rd = new RosterData();
         Calendar thisMonth = Calendar.getInstance();
-       
+        
+        String lowerOut = lowerOutput.getText();
+        
+        
         rowData.clear();
         for(Employee crew: aCrews){
             
@@ -867,6 +870,10 @@ public class MainController implements Initializable {
         
         tableView.setItems(null);
         tableView.setItems(rowData);
+        
+        lowerOut = "Total assigned: " + rowData.size() + "; " + lowerOut;
+        lowerOutput.setText(lowerOut);
+        
         tableView.refresh();
 
     }
