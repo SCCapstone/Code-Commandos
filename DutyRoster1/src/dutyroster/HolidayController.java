@@ -154,9 +154,9 @@ public class HolidayController implements Initializable {
          
         String tmpTo = curTo.format(formatter); 
 
-        if (curFrom.isEqual(curTo) || curFrom.isAfter(curTo)){
+        if (curFrom.isAfter(curTo)){
 
-            alert = new Alert(Alert.AlertType.ERROR, "The \"From\" date must be a date that is earlier than the \"To\" date.");
+            alert = new Alert(Alert.AlertType.ERROR, "The \"From\" date must be a date that is the same as or earlier than the \"To\" date.");
             alert.setTitle("Incorrect Date");
             alert.showAndWait();
             return;
@@ -218,9 +218,9 @@ public class HolidayController implements Initializable {
          
         String tmpTo = curTo.format(formatter);       
           
-        if (curFrom.isEqual(curTo) || curFrom.isAfter(curTo)){
+        if ( curFrom.isAfter(curTo)){
             
-            alert = new Alert(Alert.AlertType.ERROR, "The \"From\" date must be a date that is earlier than the \"To\" date.");
+            alert = new Alert(Alert.AlertType.ERROR, "The \"From\" date must be a date that is the same as or earlier than the \"To\" date.");
             alert.setTitle("Incorrect Date");
             alert.showAndWait();
             return;
