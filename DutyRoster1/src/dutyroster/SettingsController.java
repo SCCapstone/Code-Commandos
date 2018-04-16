@@ -31,12 +31,31 @@ public class SettingsController implements Initializable {
     private static final String SETTINGS_FILE = "Settings2";
     private final static String[] CATEGORYS = {"Roster", "Memorandum"};
     private final static String[][] SETTING_IDS = {{"fOrg","fTitle","fNote","fRef","fVer"},{"fSymbol", "fHead","fFirst","fConc","fSig"}};
-    private final static String[][] SETTINGS = {{"Organization", "Title","Notice","Reference","Version",},
+    private final static String[][] SETTINGS = {{"Organization", "Title","Notice","Reference","Version"},
         {"Office Symbol","Header","First Paragraph","Conclusion","Signature Block"}};
     private final static String[] ISTEXTAREA = {"fHead","fFirst","fConc","fSig"};
-    private ArrayList<Setting> sList;
-
     
+
+    private final static String[][] SETTING_DEFAULTS = {
+        {
+        "",
+        "DA FORM 6, JUL 1974",
+        "PREVIOUS EDITIONS OF THIS FORM ARE OBSOLETE.",
+        "For use of this form, see AR 220-45; the proponent agency is DCS, G-1.",
+        "APD ALD v1.02"
+        },
+        {
+        "OFFICE-SYMBOL",
+        "Department of the Army",
+        "1. The following personnel have been assigned duty.",
+        "2. For futher information contact our office.",
+        "SIGNATURE BLOCK"
+        }};
+    
+    
+    
+    private ArrayList<Setting> sList;
+ 
     public SettingsController(){
         startUp();
     }    
@@ -72,6 +91,7 @@ public class SettingsController implements Initializable {
                     s.setText(textF.getText()); 
 
             }
+        
         }
         
         storeData();
@@ -79,10 +99,12 @@ public class SettingsController implements Initializable {
    
     public void setupArray(){
      
-        for(int i = 0; i < SETTINGS.length; i++)
-            for (String item : SETTING_IDS[i]) 
-                sList.add(new Setting(i, item, "", isTextArea(item)));
-
+        for(int i = 0; i < SETTINGS.length; i++){
+            for (int j = 0; j < SETTING_IDS[i].length; j++){
+                String setID = SETTING_IDS[i][j];
+                sList.add(new Setting(i, setID, SETTING_DEFAULTS[i][j], isTextArea(setID))); 
+            }
+        }
     }
     
     private void buildForm(){
@@ -113,6 +135,7 @@ public class SettingsController implements Initializable {
                 TextField textField = new TextField();
                     textField.setId(s.getId());
                     textField.setText(text);
+                    
                     textField.setMinWidth(CONTROL_WIDTH);
  
                     TextArea textArea = new TextArea(s.getId());
@@ -146,9 +169,11 @@ public class SettingsController implements Initializable {
         
         String strData = "";
         
-        for(Setting s : sList)
-            strData +=  s.getText() + "|";          
+        for(Setting s : sList){
+            String tmp = Tools.removeSpecialChars(s.getText());
+            strData +=  tmp + "|";          
         
+        }
         strData = Tools.removeLastChar(strData);
         
         sc.store(strData);
@@ -165,36 +190,18 @@ public class SettingsController implements Initializable {
         if(aArry.length < 1)
             return;
       
-        for (int i = 0; i < aArry.length; i++)
-            sList.get(i).setText(aArry[i]);             
-
+        for (int i = 0; i < aArry.length; i++){
+            String tmp = Tools.replaceSpecialChars(aArry[i]);
+            sList.get(i).setText(tmp);             
+        }
     }
    
     public String getSetting(String sID){ 
         
-        for(Setting s : sList){
-            
-            if(s.getId().equals(sID)){
-              
-                if(s.getText().isEmpty()){
-                    
-                    //Set defaults for "fTitle","fRef","fVer","fNote"
-                    switch (sID) {
-                        case "fTitle":  return "DA FORM 6, JUL 1974";
-                        case "fRef":  return "For use of this form, see AR 220-45; the proponent agency is DCS, G-1.";
-                        case "fVer":  return "APD ALD v1.02";
-                        case "fNote":  return "PREVIOUS EDITIONS OF THIS FORM ARE OBSOLETE.";
-                        default: return "";
-                    }
-                
-                } 
-                else{
-                    return s.getText(); 
-                }
-                    
-            }
+        for(Setting s : sList)
+            if(s.getId().equals(sID))
+                return s.getText(); 
 
-        }
 
         return "";
 
