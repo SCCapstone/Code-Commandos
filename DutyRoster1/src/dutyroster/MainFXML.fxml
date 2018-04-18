@@ -31,11 +31,7 @@
                      </accelerator></MenuItem>
               </items>
             </Menu>
-            <Menu mnemonicParsing="false" text="Edit">
-              <items>
-                <MenuItem mnemonicParsing="false" onAction="#openSettings" text="Settings" />
-              </items>
-            </Menu>
+
             <Menu text="_Tools">
               <items>
                 <MenuItem fx:id="menu_rankEditor" onAction="#openRankEditor" text="_Grades" />
@@ -47,6 +43,11 @@
                      <accelerator>
                         <KeyCodeCombination alt="UP" code="N" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
                      </accelerator></MenuItem>
+              </items>
+            </Menu>
+            <Menu mnemonicParsing="false" text="View">
+              <items>
+                <MenuItem mnemonicParsing="false" onAction="#openSettings" text="Settings" />
               </items>
             </Menu>
             <Menu text="_Help">
@@ -73,9 +74,9 @@
             <TabPane fx:id="rosterTabs" maxWidth="4000.0" prefHeight="44.0" prefWidth="4000.0" tabClosingPolicy="SELECTED_TAB" />
          </children>
       </HBox>
-      <ButtonBar buttonMinWidth="50.0" minHeight="50.0" prefHeight="50.0">
+      <ButtonBar fx:id="btnBar" buttonMinWidth="50.0" minHeight="50.0" prefHeight="50.0">
         <buttons>
-            <Button layoutX="706.0" layoutY="20.0" maxHeight="31.0" maxWidth="114.0" minHeight="-Infinity" minWidth="30.0" mnemonicParsing="false" onAction="#resetIncrements" prefHeight="31.0" prefWidth="50.0" text="Set Incremets">
+            <Button fx:id="btnIncrement" layoutX="706.0" layoutY="20.0" maxHeight="31.0" maxWidth="114.0" minHeight="-Infinity" minWidth="30.0" mnemonicParsing="false" onAction="#resetIncrements" prefHeight="31.0" prefWidth="50.0" text="Set Incremets">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>
@@ -83,7 +84,7 @@
                   <Tooltip maxWidth="170.0" minWidth="140.0" text="Continues the increments from the previous month." wrapText="true" />
                </tooltip>
             </Button>
-            <Button layoutX="830.0" layoutY="20.0" maxHeight="31.0" maxWidth="114.0" minHeight="-Infinity" minWidth="50.0" mnemonicParsing="false" onAction="#assignDuty" prefHeight="31.0" prefWidth="50.0" text="Update Rosters">
+            <Button fx:id="btnAssign" layoutX="830.0" layoutY="20.0" maxHeight="31.0" maxWidth="114.0" minHeight="-Infinity" minWidth="50.0" mnemonicParsing="false" onAction="#assignDuty" prefHeight="31.0" prefWidth="50.0" text="Update Rosters">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>
@@ -91,7 +92,7 @@
                   <Tooltip maxWidth="170.0" minWidth="140.0" text="Updates all roster assignments with the current settings." wrapText="true" />
                </tooltip>
             </Button>
-            <Button layoutX="706.0" layoutY="20.0" maxHeight="31.0" maxWidth="114.0" minHeight="-Infinity" minWidth="30.0" mnemonicParsing="false" onAction="#printRosterForm" prefHeight="31.0" prefWidth="50.0" text="Export Roster">
+            <Button fx:id="btnRoster" layoutX="706.0" layoutY="20.0" maxHeight="31.0" maxWidth="114.0" minHeight="-Infinity" minWidth="30.0" mnemonicParsing="false" onAction="#printRosterForm" prefHeight="31.0" prefWidth="50.0" text="Export Roster">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>
@@ -99,7 +100,7 @@
                   <Tooltip maxWidth="170.0" minWidth="140.0" text="Save the current roster in PDF format." wrapText="true" />
                </tooltip>
             </Button>
-            <Button maxHeight="31.0" maxWidth="114.0" minHeight="-Infinity" minWidth="30.0" mnemonicParsing="false" onAction="#printRosterMemo" prefHeight="31.0" prefWidth="50.0" text="Export Memo">
+            <Button fx:id="btnMemo" maxHeight="31.0" maxWidth="114.0" minHeight="-Infinity" minWidth="30.0" mnemonicParsing="false" onAction="#printRosterMemo" prefHeight="31.0" prefWidth="50.0" text="Export Memo">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>

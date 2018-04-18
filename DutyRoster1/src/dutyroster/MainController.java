@@ -13,7 +13,6 @@ import java.nio.file.Files;
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -41,6 +40,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
@@ -81,15 +81,14 @@ public class MainController implements Initializable {
     @FXML private TabPane rosterTabs;
     @FXML private HBox rosterControls;
     @FXML private Button bAddRoster, bSave;
+    @FXML private Button btnMemo, btnRoster, btnAssign, btnIncrement;
     
     private Tab currentDragTab;
     private static final AtomicLong ID = new AtomicLong();
     private final String draggingID = "DraggingTab-"+ID.incrementAndGet();
     private int dragIndex,dropIndex;
     private int lastDayOfMonth,curMonth,curYear;
-    private static final String DATE_FORMAT = "d MMM uuuu";
-    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_FORMAT);
-           
+          
     private final ObservableList<String> monthList = FXCollections.observableArrayList();
     private final ObservableList<Integer> yearList = FXCollections.observableArrayList();
     private final ObservableList<Interval> intervalList = FXCollections.observableArrayList();
@@ -103,6 +102,7 @@ public class MainController implements Initializable {
     //Extracting Data from encrypted file
 
     private String strData;
+    private String strMessage;
     private boolean updateLock;
     
     public MainController(){
@@ -231,6 +231,11 @@ public class MainController implements Initializable {
  
          //Set save to false at startup
         bSave.setDisable(true);
+        
+        if (rosterArray.isEmpty() || currentRoster==null)
+            setButtonsDisabled(true);
+            
+        
     }    
  
     public void setDInterval(){
@@ -870,14 +875,27 @@ public class MainController implements Initializable {
         
         tableView.setItems(null);
         tableView.setItems(rowData);
+   
+        if (rowData==null || rosterArray.isEmpty() || rowData.isEmpty())
+            setButtonsDisabled(true);
+        else
+           setButtonsDisabled(false); 
         
-        lowerOut = "Total assigned: " + rowData.size() + "; " + lowerOut;
+        lowerOut = "Total assigned: " + rowData.size() + "; " + strMessage;
         lowerOutput.setText(lowerOut);
         
         tableView.refresh();
 
     }
    
+    private void setButtonsDisabled(boolean vis){
+        
+            btnIncrement.setDisable(vis);
+            btnAssign.setDisable(vis);
+            btnRoster.setDisable(vis);
+            btnMemo.setDisable(vis);        
+    }
+    
     @FXML public void resetIncrements(){
 
         Calendar lastMonth = Calendar.getInstance();
@@ -1043,7 +1061,8 @@ public class MainController implements Initializable {
         setDate(curYear, curMonth-1);
 
         rosterName = currentRoster.getTitle();
-        lowerOutput.setText(rosterName + " is set to priority " + (xVal+1) + ". Drag and drop tabs to change.");
+        strMessage = rosterName + " is set to priority " + (xVal+1) + ". Drag and drop tabs to change.";
+        lowerOutput.setText(strMessage);
         rosterControls.setVisible(true);
         fTitle.setText(rosterName);
         fDInterval.setText(Integer.toString(currentRoster.getDInterval()));

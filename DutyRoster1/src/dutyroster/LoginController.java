@@ -20,6 +20,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.input.KeyCode;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class LoginController implements Initializable {
@@ -169,7 +170,9 @@ public class LoginController implements Initializable {
             WizardFXMLController mController = loader.getController();
             Stage stage = new Stage();
             stage.setTitle("Duty Roster 1.0");
-            stage.setResizable(true);
+            stage.setResizable(false);
+            stage.setResizable(false);            
+            stage.initModality(Modality.APPLICATION_MODAL);
             stage.setScene(new Scene(root1));
             stage.setMaximized(false);
             stage.setOnHidden(e -> mController.shutDown());
