@@ -24,6 +24,7 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
+import javafx.stage.Stage;
 import javafx.util.StringConverter;
 
 
@@ -38,7 +39,7 @@ public class BlockoutController implements Initializable {
     @FXML private ComboBox statusCombo;
     @FXML private DatePicker dateFrom;
     @FXML private DatePicker dateTo;
-    @FXML private Button buAdd,buUpdate,buCancel;
+    @FXML private Button buAdd,buUpdate,buCancel,btnDone;
   
     //Hold localdates from datepickers
     private LocalDate curFrom, curTo;
@@ -299,7 +300,13 @@ public class BlockoutController implements Initializable {
     public void shutDown() {  
         storeData();
     }
- 
+    
+    @FXML public void closeScene(){
+         Stage stage = (Stage) btnDone.getScene().getWindow();
+         stage.close();
+        
+    } 
+    
     public void storeData(){  
         
         SecureFile scBlockOut = new SecureFile("Blockouts");

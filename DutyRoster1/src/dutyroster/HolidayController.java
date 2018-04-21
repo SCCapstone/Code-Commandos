@@ -27,18 +27,18 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 import javafx.util.StringConverter;
 
 public class HolidayController implements Initializable {
     
     @FXML private TableView<Holiday> tableView;
-    @FXML private TableColumn<Holiday,String> name;
     @FXML private TableColumn<Holiday,String> fromDate;
     @FXML private TableColumn<Holiday,String> toDate;
     @FXML private TextField dateName;
     @FXML private DatePicker dateFrom;
     @FXML private DatePicker dateTo;
-    @FXML private Button buAdd, buUpdate, buCancel;
+    @FXML private Button buAdd, buUpdate, buCancel, btnDone;
     
     private Holiday oldHoliday;
     
@@ -174,8 +174,12 @@ public class HolidayController implements Initializable {
         curFrom = null;
         curTo = null;
     }
- 
-   private void setEdit(Holiday holiday){
+    @FXML public void closeScene(){
+         Stage stage = (Stage) btnDone.getScene().getWindow();
+         stage.close();
+        
+    }
+    private void setEdit(Holiday holiday){
          
         oldHoliday = holiday;
         

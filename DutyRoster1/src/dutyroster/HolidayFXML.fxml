@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="CENTER" prefHeight="483.0" prefWidth="450.0" spacing="10.0" xmlns="http://javafx.com/javafx/8.0.161" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dutyroster.HolidayController">
+<VBox alignment="CENTER" prefHeight="483.0" prefWidth="450.0" spacing="10.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dutyroster.HolidayController">
     <padding>
         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
     </padding>
@@ -51,13 +51,14 @@
    </HBox>
    <HBox alignment="bottom_right" layoutX="20.0" layoutY="437.0" spacing="10" GridPane.rowIndex="4">
       <children>
-             <Button fx:id="buCancel" maxWidth="420.0" onAction="#setCancel" prefHeight="25.0" prefWidth="138.0" text="Cancel" />
+             <Button fx:id="buCancel" maxWidth="420.0" onAction="#setCancel" prefHeight="25.0" prefWidth="103.0" text="Cancel" />
          <StackPane>
             <children>
                <Button fx:id="buAdd" maxWidth="420.0" onAction="#addHolidays" prefHeight="25.0" prefWidth="138.0" text="Add" />
-               <Button fx:id="buUpdate" layoutX="10.0" onAction="#updateBlockout" layoutY="10.0" maxWidth="420.0" prefHeight="25.0" prefWidth="138.0" text="Update" />
+               <Button fx:id="buUpdate" layoutX="10.0" layoutY="10.0" maxWidth="420.0" onAction="#updateBlockout" prefHeight="25.0" prefWidth="138.0" text="Update" />
             </children>
          </StackPane>
+         <Button fx:id="btnDone" mnemonicParsing="false" onAction="#closeScene" text="Done" />
       </children>
    </HBox>
 

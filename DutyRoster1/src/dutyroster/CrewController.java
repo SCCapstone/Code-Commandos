@@ -11,10 +11,12 @@ import javafx.collections.FXCollections;
 import javafx.fxml.Initializable;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.stage.Stage;
 
 
 public final class CrewController implements Initializable {
@@ -29,6 +31,7 @@ public final class CrewController implements Initializable {
     @FXML private TableColumn<Employee,Integer> sort;
     @FXML private CheckBox selectAll;
     @FXML private Label ratio;
+    @FXML private Button btnDone;
     
     // used to import and export data from employee data
     private ObservableList<Employee> crewList;
@@ -67,7 +70,7 @@ public final class CrewController implements Initializable {
  
         startUp();
         //  load the rankListing into rankCombo
-       // rankCombo.getItems().setAll(rankListing);
+        // rankCombo.getItems().setAll(rankListing);
         
         //pull the employess from secureFile and loads it into crews.
         loadCrews();
@@ -94,7 +97,12 @@ public final class CrewController implements Initializable {
     public void shutDown() {  
         storeData(crewList);
     }
-  
+    
+    @FXML public void closeScene(){
+         Stage stage = (Stage) btnDone.getScene().getWindow();
+         stage.close();
+        
+    }
     public void checkAll(boolean val){
            
         for(Employee f: crewList)

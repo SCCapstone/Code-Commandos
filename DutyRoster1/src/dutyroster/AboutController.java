@@ -17,14 +17,14 @@ import javafx.stage.Stage;
  *
  * @author Michael Harlow
  */
-public class HelpController extends MainController implements Initializable {
+public class AboutController extends MainController implements Initializable {
 
     @FXML private Button btnDone;
 
     /**
      * Initializes the controller class.
      */
-    public HelpController(){}    
+    public AboutController(){}    
  
     @Override
     public void initialize(URL url, ResourceBundle rb) {}    
@@ -34,7 +34,5 @@ public class HelpController extends MainController implements Initializable {
          stage.close();
         
     }
-    
-    
     
 }

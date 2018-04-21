@@ -15,6 +15,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
@@ -27,6 +28,7 @@ import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.KeyCode;
+import javafx.stage.Stage;
 import javafx.util.converter.DefaultStringConverter;
 
 public class EmployeeController implements Initializable {
@@ -40,6 +42,7 @@ public class EmployeeController implements Initializable {
     @FXML private TableColumn<Employee,String> rank;
     @FXML private TableColumn<Employee,String> name;
     @FXML private TableColumn<Employee,Integer> sort;
+    @FXML private Button btnDone;
     
     // used to import and export data from employee data
     private ObservableList<Employee> employeeList;
@@ -372,6 +375,12 @@ public class EmployeeController implements Initializable {
                 return true;
         
         return false;    
+        
+    }
+    
+    @FXML public void closeScene(){
+         Stage stage = (Stage) btnDone.getScene().getWindow();
+         stage.close();
         
     }
     
