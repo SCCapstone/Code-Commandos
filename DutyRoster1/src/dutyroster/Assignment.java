@@ -522,13 +522,15 @@ public class Assignment {
                 
                 // getSortIndex pulls updated rank order index. 
                 if(bArry[0].length() > 0 && bArry[1].length() > 0){
-                     String sTitle = Tools.replaceSpecialChars(bArry[0]);
-                     
+                    String sTitle = Tools.replaceSpecialChars(bArry[0]);
+                    String sStatus = Tools.replaceSpecialChars(bArry[1]);
+                    String sReason = Tools.replaceSpecialChars(bArry[2]);
                     blockoutArray.add( new Blockout(
                             sTitle,
-                            bArry[1],
-                            bArry[2],
-                            bArry[3]
+                            sStatus,
+                            sReason,
+                            bArry[3],
+                            bArry[4]
                     ));
                 }
             }    

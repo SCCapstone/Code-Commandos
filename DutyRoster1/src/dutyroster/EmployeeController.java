@@ -258,8 +258,9 @@ public class EmployeeController implements Initializable {
             System.out.print(e);
         }
 
-        if(importList==null)
+        if(importList==null || importList.isEmpty())
             return;
+
 
         boolean eExists;
         

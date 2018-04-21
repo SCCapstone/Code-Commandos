@@ -1336,13 +1336,15 @@ public class MainController implements Initializable {
                 
                 // getSortIndex pulls updated rank order index. 
                 if(bArry[0].length() > 0 && bArry[1].length() > 0){
-                     String eName = Tools.replaceSpecialChars(bArry[0]);
-                     String eStatus = Tools.replaceSpecialChars(bArry[1]);
+                     String sName = Tools.replaceSpecialChars(bArry[0]);
+                     String sStatus = Tools.replaceSpecialChars(bArry[1]);
+                     String sReason = Tools.replaceSpecialChars(bArry[2]);
                     blockoutArray.add( new Blockout(
-                            eName,
-                            eStatus,
-                            bArry[2],
-                            bArry[3]
+                            sName,
+                            sStatus,
+                            sReason,
+                            bArry[3],
+                            bArry[4]
                     ));
                 }
             }    
