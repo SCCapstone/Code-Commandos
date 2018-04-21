@@ -7,19 +7,15 @@ package dutyroster;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.Comparator;
 import java.util.ResourceBundle;
-import javafx.application.Platform;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -30,17 +26,45 @@ import javafx.stage.Stage;
  */
 public class WizardFXMLController extends MainController implements Initializable {
 
-    /**
-     * Initializes the controller class.
-     */
-    
-    @FXML private Button settingsButton, csvButton, gradeButton, employeeButton, holidayButton, continueButton, statusButton, blockoutButton;
 
     
+    @FXML private Button  btnDone;
+    @FXML private CheckBox chkWizard;
+    private String pass;
+ 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        retrieveSettings();
     }    
+ 
+    public void retrieveSettings(){
+        
+        SecureFile sc = new SecureFile("Settings");
+        String a = sc.retrieve();
+        String aArry[] = a.split("\\|", -1);
+        
+        if(aArry[0].length() > 0){
+            pass = aArry[0];
+            boolean openWizard = (aArry.length==1 ||  !(aArry[1]==null || aArry[1].equals("0")) );
+            chkWizard.setSelected(openWizard);
+            
+        }
+
+    }
+    
+    private void storeSettings(){
+        
+        SecureFile sc = new SecureFile("Settings");
+        String checked= (chkWizard.isSelected())? "1" : "0";
+        System.out.print(pass + "|" + checked);
+        sc.store(pass + "|" + checked);
+
+    }
+    
+    public void shutDown() {
+        
+        storeSettings();
+    }
     
     @FXML private void openEmployeeEditor(ActionEvent event) {
          
@@ -177,30 +201,11 @@ public class WizardFXMLController extends MainController implements Initializabl
         
     }
     
-    public void openMainScene(){
+    public void closeScene(){
 
-         try{
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("MainFXML.fxml")); 
-            Parent root1 = loader.load();
-            MainController mController = loader.getController();
-            Stage stage = new Stage();
-            stage.setTitle("Duty Roster 1.0");
-            stage.setResizable(true);
-            stage.setScene(new Scene(root1));
-            stage.setMaximized(true);
-            stage.setOnHidden(e -> mController.shutDown());
-            stage.show(); 
-          
-        }
-        catch(IOException e){
-           System.out.println("Can't load new scene: " + e); 
-        }   
-        Stage stage2 = (Stage) continueButton.getScene().getWindow();
+        Stage stage2 = (Stage) btnDone.getScene().getWindow();
         stage2.close();
     }
     
-    @FXML private void exitProgram(ActionEvent event) {   
-        System.exit(0);
-    }
-    
+
 }

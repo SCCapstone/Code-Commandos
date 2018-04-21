@@ -1,7 +1,7 @@
 /**
  * This class control the login screen. 
- * @author Michael Harlow
- * @version 2 February 22th, 2018
+ * @author Michael Harlow, Austin
+ * @version 3 April 4th, 2018
 */
 package dutyroster;
 
@@ -28,6 +28,7 @@ import javafx.stage.Stage;
 public class LoginController implements Initializable {
     
     String pass;
+    boolean openWizard;
     @FXML private Label labelPass1,labelPass2;
     @FXML private PasswordField fieldPass1, fieldPass2;
     @FXML private TextField fieldText1, fieldText2;
@@ -37,6 +38,7 @@ public class LoginController implements Initializable {
     
     @Override
     public void initialize(URL url, ResourceBundle rb) { 
+        openWizard = true;
         isCreate = false;    
         retrievepassword(); 
         fieldText1.setVisible(false);
@@ -152,8 +154,8 @@ public class LoginController implements Initializable {
             return;
         }
  
-        if ( passW2.equals("@") ){
-            Alert alert = new Alert(AlertType.ERROR, "Password cannot contain the @ symbol.");
+        if ( passW2.equals("|") ){
+            Alert alert = new Alert(AlertType.ERROR, "Password cannot contain the \"|\" symbol.");
             alert.showAndWait();
             fieldPass1.clear();
             fieldPass2.clear();
@@ -186,6 +188,8 @@ public class LoginController implements Initializable {
         if(aArry[0].length() > 0){
             showPassword();
             pass = aArry[0];
+            openWizard = (aArry.length==1 ||  !(aArry[1]==null || aArry[1].equals("0")) );
+            
         }
         else{
             showNewPassword();
@@ -236,21 +240,22 @@ public class LoginController implements Initializable {
             stage.setOnHidden(e -> mController.shutDown());
             stage.show();
             
-             openWizard(); 
+             if (openWizard)
+                 openStepByStep(); 
         }
         catch(IOException e){
            System.out.println("Can't load new scene: " + e); 
         }   
         
     } 
-     public void openWizard(){
+     public void openStepByStep(){
 
          try{
             FXMLLoader loader = new FXMLLoader(getClass().getResource("WizardFXML.fxml")); 
             Parent root1 = loader.load();
             WizardFXMLController mController = loader.getController();
             Stage stage = new Stage();
-            stage.setTitle("Setup");
+            stage.setTitle("Step by Step");
             stage.setResizable(false);           
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setScene(new Scene(root1));

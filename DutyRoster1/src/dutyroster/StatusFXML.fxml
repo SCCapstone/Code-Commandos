@@ -15,17 +15,17 @@
    <children>
       <TableView fx:id="tableView" maxWidth="400.0" minWidth="400.0" prefHeight="406.0" prefWidth="400.0" styleClass="table">
          <columns>
-            <TableColumn fx:id="colCode" maxWidth="100.0" minWidth="66.0" prefWidth="66.0" resizable="false" sortable="true" text="Code">
+            <TableColumn fx:id="colCode" maxWidth="100.0" minWidth="55.0" prefWidth="55.0" resizable="false" sortable="true" text="Code">
                <cellValueFactory>
                   <PropertyValueFactory property="code" />
                </cellValueFactory>
             </TableColumn>
-            <TableColumn fx:id="colTitle" maxWidth="298.0" minWidth="-Infinity" prefWidth="280.0" resizable="false" sortable="true" text="Title">
+            <TableColumn fx:id="colTitle" maxWidth="298.0" minWidth="-Infinity" prefWidth="273.0" resizable="false" sortable="true" text="Title">
                <cellValueFactory>
                   <PropertyValueFactory property="title" />
                </cellValueFactory>
             </TableColumn>
-            <TableColumn fx:id="colIncrements" maxWidth="53" minWidth="53" prefWidth="53" resizable="false" sortable="true" text="Inc">
+            <TableColumn fx:id="colIncrements" maxWidth="74.0" minWidth="53" prefWidth="65.0" resizable="false" sortable="true" text="Inc">
                 <cellValueFactory>
                     <PropertyValueFactory property="increments" />
                 </cellValueFactory>

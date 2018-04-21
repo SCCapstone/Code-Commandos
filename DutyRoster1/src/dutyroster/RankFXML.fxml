@@ -37,7 +37,7 @@
                         <PropertyValueFactory property="sort" />
                      </cellValueFactory>
                   </TableColumn>
-                  <TableColumn fx:id="rank" maxWidth="1.7976931348623157E308" minWidth="-1.0" prefWidth="269.0" resizable="false" sortable="false" text="Grade">
+                  <TableColumn fx:id="rank" maxWidth="1.7976931348623157E308" minWidth="-1.0" prefWidth="243.0" resizable="false" sortable="false" text="Grade">
                      <cellValueFactory>
                         <PropertyValueFactory property="rank" />
                      </cellValueFactory>

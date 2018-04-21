@@ -30,12 +30,12 @@
                   <CheckBox fx:id="selectAll" mnemonicParsing="false" onMouseClicked="#statusBar" onMouseMoved="#statusBar" text="All" />
                </graphic>
             </TableColumn>
-            <TableColumn fx:id="rank" maxWidth="100.0" minWidth="-Infinity" prefWidth="100.0" resizable="false" text="Grade">
+            <TableColumn fx:id="rank" maxWidth="100.0" minWidth="-Infinity" prefWidth="92.0" resizable="false" text="Grade">
                <cellValueFactory>
                   <PropertyValueFactory property="rank" />
                </cellValueFactory>
             </TableColumn>
-            <TableColumn fx:id="name" maxWidth="291.0" minWidth="-1.0" prefWidth="291.0" resizable="false" sortable="false" text="Name">
+            <TableColumn fx:id="name" maxWidth="299.0" minWidth="-1.0" prefWidth="293.0" resizable="false" sortable="false" text="Name">
                <cellValueFactory>
                   <PropertyValueFactory property="name" />
                </cellValueFactory>

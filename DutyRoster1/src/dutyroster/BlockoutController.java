@@ -24,6 +24,7 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
 
@@ -37,6 +38,7 @@ public class BlockoutController implements Initializable {
     @FXML private TableColumn<Blockout,LocalDate> toDate;
     @FXML private ComboBox nameCombo;
     @FXML private ComboBox statusCombo;
+    @FXML private TextField fieldReason;
     @FXML private DatePicker dateFrom;
     @FXML private DatePicker dateTo;
     @FXML private Button buAdd,buUpdate,buCancel,btnDone;
@@ -163,6 +165,7 @@ public class BlockoutController implements Initializable {
                
         String sName = nameCombo.getValue().toString();
         String sStatus = statusCombo.getValue().toString();
+        String sReason = fieldReason.getText();
         String tmpFrom = curFrom.format(formatter);
         String tmpTo = curTo.format(formatter); 
         
@@ -175,12 +178,13 @@ public class BlockoutController implements Initializable {
         }
 
 
-        blockoutList.add( new Blockout(sName,sStatus,tmpFrom,tmpTo) );
+        blockoutList.add( new Blockout(sName,sStatus,sReason,tmpFrom,tmpTo) );
         tableView.sort();
         
         //Clear form controls
         nameCombo.setValue(null);
         statusCombo.setValue(null);
+        fieldReason.setText(null);
         dateFrom.setValue(null);
         dateTo.setValue(null);
         
@@ -194,6 +198,7 @@ public class BlockoutController implements Initializable {
         oldBlock = block;
         nameCombo.setValue(block.getName());
         statusCombo.setValue(block.getStatus());
+        fieldReason.setText(block.getReason());
         dateFrom.setValue(LocalDate.parse(block.getFromDate(), formatter));
         dateTo.setValue(LocalDate.parse(block.getToDate(), formatter));
         buUpdate.setVisible(true);
@@ -237,6 +242,7 @@ public class BlockoutController implements Initializable {
                
         String sName = nameCombo.getValue().toString();
         String sStatus = statusCombo.getValue().toString();
+        String sReason = fieldReason.getText();
         String tmpFrom = curFrom.format(formatter);
         String tmpTo = curTo.format(formatter); 
         
@@ -251,16 +257,16 @@ public class BlockoutController implements Initializable {
         blockoutList.forEach((b) -> {
           
             if(oldBlock.equals(b)){
-            b.setName(sName);
-            b.setStatus(sStatus);
-            b.setFromDate(tmpFrom);
-            b.setToDate(tmpTo);           
-            setCancel();
+                b.setName(sName);
+                b.setStatus(sStatus);
+                b.setReason(sReason);
+                b.setFromDate(tmpFrom);
+                b.setToDate(tmpTo);           
+                setCancel();
             
-            tableView.setItems(blockoutList);
-            tableView.refresh();
-            tableView.sort();
-            
+                tableView.setItems(blockoutList);
+                tableView.refresh();
+                tableView.sort();
             }
             
         });
@@ -272,6 +278,7 @@ public class BlockoutController implements Initializable {
         //Clear form controls
         nameCombo.setValue(null);
         statusCombo.setValue(null);
+        fieldReason.setText(null);
         dateFrom.setValue(null);
         dateTo.setValue(null);
         buUpdate.setVisible(false);
@@ -292,7 +299,7 @@ public class BlockoutController implements Initializable {
  
         for(int i = 0; i<tmpList.size(); i++)
             for(int j = 0; j<blockoutList.size(); j++)  
-                if (tmpList.get(i).getName().equals(blockoutList.get(j).getName()))  
+                if ( tmpList.get(i).equals(blockoutList.get(j)) )  
                     blockoutList.remove(j);
     }
        
@@ -318,8 +325,10 @@ public class BlockoutController implements Initializable {
         blockoutList.forEach((b) -> { 
             String eName = Tools.removeSpecialChars(b.getName());
             String eStatus = Tools.removeSpecialChars(b.getStatus());
+            String eReason = Tools.removeSpecialChars(b.getReason());
             strData += eName 
                     + "@" + eStatus
+                    + "@" + eReason
                     + "@" + b.getFromDate()
                     + "@" + b.getToDate()
                     + "|";    
@@ -350,11 +359,13 @@ public class BlockoutController implements Initializable {
                 if(bArry[0].length() > 0 && bArry[1].length() > 0){
                     String eName = Tools.replaceSpecialChars(bArry[0]);
                     String eStatus = Tools.replaceSpecialChars(bArry[1]);
+                    String eReason = Tools.replaceSpecialChars(bArry[2]);
                     blockoutList.add( new Blockout(
                            eName,
                             eStatus,
-                            bArry[2],
-                            bArry[3]
+                            eReason,
+                            bArry[3],
+                            bArry[4]
                     ));
                 }
             }    

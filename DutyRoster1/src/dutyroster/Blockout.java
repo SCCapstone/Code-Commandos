@@ -1,8 +1,7 @@
 /**
  * This is an employee strut class
- * @author Austin Freed
- * @assisted by Tanya Peyush
- * @version 6 3/15/2018
+ * @author Austin Freed, Tanya Peyush
+ * @version 7 4/21/2018
  */
 package dutyroster;
 
@@ -14,6 +13,7 @@ public class Blockout {
    //SimipleString is a string. It works better with tableview
    private final SimpleStringProperty name = new SimpleStringProperty("");
    private final SimpleStringProperty status = new SimpleStringProperty("");
+   private final SimpleStringProperty reason = new SimpleStringProperty("");
    private final SimpleStringProperty fromDate = new SimpleStringProperty("");
    private final SimpleStringProperty toDate = new SimpleStringProperty("");
 
@@ -21,14 +21,16 @@ public class Blockout {
     public Blockout() {
         name.set(null); 
         status.set(null);
+        reason.set(null);
         fromDate.set(null);
         toDate.set(null);
     }
  
-    public Blockout(String nameIn, String statusIn, String from, String to) {
+    public Blockout(String nameIn, String statusIn, String reasonIn, String from, String to) {
        
         name.set(nameIn); 
         status.set(statusIn);
+        reason.set(reasonIn);
         fromDate.set(from);
         toDate.set(to);
        
@@ -41,6 +43,10 @@ public class Blockout {
     
     public String getStatus() {
         return status.get();
+    }
+    
+    public String getReason() {
+        return reason.get();
     }
     
     public String getFromDate() {
@@ -64,6 +70,11 @@ public class Blockout {
     
     }
     
+    public void setReason(String reasonIn) {
+        reason.set(reasonIn);
+    
+    } 
+    
     public void setFromDate(String from) {
        fromDate.set(from);
               
@@ -83,6 +94,7 @@ public class Blockout {
         // Custom equality check here.
         return this.name.equals(that.name)
         && this.status.equals(that.status)
+        && this.reason.equals(that.reason)
         && this.fromDate.equals(that.fromDate)
         && this.toDate.equals(that.toDate);
     }
