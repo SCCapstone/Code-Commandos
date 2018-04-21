@@ -3,6 +3,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
@@ -10,7 +11,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox prefWidth="420.0" xmlns="http://javafx.com/javafx/8.0.161" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dutyroster.StatusController">
+<VBox prefWidth="420.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dutyroster.StatusController">
    <children>
       <TableView fx:id="tableView" maxWidth="400.0" minWidth="400.0" prefHeight="406.0" prefWidth="400.0" styleClass="table">
          <columns>
@@ -34,6 +35,7 @@
             </TableColumn>
          </columns>
       </TableView>
+      <Label alignment="CENTER" prefHeight="17.0" prefWidth="402.0" text="(Right-click to delete a Status)" />
       <HBox alignment="CENTER" maxHeight="50.0" maxWidth="400.0" minWidth="50.0" prefHeight="50.0" prefWidth="400.0" spacing="10">
          <children>
             <TextField fx:id="codeField" prefHeight="31.0" prefWidth="60.0" promptText="Code" />
@@ -41,9 +43,10 @@
             <CheckBox fx:id="chkIncrements" mnemonicParsing="false" selected="true" text="Allow Increment" />
          </children>
       </HBox>
-      <HBox alignment="CENTER_RIGHT" spacing="5.0">
+      <HBox alignment="CENTER_RIGHT" spacing="10.0">
          <children>
             <Button fx:id="addButton" contentDisplay="TOP" onAction="#addStatus" text="Add" />
+            <Button fx:id="btnDone" mnemonicParsing="false" onAction="#closeScene" text="Done" />
          </children>
       </HBox>
    </children>

@@ -13,6 +13,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
@@ -22,6 +23,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.input.KeyCode;
+import javafx.stage.Stage;
 
 public final class StatusController implements Initializable {
 
@@ -34,6 +36,7 @@ public final class StatusController implements Initializable {
     @FXML private TextField codeField;
     @FXML private TextField titleField;
     @FXML private CheckBox chkIncrements;
+    @FXML private Button btnDone;
   
     //List of rankssor
     private ObservableList<Status> statusList;
@@ -224,6 +227,12 @@ public final class StatusController implements Initializable {
                     return true;
         
         return false;      
+    }
+     
+    @FXML public void closeScene(){
+         Stage stage = (Stage) btnDone.getScene().getWindow();
+         stage.close();
+        
     }
  
 }

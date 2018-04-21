@@ -1,22 +1,58 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="200.0" prefWidth="420.0" styleClass="anchor" xmlns="http://javafx.com/javafx/8.0.161" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dutyroster.LoginController">
+<AnchorPane id="AnchorPane" prefHeight="200.0" prefWidth="420.0" styleClass="anchor" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dutyroster.LoginController">
    <children>
-      <PasswordField fx:id="fieldPass1" layoutX="33.0" layoutY="47.0" prefHeight="31.0" prefWidth="253.0" promptText="Password" />
-      <Button fx:id="buttonPass1" layoutX="297.0" layoutY="47.0" mnemonicParsing="false" onAction="#userLogin" prefHeight="31.0" prefWidth="87.0" text="Login" />
-      <PasswordField fx:id="fieldPass2" layoutX="33.0" layoutY="118.0" prefHeight="31.0" prefWidth="253.0" promptText="Re-enter new password" />
-      <Button fx:id="buttonPass2" layoutX="297.0" layoutY="118.0" mnemonicParsing="false" onAction="#createPassword" prefHeight="31.0" prefWidth="87.0" text="Create" />
-      <Label fx:id="labelPass1" layoutX="34.0" layoutY="87.0" prefHeight="21.0" prefWidth="356.0" text="Password must be between 5 and 16 characters" textFill="#e04922" />
-      <Label fx:id="labelPass2" layoutX="30.0" layoutY="19.0" prefHeight="21.0" prefWidth="356.0" text="Create New Password">
-         <font>
-            <Font name="System Bold" size="15.0" />
-         </font>
-      </Label>
+      <VBox prefHeight="200.0" prefWidth="420.0" spacing="10.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+         <children>
+            <Label fx:id="labelPass1" prefHeight="21.0" prefWidth="356.0" text="Create New Password">
+               <font>
+                  <Font name="System Bold" size="15.0" />
+               </font>
+            </Label>
+            <HBox alignment="CENTER" spacing="20.0">
+               <children>
+                  <StackPane prefHeight="30.0" prefWidth="253.0">
+                     <children>
+                        <PasswordField fx:id="fieldPass1" prefHeight="30.0" promptText="Password" />
+                        <TextField fx:id="fieldText1" prefHeight="30.0" promptText="Password" />
+                     </children>
+                  </StackPane>
+                  <Button fx:id="buttonPass1" mnemonicParsing="false" onAction="#userLogin" prefHeight="31.0" prefWidth="87.0" text="Login" />
+               </children>
+            </HBox>
+            <Label fx:id="labelPass2" alignment="CENTER" prefHeight="21.0" prefWidth="400.0" text="Password must be between 5 and 16 characters" textFill="#e04922" />
+            <HBox alignment="CENTER" spacing="20.0">
+               <children>
+                  <StackPane prefHeight="30.0" prefWidth="253.0">
+                     <children>
+                        <PasswordField fx:id="fieldPass2" prefHeight="30.0" promptText="Re-enter new password" />
+                        <TextField fx:id="fieldText2" prefHeight="30.0" promptText="Re-enter new password" />
+                     </children>
+                  </StackPane>
+                  <Button fx:id="buttonPass2" mnemonicParsing="false" onAction="#createPassword" prefHeight="31.0" prefWidth="87.0" text="Create" />
+               </children>
+            </HBox>
+            <HBox alignment="BOTTOM_LEFT">
+               <children>
+                  <CheckBox fx:id="chkShow" alignment="CENTER" mnemonicParsing="false" onAction="#togglevisiblePassword" prefHeight="21.0" prefWidth="122.0" text="Show password" />
+               </children>
+               <padding>
+                  <Insets left="20.0" />
+               </padding>
+            </HBox>
+         </children>
+      </VBox>
    </children>
 </AnchorPane>

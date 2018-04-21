@@ -40,7 +40,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
@@ -234,8 +233,8 @@ public class MainController implements Initializable {
         
         if (rosterArray.isEmpty() || currentRoster==null)
             setButtonsDisabled(true);
-            
-        
+              
+    
     }    
  
     public void setDInterval(){
@@ -469,7 +468,6 @@ public class MainController implements Initializable {
            System.out.println("Can't load new scene: " + e); 
         }
     }  
-    
     @FXML private void openHelp(ActionEvent event) {
          
         try{
@@ -488,7 +486,44 @@ public class MainController implements Initializable {
            System.out.println("Can't load new scene: " + e); 
         }
     }  
-    
+    @FXML private void openAbout(ActionEvent event) {
+         
+        try{
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("AboutFXML.fxml")); 
+            Parent root1 = loader.load();
+           // CrewController eController = loader.getController();
+            Stage stage = new Stage();
+            stage.setTitle("About");
+            stage.setResizable(false);
+            Scene scene = new Scene(root1);
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setScene(scene);
+            stage.show(); 
+        }
+        catch(IOException e){
+           System.out.println("Can't load new scene: " + e); 
+        }
+    } 
+    public void openWizard(){
+
+         try{
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("WizardFXML.fxml")); 
+            Parent root1 = loader.load();
+            WizardFXMLController mController = loader.getController();
+            Stage stage = new Stage();
+            stage.setTitle("Setup");
+            stage.setResizable(false);           
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setScene(new Scene(root1));
+            stage.setMaximized(false);
+            stage.setOnHidden(e -> mController.shutDown());
+            stage.show(); 
+          
+        }
+        catch(IOException e){
+           System.out.println("Can't load new scene: " + e); 
+        }      
+    }
     @FXML private void assignDuty(){
         
         storeData();
@@ -592,7 +627,7 @@ public class MainController implements Initializable {
         
         //!!!Before switching to another month, store the current data!
         storeRosterData();
-        //========================================
+        //================
         
         selCal.set(intYear, intMonth, 1);
         lastDayOfMonth = selCal.getActualMaximum(Calendar.DAY_OF_MONTH);

@@ -17,34 +17,47 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class LoginController implements Initializable {
     
-    private final SecureFile sc = new SecureFile("Settings");
     String pass;
     @FXML private Label labelPass1,labelPass2;
     @FXML private PasswordField fieldPass1, fieldPass2;
+    @FXML private TextField fieldText1, fieldText2;
     @FXML private Button buttonPass1, buttonPass2;
+    @FXML private CheckBox chkShow;
+    private boolean isCreate;
     
     @Override
-    public void initialize(URL url, ResourceBundle rb) {     
+    public void initialize(URL url, ResourceBundle rb) { 
+        isCreate = false;    
         retrievepassword(); 
+        fieldText1.setVisible(false);
+        fieldText2.setVisible(false);
+
     }    
 
     @FXML private void showPassword(){
         buttonPass1.setVisible(true);
-        buttonPass2.setVisible(false); 
         fieldPass1.setVisible(true);
-        fieldPass2.setVisible(false);
-        labelPass1.setVisible(false);
         labelPass2.setVisible(true);
-        labelPass2.setText("Enter Your Password");
-      
+        labelPass1.setText("Enter Your Password");
+        
+        buttonPass2.setVisible(false); 
+        fieldPass2.setVisible(false);
+        labelPass2.setVisible(false);
+          
+        fieldText1.setOnKeyPressed((event) -> { 
+            if(event.getCode() == KeyCode.ENTER) checkPass(); 
+        });
+          
         fieldPass1.setOnKeyPressed((event) -> { 
             if(event.getCode() == KeyCode.ENTER) checkPass(); 
         }); 
@@ -52,19 +65,33 @@ public class LoginController implements Initializable {
     }
     
     @FXML private void showNewPassword(){
+        isCreate = true;
+        
         buttonPass1.setVisible(false);
-        buttonPass2.setVisible(true); 
+        labelPass1.setVisible(true);
         fieldPass1.setVisible(true);
         fieldPass1.setPromptText("Enter a new Password");
+        fieldText1.setPromptText("Enter a new Password");
+        labelPass2.setVisible(true);          
+        buttonPass2.setVisible(true); 
         fieldPass2.setVisible(true);
-        labelPass1.setVisible(true);
-        labelPass2.setVisible(true);  
+        
         fieldPass1.setOnKeyPressed((event) -> { 
             if(event.getCode() == KeyCode.ENTER)         
                 fieldPass2.requestFocus();
         });
+ 
+        fieldText1.setOnKeyPressed((event) -> { 
+            if(event.getCode() == KeyCode.ENTER)         
+                fieldText2.requestFocus();
+        });      
         
         fieldPass2.setOnKeyPressed((event) -> { 
+            if(event.getCode() == KeyCode.ENTER || event.getCode() == KeyCode.TAB)
+                newPassword();
+        }); 
+        
+        fieldText2.setOnKeyPressed((event) -> { 
             if(event.getCode() == KeyCode.ENTER || event.getCode() == KeyCode.TAB)
                 newPassword();
         }); 
@@ -75,12 +102,16 @@ public class LoginController implements Initializable {
     }
     
     private void checkPass(){
-        String testPass = fieldPass1.getText();
+        
+        String passW1 = (chkShow.isSelected())? fieldText1.getText() : fieldPass1.getText();
+        
         fieldPass1.clear();
         
-        if (!testPass.equals(pass) ) {
+        if (!passW1.equals(pass) ) {
             Alert alert = new Alert(AlertType.WARNING, "Wrong password. Please try again.");
             alert.showAndWait();
+            fieldPass1.clear();
+            fieldText1.clear();
         }
         else{
             Stage stage = (Stage) fieldPass1.getScene().getWindow();
@@ -96,30 +127,50 @@ public class LoginController implements Initializable {
   
     private void newPassword(){
         
-        if ( fieldPass1.getText().length()<5 || fieldPass1.getText().length()>16){
+        SecureFile sc = new SecureFile("Settings");
+        
+        String passW1 = (chkShow.isSelected())? fieldText1.getText() : fieldPass1.getText();
+        String passW2 = (chkShow.isSelected())? fieldText2.getText() : fieldPass2.getText();
+        
+        if ( passW1.length()<5 || passW1.length()>16){
             Alert alert = new Alert(AlertType.ERROR, "Password is not between 5-16 characters");
             alert.showAndWait();
             fieldPass1.clear();
             fieldPass2.clear();
+            fieldText1.clear();
+            fieldText2.clear();
             return;
         }
         
-        if ( !(fieldPass1.getText().equals(fieldPass2.getText())) ){
-            Alert alert = new Alert(AlertType.ERROR, "Passwords didn't match."
-            + fieldPass1.getText() + " != " + fieldPass2.getText());
+        if ( !(passW1.equals(passW2)) ){
+            Alert alert = new Alert(AlertType.ERROR, "Passwords didn't match.");
             alert.showAndWait();
             fieldPass1.clear();
             fieldPass2.clear();
+            fieldText1.clear();
+            fieldText2.clear();
             return;
         }
+ 
+        if ( passW2.equals("@") ){
+            Alert alert = new Alert(AlertType.ERROR, "Password cannot contain the @ symbol.");
+            alert.showAndWait();
+            fieldPass1.clear();
+            fieldPass2.clear();
+            fieldText1.clear();
+            fieldText2.clear();
+            return;
+        }       
         
-        sc.store(fieldPass1.getText());
+        
+        sc.store(passW1);
         fieldPass1.clear();
         fieldPass2.clear();
         Stage stage = (Stage) fieldPass2.getScene().getWindow();
         stage.close();
         
-        openWizard();
+       openMainScene();
+      
     }
     
     @FXML private void exitProgram(ActionEvent event) {   
@@ -128,6 +179,7 @@ public class LoginController implements Initializable {
     
     public void retrievepassword(){
         
+        SecureFile sc = new SecureFile("Settings");
         String a = sc.retrieve();
         String aArry[] = a.split("\\|", -1);
         
@@ -139,6 +191,35 @@ public class LoginController implements Initializable {
             showNewPassword();
         }
 
+    }
+    
+    public void togglevisiblePassword(ActionEvent event) {
+        
+        if (chkShow.isSelected()) {
+            
+            fieldText1.setText(fieldPass1.getText());
+            fieldText1.setVisible(true);
+            fieldPass1.setVisible(false);
+            
+            if(isCreate){
+                fieldText2.setText(fieldPass2.getText());
+                fieldText2.setVisible(true);
+                fieldPass2.setVisible(false);
+            }
+            
+            return;
+        }
+        
+        fieldPass1.setText(fieldText1.getText());
+        fieldPass1.setVisible(true);
+        fieldText1.setVisible(false);
+        
+         if(isCreate){
+            fieldPass2.setText(fieldText2.getText());
+            fieldPass2.setVisible(true);
+            fieldText2.setVisible(false);
+         }
+        
     }
     
     public void openMainScene(){
@@ -154,24 +235,23 @@ public class LoginController implements Initializable {
             stage.setMaximized(true);
             stage.setOnHidden(e -> mController.shutDown());
             stage.show();
-          
+            
+             openWizard(); 
         }
         catch(IOException e){
            System.out.println("Can't load new scene: " + e); 
         }   
         
-    }      
-    
-    public void openWizard(){
+    } 
+     public void openWizard(){
 
          try{
             FXMLLoader loader = new FXMLLoader(getClass().getResource("WizardFXML.fxml")); 
             Parent root1 = loader.load();
             WizardFXMLController mController = loader.getController();
             Stage stage = new Stage();
-            stage.setTitle("Duty Roster 1.0");
-            stage.setResizable(false);
-            stage.setResizable(false);            
+            stage.setTitle("Setup");
+            stage.setResizable(false);           
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setScene(new Scene(root1));
             stage.setMaximized(false);
@@ -181,7 +261,8 @@ public class LoginController implements Initializable {
         }
         catch(IOException e){
            System.out.println("Can't load new scene: " + e); 
-        }   
-        
+        }      
+    
     }
+
 }

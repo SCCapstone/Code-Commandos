@@ -13,6 +13,10 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
@@ -20,13 +24,16 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
 
 
 public class SettingsController implements Initializable {
 
     @FXML private TabPane tabPane;
+    @FXML private Button btnDone;
     
+    private boolean hasChanged;
     private static final int CONTROL_WIDTH = 500;
     private static final String SETTINGS_FILE = "Settings2";
     private final static String[] CATEGORYS = {"Roster", "Memorandum"};
@@ -57,6 +64,7 @@ public class SettingsController implements Initializable {
     private ArrayList<Setting> sList;
  
     public SettingsController(){
+        hasChanged = false;
         startUp();
     }    
  
@@ -80,7 +88,7 @@ public class SettingsController implements Initializable {
                 TextArea textA = (TextArea) tabPane.lookup("#" + s.getId());
                 
                 if( textA!=null && !(textA.getText().equals( s.getText() ) ) )
-                        s.setText(textA.getText());   
+                    s.setText(textA.getText());   
 
             }
             else{
@@ -95,6 +103,14 @@ public class SettingsController implements Initializable {
         }
         
         storeData();
+        
+        hasChanged = false;
+        
+        Alert alert = new Alert(Alert.AlertType.INFORMATION, "Settings have been saved.");
+        alert.setTitle("Upate Settings");
+        alert.showAndWait();
+
+        
     }
    
     public void setupArray(){
@@ -119,6 +135,7 @@ public class SettingsController implements Initializable {
         //Create Tabs
         Tab tab = new Tab();
         tab.setText(CATEGORYS[tabIndex]);
+        
         VBox vbox = new VBox();
         vbox.setPadding(new Insets(10, 10, 10, 10));
         vbox.setSpacing(5);
@@ -135,12 +152,14 @@ public class SettingsController implements Initializable {
                 TextField textField = new TextField();
                     textField.setId(s.getId());
                     textField.setText(text);
+                    textField.setOnKeyTyped(e -> {hasChanged = true;});
                     
                     textField.setMinWidth(CONTROL_WIDTH);
  
                     TextArea textArea = new TextArea(s.getId());
                     textArea.setId(s.getId());
                     textArea.setText(text);
+                    textArea.setOnKeyTyped(e -> {hasChanged = true;});
                     textArea.setMaxSize(CONTROL_WIDTH, 150);
                 
                     hbox.getChildren().addAll(new Label(SETTINGS[tabIndex][i++]), (s.isTextArea())? textArea : textField);
@@ -202,8 +221,23 @@ public class SettingsController implements Initializable {
             if(s.getId().equals(sID))
                 return s.getText(); 
 
-
         return "";
+
+    }
+    
+    @FXML public void closeScene(){
+        Alert alert;
+        alert = new Alert(AlertType.CONFIRMATION, "Do you wish to ignore changes?", ButtonType.YES, ButtonType.CANCEL);
+        alert.setTitle("Changes Were Made");
+        
+        if(hasChanged){
+            alert.showAndWait();
+        }
+        
+        if (!hasChanged || alert.getResult() == ButtonType.YES) {
+            Stage stage = (Stage) btnDone.getScene().getWindow();
+            stage.close(); 
+        }
 
     }
 

@@ -52,13 +52,16 @@
             </Menu>
             <Menu text="_Help">
               <items>
-                <MenuItem mnemonicParsing="false" onAction="#openHelp" text="About">
+                <MenuItem mnemonicParsing="false" onAction="#openAbout" text="About">
+                    </MenuItem>
+                <MenuItem mnemonicParsing="false" onAction="#openHelp" text="Help">
                      <accelerator>
                         <KeyCodeCombination alt="UP" code="F1" control="UP" meta="UP" shift="UP" shortcut="UP" />
                      </accelerator></MenuItem>
+                     <MenuItem mnemonicParsing="false" onAction="#openWizard" text="Step by Step">
+                    </MenuItem>
               </items>
             </Menu>
-
           </menus>
         </MenuBar>
       <HBox maxHeight="-Infinity" minWidth="-Infinity" prefHeight="44.0" prefWidth="200.0">

@@ -12,6 +12,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SelectionMode;
@@ -19,6 +20,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
+import javafx.stage.Stage;
 
 public class RankController implements Initializable {
 
@@ -26,6 +28,7 @@ public class RankController implements Initializable {
     @FXML private TableView<Rank> tableView;
     @FXML private TextField rankField;
     @FXML private TableColumn<Rank,Integer> sort;
+    @FXML private Button btnDone;
  
     //List of rankssor
     private ObservableList<Rank> rankList;
@@ -294,6 +297,12 @@ public class RankController implements Initializable {
         rankList.add(new Rank(countRanks()+1,rank));
              
     } 
+    
+    @FXML public void closeScene(){
+         Stage stage = (Stage) btnDone.getScene().getWindow();
+         stage.close();
+        
+    }
     
     //Delete rank function
     public void delRanks(String[] ranks){
