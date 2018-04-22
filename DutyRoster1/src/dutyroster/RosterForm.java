@@ -13,14 +13,20 @@ import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.Font.FontFamily;
 import com.itextpdf.text.PageSize;
+import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Phrase;
 import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Locale;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -28,7 +34,9 @@ import javafx.collections.ObservableList;
 public class RosterForm {
     
 
-
+    private final ArrayList<Blockout> blockoutArray = new ArrayList();
+    private final ArrayList<Status> statusArray = new ArrayList();
+    
     private final ObservableList<ObservableList<StringProperty>> rowData = FXCollections.observableArrayList();
     private static final String DATE_FORMAT = "d MMM yy";
     private static final float WIDTH_1 = 1.5f;
@@ -47,9 +55,11 @@ public class RosterForm {
     private final String gNote;
     private final String gOrg;
     
-    public RosterForm(ObservableList<ObservableList<StringProperty>> tempRows, String roster, int year, int month){
-
+    public RosterForm(ObservableList<ObservableList<StringProperty>> tempRows, ArrayList<Blockout> blocks, String roster, int year, int month){
+        
         rowData.addAll(tempRows);
+        blockoutArray.addAll(blocks);
+        loadStatusData();
         cYear = year;
         cMonth = month;
         rosterTitle = roster;
@@ -66,6 +76,10 @@ public class RosterForm {
     
     
     public void makePDF() throws DocumentException, IOException{
+
+        ArrayList<Blockout> remarks = new ArrayList<>();
+        remarks = getRemarks();
+        
 
         String rTitle = "Form_" + rosterTitle + "_" + cYear + "_" + cMonth; 
         ExportFile ex = new ExportFile(rTitle);
@@ -95,9 +109,26 @@ public class RosterForm {
             PdfPTable table = newTable(i+1, pages);
             document.add( table); 
         }
-       
-        document.close();       
-           
+        
+        
+        if(!remarks.isEmpty()){
+           document.newPage(); 
+         
+           Paragraph remark;   
+
+           for (Blockout b : remarks){
+               String code = lookupStatusCode(b.getStatus());
+               
+               remark = new Paragraph(
+                       "(" + b.getFromDate() + " - " + b.getToDate() + ") " 
+                            + b.getName() + ": " + code + "-" + b.getStatus() + "; "
+                            + b.getReason()
+               );     
+               document.add(remark);
+           }
+
+        }
+        document.close();            
     }
     
     public PdfPTable newTable(int page, int pages) throws DocumentException, IOException {
@@ -110,6 +141,8 @@ public class RosterForm {
         String startDate = milDate.format(selCal.getTime()); 
         selCal.set(cYear, (cMonth-1), lastDay);
         String endDate = milDate.format(selCal.getTime());
+        
+        
         
         PdfPTable table = new PdfPTable(43);
         table.setWidthPercentage(100);
@@ -438,6 +471,75 @@ public class RosterForm {
         table.addCell(cell);           
         return table; 
 
+    }
+    
+    private ArrayList<Blockout> getRemarks(){
+           
+        ArrayList<Blockout> tmpBlocks = new ArrayList<>();
+        
+        Calendar monthStart = Calendar.getInstance();
+        monthStart.set(cYear, (cMonth-1), 1);
+        int lastDay = monthStart.getActualMaximum(Calendar.DAY_OF_MONTH);
+        Calendar monthEnd = Calendar.getInstance();
+        monthEnd.set(cYear, (cMonth-1), lastDay);
+        
+        SimpleDateFormat sdf = new SimpleDateFormat("d MMM yyyy", Locale.ENGLISH);
+        Calendar startDate = Calendar.getInstance();
+        Calendar endDate = Calendar.getInstance();    
+        
+        for (Blockout b : blockoutArray){  
+            
+            try {
+                startDate.setTime( sdf.parse( b.getFromDate() ) );
+                endDate.setTime( sdf.parse( b.getToDate() ) );
+                endDate.add(Calendar.DATE, 1); 
+            } catch (ParseException ex) {
+                Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+                
+            if ( startDate.after(monthStart) && endDate.before(monthEnd) ){
+                tmpBlocks.add(b); 
+            }
+                
+        }
+        
+        return tmpBlocks;   
+    }
+    
+    private String lookupStatusCode(String status){
+        
+        for (Status s : statusArray)
+            if (s.getTitle().equals(status))
+                return s.getCode();
+        
+        return "";
+    } 
+    
+    public void loadStatusData(){
+        
+          if(!statusArray.isEmpty()) 
+        statusArray.clear();
+        
+        SecureFile sc = new SecureFile("Status");
+        String a = sc.retrieve();
+      
+        String aArry[] = a.split("\\|", -1);
+        for (String b : aArry){
+            
+            if (b.length() > 2){
+                
+                String bArry[] = b.split("\\@", -1);
+                
+                if(bArry[0].length() > 0 && bArry[1].length() > 0){
+                    
+                    boolean incs = ( bArry[2].equals("1") );
+                    String sCode = Tools.replaceSpecialChars(bArry[0]);
+                    String sTitle = Tools.replaceSpecialChars(bArry[1]);
+                    
+                    statusArray.add(  new Status(sCode, sTitle, incs)  );  
+                }
+            }
+        }
     }
 
 }   

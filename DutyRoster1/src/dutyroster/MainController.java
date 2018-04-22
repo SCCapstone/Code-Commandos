@@ -97,6 +97,7 @@ public class MainController implements Initializable {
     private final ArrayList<Holiday> holidayArray = new ArrayList(); 
     private final ArrayList<Status> statusArray = new ArrayList();
     private final ArrayList<Blockout> blockoutArray = new ArrayList();
+    
     private Roster currentRoster = new Roster();
     //Extracting Data from encrypted file
 
@@ -554,9 +555,9 @@ public class MainController implements Initializable {
         comboYear.getSelectionModel().select(Integer.toString(curYear));
     }
     
-    @FXML public void printRosterForm(ActionEvent event){
+    @FXML public void printRosterForm(ActionEvent event){ 
         
-        RosterForm form = new RosterForm(rowData,currentRoster.getTitle(),curYear,curMonth);
+        RosterForm form = new RosterForm(rowData, blockoutArray, currentRoster.getTitle(), curYear, curMonth);
         
         try {
             form.makePDF();
@@ -637,15 +638,15 @@ public class MainController implements Initializable {
         tableView.getColumns().clear();
  
         TableColumn colRank = createColumn(0, "Grade");
-        colRank.setPrefWidth(150);
-        colRank.setMaxWidth(300);
+        colRank.setPrefWidth(50);
+        colRank.setMaxWidth(150);
         colRank.setEditable(false);
         colRank.setSortable(false);
         tableView.getColumns().add(colRank);
         
         TableColumn colName = createColumn(1, "Name");
-        colName.setPrefWidth(300);
-        colName.setMaxWidth(600);
+        colName.setPrefWidth(180);
+        colName.setMaxWidth(300);
         colName.setEditable(false);
         colName.setSortable(false);
         tableView.getColumns().add(colName);
@@ -842,9 +843,6 @@ public class MainController implements Initializable {
         RosterData rd = new RosterData();
         Calendar thisMonth = Calendar.getInstance();
         
-        String lowerOut = lowerOutput.getText();
-        
-        
         rowData.clear();
         for(Employee crew: aCrews){
             
@@ -916,7 +914,7 @@ public class MainController implements Initializable {
         else
            setButtonsDisabled(false); 
         
-        lowerOut = "Total assigned: " + rowData.size() + "; " + strMessage;
+        String lowerOut = "Total assigned: " + rowData.size() + "; " + strMessage;
         lowerOutput.setText(lowerOut);
         
         tableView.refresh();
@@ -1321,7 +1319,7 @@ public class MainController implements Initializable {
     
     public void loadBlockouts(){
         
-        if(!blockoutArray.isEmpty()) 
+      
         blockoutArray.clear();
         
         SecureFile scBO = new SecureFile("Blockouts");
@@ -1367,7 +1365,10 @@ public class MainController implements Initializable {
                 Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex);
             }
                 
-            if (b.getName().equals(employee) && curDate.after(startDate) && curDate.before(endDate)){
+            if ( b.getName().equals(employee)
+                    && ((curDate.after(startDate)
+                    && (curDate.before(endDate) || (curDate.equals(endDate))))
+                    )){
                 return lookupStatusCode(b.getStatus());
             }
                 
@@ -1434,8 +1435,8 @@ public class MainController implements Initializable {
                 return h.getName();
             
         }    
-
         return "";
     }
+
 }
    

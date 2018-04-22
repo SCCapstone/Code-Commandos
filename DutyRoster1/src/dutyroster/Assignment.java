@@ -553,7 +553,10 @@ public class Assignment {
                 Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex);
             }
                 
-            if (b.getName().equals(employee) && curDate.after(startDate) && curDate.before(endDate)){
+            if ( b.getName().equals(employee)
+                    && ((curDate.after(startDate)
+                    && (curDate.before(endDate) || (curDate.equals(endDate))))
+                    )){
                 return lookupStatusCode(b.getStatus());
             }
                 

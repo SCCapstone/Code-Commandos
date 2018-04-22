@@ -56,7 +56,7 @@ public class WizardFXMLController extends MainController implements Initializabl
         
         SecureFile sc = new SecureFile("Settings");
         String checked= (chkWizard.isSelected())? "1" : "0";
-        System.out.print(pass + "|" + checked);
+      
         sc.store(pass + "|" + checked);
 
     }
