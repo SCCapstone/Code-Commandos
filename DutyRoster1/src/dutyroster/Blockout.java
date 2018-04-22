@@ -6,9 +6,15 @@
 package dutyroster;
 
 //import javafx.beans.property.SimpleBooleanProperty;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.beans.property.SimpleStringProperty;
 
-public class Blockout {
+public class Blockout implements Comparable<Blockout>{
   
    //SimipleString is a string. It works better with tableview
    private final SimpleStringProperty name = new SimpleStringProperty("");
@@ -17,6 +23,9 @@ public class Blockout {
    private final SimpleStringProperty fromDate = new SimpleStringProperty("");
    private final SimpleStringProperty toDate = new SimpleStringProperty("");
 
+   private SimpleDateFormat sdf = new SimpleDateFormat("d MMM yyyy", Locale.ENGLISH);
+   
+   
     //Constructor 
     public Blockout() {
         name.set(null); 
@@ -97,6 +106,26 @@ public class Blockout {
         && this.reason.equals(that.reason)
         && this.fromDate.equals(that.fromDate)
         && this.toDate.equals(that.toDate);
+    }
+
+    @Override
+    public int compareTo(Blockout that) {
+  
+       
+       
+        Calendar thisDate = Calendar.getInstance();
+        Calendar thatDate = Calendar.getInstance();    
+
+       try {
+           thisDate.setTime( sdf.parse( this.getFromDate() ) );
+           thatDate.setTime( sdf.parse( that.getFromDate() ) );
+       } catch (ParseException ex) {
+           Logger.getLogger(Blockout.class.getName()).log(Level.SEVERE, null, ex);
+       }
+        
+        
+        return ( thisDate.before(thatDate) ? -1 : thisDate.equals(thatDate) ? 0 : 1);     
+        
     }
     
 }

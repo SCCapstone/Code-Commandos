@@ -24,6 +24,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -77,9 +78,10 @@ public class RosterForm {
     
     public void makePDF() throws DocumentException, IOException{
 
-        ArrayList<Blockout> remarks = new ArrayList<>();
+         ArrayList<Blockout> remarks = new ArrayList<>();
         remarks = getRemarks();
         
+        Collections.sort(remarks); 
 
         String rTitle = "Form_" + rosterTitle + "_" + cYear + "_" + cMonth; 
         ExportFile ex = new ExportFile(rTitle);
@@ -497,7 +499,16 @@ public class RosterForm {
                 Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex);
             }
                 
-            if ( startDate.after(monthStart) && endDate.before(monthEnd) ){
+            if ( 
+                    ( (startDate.before(monthStart) || startDate.equals(monthStart))
+                    && (endDate.after(monthStart) || endDate.equals(monthStart)) )
+                    ||
+                    ( (startDate.before(monthEnd) || startDate.equals(monthEnd))
+                    && (endDate.after(monthEnd) || endDate.equals(monthEnd)) )
+                    ||
+                    ( (startDate.after(monthStart) || startDate.equals(monthStart))
+                    && (endDate.before(monthEnd) || endDate.equals(monthEnd)) )               
+                    ) {
                 tmpBlocks.add(b); 
             }
                 

@@ -8,6 +8,7 @@ package dutyroster;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Collections;
 import java.util.ResourceBundle;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -71,7 +72,8 @@ public class BlockoutController implements Initializable {
         blockoutList = FXCollections.observableArrayList();
              
         loadBlockouts();
-
+        Collections.sort(blockoutList); 
+       
         //Scene formatting
         setDatePickers();
 
@@ -179,7 +181,10 @@ public class BlockoutController implements Initializable {
 
 
         blockoutList.add( new Blockout(sName,sStatus,sReason,tmpFrom,tmpTo) );
-        tableView.sort();
+        
+        Collections.sort(blockoutList); 
+        tableView.setItems(null);
+        tableView.setItems(blockoutList);
         
         //Clear form controls
         nameCombo.setValue(null);
@@ -264,9 +269,10 @@ public class BlockoutController implements Initializable {
                 b.setToDate(tmpTo);           
                 setCancel();
             
+                Collections.sort(blockoutList); 
+                tableView.setItems(null);
                 tableView.setItems(blockoutList);
-                tableView.refresh();
-                tableView.sort();
+                
             }
             
         });
@@ -369,7 +375,9 @@ public class BlockoutController implements Initializable {
                     ));
                 }
             }    
-        }           
+        } 
+        
+        
     }
     
     /**

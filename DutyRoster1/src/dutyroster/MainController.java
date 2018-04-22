@@ -1366,9 +1366,9 @@ public class MainController implements Initializable {
             }
                 
             if ( b.getName().equals(employee)
-                    && ((curDate.after(startDate)
-                    && (curDate.before(endDate) || (curDate.equals(endDate))))
-                    )){
+                    && ( curDate.after(startDate) || curDate.equals(startDate) ) 
+                    && ( curDate.before(endDate) || curDate.equals(endDate) ) )
+                    {
                 return lookupStatusCode(b.getStatus());
             }
                 
@@ -1431,7 +1431,7 @@ public class MainController implements Initializable {
                 Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex);
             }
             
-            if ( curDate.after(startDate) && curDate.before(endDate) )
+            if ( (curDate.after(startDate) || curDate.equals(startDate)) && ( curDate.before(endDate) || curDate.equals(endDate)) )
                 return h.getName();
             
         }    
