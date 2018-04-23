@@ -5,6 +5,7 @@
  */
 package dutyroster;
 
+import com.itextpdf.text.Chunk;
 import java.io.File;
 import java.io.FileOutputStream;
 import com.itextpdf.text.Document;
@@ -117,7 +118,10 @@ public class RosterForm {
            document.newPage(); 
          
            Paragraph remark;   
-
+            Font font = new Font(FontFamily.HELVETICA,11);
+            Font boldFont = new Font(FontFamily.HELVETICA,11,Font.UNDERLINE);
+            remark = new Paragraph("Remarks:",boldFont);
+            document.add(remark);
            for (Blockout b : remarks){
                String code = lookupStatusCode(b.getStatus());
                
@@ -125,7 +129,7 @@ public class RosterForm {
                        "(" + b.getFromDate() + " - " + b.getToDate() + ") " 
                             + b.getName() + ": " + code + "-" + b.getStatus() + "; "
                             + b.getReason()
-               );     
+               ,font);     
                document.add(remark);
            }
 
