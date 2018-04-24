@@ -368,7 +368,7 @@ public class BlockoutController implements Initializable {
                     String eStatus = Tools.replaceSpecialChars(bArry[1]);
                     String eReason = (!bArry[2].isEmpty()) ? Tools.replaceSpecialChars(bArry[2]) : "";
                     blockoutList.add( new Blockout(
-                           eName,
+                            eName,
                             eStatus,
                             eReason,
                             bArry[3],

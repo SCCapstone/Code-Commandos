@@ -42,8 +42,9 @@ public final class StatusController implements Initializable {
   
     //List of rankssor
     private ObservableList<Status> statusList;
-    
+    private boolean edit;
     private String strData;
+    private ObservableList<Status> editList;
     
     public StatusController(){
     startUp();
@@ -59,7 +60,7 @@ public final class StatusController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
 
         startUp(); 
-        
+        edit = false;
         //Add multi select to table
         tableView.getSelectionModel().setSelectionMode(
                 SelectionMode.MULTIPLE
@@ -91,11 +92,11 @@ public final class StatusController implements Initializable {
             row.setOnMouseClicked(event -> {
                 if (event.getClickCount() == 2 && (! row.isEmpty()) ) {
                     Status rowData = row.getItem();
-                    setEdit(rowData);
+                    ObservableList<Status> items = tableView.getSelectionModel().getSelectedItems();
+                    setEdit(rowData, items);
                 }
         });
-            
-            return row;
+        return row;
         });
         
         //used to edit the tables.
@@ -187,24 +188,29 @@ public final class StatusController implements Initializable {
             alert.showAndWait();
         return;
         }
+        if(!edit){
+            if (titleExists(titleField.getText())){
+                alert = new Alert(Alert.AlertType.ERROR, "Each title must be a unique value.");
+                alert.setTitle("Status Already Exists");
+                alert.showAndWait();
+                return;
+            }
         
-        if (titleExists(titleField.getText())){
-             alert = new Alert(Alert.AlertType.ERROR, "Each title must be a unique value.");
-             alert.setTitle("Status Already Exists");
-             alert.showAndWait();
-          return;
+            if (codeField.getText().length() > 1){
+                alert = new Alert(Alert.AlertType.ERROR, "Code Field can only contain one value");
+                alert.setTitle("Code Length Too Long");
+                alert.showAndWait();
+                return;
+            }
+        
+            boolean incs = chkIncrements.isSelected();
+            statusList.add(  new Status(codeField.getText(),titleField.getText(), incs)  );
         }
-        
-        if (codeField.getText().length() > 1){
-             alert = new Alert(Alert.AlertType.ERROR, "Code Field can only contain one value");
-             alert.setTitle("Code Length Too Long");
-             alert.showAndWait();
-          return;
+        else{
+            deleteStatus(editList);
+            boolean incs = chkIncrements.isSelected();
+            statusList.add(  new Status(codeField.getText(),titleField.getText(), incs)  );
         }
-        
-        boolean incs = chkIncrements.isSelected();
-        statusList.add(  new Status(codeField.getText(),titleField.getText(), incs)  );
-        
         updateSort();
     }
     
@@ -247,14 +253,15 @@ public final class StatusController implements Initializable {
         return false;      
     }
     
-    private void setEdit(Status block){
-         
-        /*oldBlock = block;
-        codeField.setValue(block.getName());
-        titleField.setValue(block.getStatus());
-        buUpdate.setVisible(true);
-        buCancel.setVisible(true);
-        buAdd.setVisible(false);*/
+    private void setEdit(Status stat, ObservableList<Status> tmpList){
+        
+        codeField.setText(stat.getCode());
+        titleField.setText(stat.getTitle());
+        chkIncrements.setSelected(stat.getIncrements());
+        if (tmpList==null)
+            return;
+        edit=true;
+        editList = tmpList;
     }
      
     @FXML public void closeScene(){
