@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.geometry.Point3D?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Tab?>
@@ -12,17 +13,17 @@
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.text.TextFlow?>
 
-<AnchorPane id="anchorPane" prefHeight="400.0" prefWidth="690.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dutyroster.HelpController">
+<AnchorPane id="anchorPane" prefHeight="400.0" prefWidth="690.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dutyroster.HelpController">
    <children>
       <VBox spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <TabPane prefHeight="400.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE">
+            <TabPane prefHeight="400.0" prefWidth="690.0" tabClosingPolicy="UNAVAILABLE">
               <tabs>
                 <Tab text="Rosters">
                      <content>
                         <AnchorPane>
                            <children>
-                              <ScrollPane prefHeight="327.0" prefWidth="690.0">
+                              <ScrollPane prefHeight="327.0" prefWidth="690.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
                                  <content>
                                     <VBox minWidth="-Infinity" prefHeight="846.0" prefWidth="672.0" spacing="10.0" style="-fx-background-color: ffffff;">
                                        <children>
@@ -115,14 +116,17 @@
                                  </content>
                               </ScrollPane>
                            </children>
+                           <rotationAxis>
+                              <Point3D />
+                           </rotationAxis>
                         </AnchorPane>
                      </content>
                   </Tab>
                 <Tab text="Grade/Employees">
                      <content>
-                        <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                        <AnchorPane prefHeight="200.0" prefWidth="690.0">
                            <children>
-                              <ScrollPane prefHeight="327.0" prefWidth="690.0">
+                              <ScrollPane prefHeight="327.0" prefWidth="690.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
                                  <content>
                                     <VBox minWidth="-Infinity" prefWidth="672.0" spacing="10.0" style="-fx-background-color: ffffff;">
                                        <children>
@@ -139,7 +143,7 @@
                                                 <Insets left="10.0" />
                                              </VBox.margin>
                                           </Text>
-                                          <TextFlow prefHeight="120.0" prefWidth="600.0">
+                                          <TextFlow prefHeight="120.0" prefWidth="640.0">
                                              <children>
                                                 <Text strokeType="OUTSIDE" strokeWidth="0.0" text="To add a grade, click on Tools select Grades in the drop down list. Enter the name of the grade in the text box down below and select add. Grades can be prioritized by selecting the grade on the list by using move up and move down buttons. To delete a Grade simply right click on the grade and select delete option.">
                                                    <font>
@@ -159,7 +163,7 @@
                                                 <Insets left="10.0" />
                                              </VBox.margin>
                                           </Text>
-                                          <TextFlow prefWidth="600.0">
+                                          <TextFlow prefWidth="640.0">
                                              <children>
                                                 <Text strokeType="OUTSIDE" strokeWidth="0.0" text="The employee editor provides the tools to assign each employee to a duty. To access the editor, go to Tools and select Employees in the drop down list. There are two options to add employees: Select the “import from .csv” option to import an employee list, or manually insert each employee by entering in a name, selecting grade and clicking the add button.  The employee name should be unique, and it is recommended to have the employee name be in the following format: Last, First. M. To edit an employee you can double click on the name and grade and you press enter once the correction is made. To delete an employee simply right click on the employee and select delete option." wrappingWidth="617.474609375">
                                                    <font>
@@ -179,7 +183,7 @@
                                                 <Insets left="10.0" />
                                              </VBox.margin>
                                           </Text>
-                                          <TextFlow prefWidth="600.0">
+                                          <TextFlow prefWidth="640.0">
                                              <children>
                                                 <Text strokeType="OUTSIDE" strokeWidth="0.0" text="To import a list of employees into the program you can create a .csv file using Microsoft excel. CSV file should contain grade and employee in separate columns with grade first and employee second. When saving the file, make sure it is saved as a .csv file. Once it’s saved, you can import the file from the employee editor." wrappingWidth="668.4700107574463">
                                                    <font>
@@ -204,9 +208,9 @@
                   </Tab>
                 <Tab text="Status/Blockouts">
                      <content>
-                        <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                        <AnchorPane prefHeight="200.0" prefWidth="690.0">
                            <children>
-                              <ScrollPane prefHeight="327.0" prefWidth="690.0">
+                              <ScrollPane prefHeight="327.0" prefWidth="690.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
                                  <content>
                                     <VBox minWidth="-Infinity" prefWidth="672.0" spacing="10.0" style="-fx-background-color: ffffff;">
                                        <children>
@@ -280,9 +284,9 @@
                   </Tab>
                 <Tab text="Holidays">
                      <content>
-                        <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                        <AnchorPane prefHeight="200.0" prefWidth="690.0">
                            <children>
-                              <ScrollPane prefHeight="327.0" prefWidth="690.0">
+                              <ScrollPane prefHeight="327.0" prefWidth="690.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
                                  <content>
                                     <VBox minWidth="-Infinity" prefWidth="672.0" spacing="10.0" style="-fx-background-color: ffffff;">
                                        <children>
@@ -335,6 +339,9 @@
                      </content>
                   </Tab>
               </tabs>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
             </TabPane>
             <HBox alignment="TOP_RIGHT" spacing="10.0">
                <VBox.margin>
