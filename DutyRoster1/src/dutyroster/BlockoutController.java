@@ -268,11 +268,12 @@ public class BlockoutController implements Initializable {
                 b.setFromDate(tmpFrom);
                 b.setToDate(tmpTo);           
                 setCancel();
-            
+             
                 Collections.sort(blockoutList); 
                 tableView.setItems(null);
                 tableView.setItems(blockoutList);
-                
+                tableView.sort();
+                tableView.refresh();
             }
             
         });
@@ -331,7 +332,7 @@ public class BlockoutController implements Initializable {
         blockoutList.forEach((b) -> { 
             String eName = Tools.removeSpecialChars(b.getName());
             String eStatus = Tools.removeSpecialChars(b.getStatus());
-            String eReason = Tools.removeSpecialChars(b.getReason());
+            String eReason = (!b.getReason().isEmpty()) ? Tools.removeSpecialChars(b.getReason()) : "";
             strData += eName 
                     + "@" + eStatus
                     + "@" + eReason
@@ -365,7 +366,7 @@ public class BlockoutController implements Initializable {
                 if(bArry[0].length() > 0 && bArry[1].length() > 0){
                     String eName = Tools.replaceSpecialChars(bArry[0]);
                     String eStatus = Tools.replaceSpecialChars(bArry[1]);
-                    String eReason = Tools.replaceSpecialChars(bArry[2]);
+                    String eReason = (!bArry[2].isEmpty()) ? Tools.replaceSpecialChars(bArry[2]) : "";
                     blockoutList.add( new Blockout(
                            eName,
                             eStatus,
