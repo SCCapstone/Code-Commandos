@@ -6,6 +6,7 @@
 package dutyroster;
 
 import java.net.URL;
+import java.time.LocalDate;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -19,6 +20,7 @@ import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.CheckBoxTableCell;
@@ -83,6 +85,19 @@ public final class StatusController implements Initializable {
         menu.getItems().add(mi1);
         tableView.setContextMenu(menu);
         
+        //Set row double-click for editing
+        tableView.setRowFactory( tv -> {
+            TableRow<Status> row = new TableRow<>();
+            row.setOnMouseClicked(event -> {
+                if (event.getClickCount() == 2 && (! row.isEmpty()) ) {
+                    Status rowData = row.getItem();
+                    setEdit(rowData);
+                }
+        });
+            
+            return row;
+        });
+        
         //used to edit the tables.
         tableView.setEditable(true); 
        
@@ -144,6 +159,9 @@ public final class StatusController implements Initializable {
     @FXML 
     protected void addStatus(ActionEvent event) {
         statusAdd();
+        codeField.clear();
+        titleField.clear();
+        chkIncrements.setSelected(false);
     }
     
     @FXML
@@ -227,6 +245,16 @@ public final class StatusController implements Initializable {
                     return true;
         
         return false;      
+    }
+    
+    private void setEdit(Status block){
+         
+        /*oldBlock = block;
+        codeField.setValue(block.getName());
+        titleField.setValue(block.getStatus());
+        buUpdate.setVisible(true);
+        buCancel.setVisible(true);
+        buAdd.setVisible(false);*/
     }
      
     @FXML public void closeScene(){
