@@ -35,7 +35,6 @@ import javafx.collections.ObservableList;
 
 public class RosterForm {
     
-
     private final ArrayList<Blockout> blockoutArray = new ArrayList();
     private final ArrayList<Status> statusArray = new ArrayList();
     
@@ -76,10 +75,9 @@ public class RosterForm {
 
     }
     
-    
     public void makePDF() throws DocumentException, IOException{
 
-         ArrayList<Blockout> remarks = new ArrayList<>();
+        ArrayList<Blockout> remarks = new ArrayList<>();
         remarks = getRemarks();
         
         Collections.sort(remarks); 
@@ -112,17 +110,17 @@ public class RosterForm {
             PdfPTable table = newTable(i+1, pages);
             document.add( table); 
         }
-        
-        
+
         if(!remarks.isEmpty()){
            document.newPage(); 
          
-           Paragraph remark;   
+            Paragraph remark;   
             Font font = new Font(FontFamily.HELVETICA,11);
             Font boldFont = new Font(FontFamily.HELVETICA,11,Font.UNDERLINE);
             remark = new Paragraph("Remarks:",boldFont);
             document.add(remark);
-           for (Blockout b : remarks){
+            
+            for (Blockout b : remarks){
                String code = lookupStatusCode(b.getStatus());
                
                remark = new Paragraph(

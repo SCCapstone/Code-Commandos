@@ -365,7 +365,13 @@ public class MainController implements Initializable {
            
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setScene(sceneStatus2);
-            stage.setOnHidden(e -> eController.shutDown());
+            stage.setOnHidden(e -> { 
+                eController.shutDown();
+                loadStatusData();
+                loadBlockouts();
+                updateCrew();
+
+            });
             stage.show(); 
           
         }
@@ -390,6 +396,7 @@ public class MainController implements Initializable {
             stage.setScene(sceneStatus2);
             stage.setOnHidden(e -> {
                 BOController.shutDown();
+                loadStatusData();
                 loadBlockouts();
                 updateCrew();
                     });
@@ -469,6 +476,7 @@ public class MainController implements Initializable {
            System.out.println("Can't load new scene: " + e); 
         }
     }  
+    
     @FXML private void openHelp(ActionEvent event) {
          
         try{
@@ -487,6 +495,7 @@ public class MainController implements Initializable {
            System.out.println("Can't load new scene: " + e); 
         }
     }  
+    
     @FXML private void openAbout(ActionEvent event) {
          
         try{
@@ -505,6 +514,7 @@ public class MainController implements Initializable {
            System.out.println("Can't load new scene: " + e); 
         }
     } 
+    
     public void openWizard(){
 
          try{
@@ -517,7 +527,14 @@ public class MainController implements Initializable {
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setScene(new Scene(root1));
             stage.setMaximized(false);
-            stage.setOnHidden(e -> mController.shutDown());
+            stage.setOnHidden(e -> {
+                mController.shutDown();
+                loadStatusData();
+                loadBlockouts();
+                loadHolidays();
+                setDate(curYear, curMonth-1);
+                    
+                    });
             stage.show(); 
           
         }
@@ -525,6 +542,7 @@ public class MainController implements Initializable {
            System.out.println("Can't load new scene: " + e); 
         }      
     }
+    
     @FXML private void assignDuty(){
         
         storeData();
@@ -1294,7 +1312,7 @@ public class MainController implements Initializable {
 
     public void loadStatusData(){
         
-          if(!statusArray.isEmpty()) 
+        
         statusArray.clear();
         
         SecureFile sc = new SecureFile("Status");
@@ -1319,7 +1337,6 @@ public class MainController implements Initializable {
     
     public void loadBlockouts(){
         
-      
         blockoutArray.clear();
         
         SecureFile scBO = new SecureFile("Blockouts");

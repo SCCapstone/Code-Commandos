@@ -18,6 +18,10 @@ import javafx.stage.Stage;
 
 public class Driver extends Application {
     
+    public static void main(String[] args) {
+        launch(args);
+    }
+    
     @Override
     public void start(Stage stage) {
         System.out.println("java version: "+System.getProperty("java.version"));

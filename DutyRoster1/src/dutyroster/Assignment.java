@@ -245,7 +245,7 @@ public class Assignment {
                     if(tResting < rRInterval) 
                         onRest = true; 
 
-
+                    
                     if( c < needed && onBlock.isEmpty() && !onDuty && !onRest && !upcomingRest && !upcomingDuty){
                         
                         //Place on duty
@@ -279,8 +279,12 @@ public class Assignment {
                         else if(!onBlock.isEmpty() || onRest || upcomingDuty || upcomingRest){
                             
                             needed++;
-                            if(c < needed || !onBlock.isEmpty()){
-                                assignees.get(c).setStatusCode(REST);
+                            if(c < needed || !onBlock.isEmpty()){                 
+                                
+                                if(!onBlock.isEmpty())
+                                    assignees.get(c).setStatusCode(onBlock);
+                                else
+                                    assignees.get(c).setStatusCode(REST);
                                 //Since the increment already occured, the only way to
                                 //make it seem as if it stopped is to just take one back here
                                 if(isHol && rHolidays)
@@ -324,8 +328,7 @@ public class Assignment {
              alert.setTitle("Possible assignment errors");
              alert.showAndWait();
         }
-        
-        
+           
         return rosterLevel;       
     }
     
