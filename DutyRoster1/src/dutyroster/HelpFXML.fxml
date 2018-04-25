@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.geometry.Point3D?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Tab?>
@@ -16,15 +17,15 @@
    <children>
       <VBox spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <TabPane prefHeight="400.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE">
+            <TabPane prefHeight="400.0" prefWidth="690.0" tabClosingPolicy="UNAVAILABLE">
               <tabs>
                 <Tab text="Rosters">
                      <content>
                         <AnchorPane>
                            <children>
-                              <ScrollPane hbarPolicy="NEVER" layoutY="14.0" style="-fx-background-color: ffffff;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                              <ScrollPane prefHeight="327.0" prefWidth="690.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
                                  <content>
-                                    <VBox prefHeight="846.0" prefWidth="678.0" spacing="10.0" style="-fx-background-color: ffffff;">
+                                    <VBox minWidth="-Infinity" prefHeight="846.0" prefWidth="672.0" spacing="10.0" style="-fx-background-color: ffffff;">
                                        <children>
                                           <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Rosters" wrappingWidth="172.80336952209473">
                                              <font>
@@ -115,16 +116,19 @@
                                  </content>
                               </ScrollPane>
                            </children>
+                           <rotationAxis>
+                              <Point3D />
+                           </rotationAxis>
                         </AnchorPane>
                      </content>
                   </Tab>
                 <Tab text="Grade/Employees">
                      <content>
-                        <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                        <AnchorPane prefHeight="200.0" prefWidth="690.0">
                            <children>
-                              <ScrollPane hbarPolicy="NEVER" style="-fx-background-color: ffffff;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                              <ScrollPane prefHeight="327.0" prefWidth="690.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
                                  <content>
-                                    <VBox spacing="10.0" style="-fx-background-color: ffffff;">
+                                    <VBox minWidth="-Infinity" prefWidth="672.0" spacing="10.0" style="-fx-background-color: ffffff;">
                                        <children>
                                           <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Grade and Employees" wrappingWidth="267.4700107574463">
                                              <font>
@@ -135,8 +139,11 @@
                                              <font>
                                                 <Font size="18.0" />
                                              </font>
+                                             <VBox.margin>
+                                                <Insets left="10.0" />
+                                             </VBox.margin>
                                           </Text>
-                                          <TextFlow prefHeight="120.0" prefWidth="600.0">
+                                          <TextFlow prefHeight="120.0" prefWidth="640.0">
                                              <children>
                                                 <Text strokeType="OUTSIDE" strokeWidth="0.0" text="To add a grade, click on Tools select Grades in the drop down list. Enter the name of the grade in the text box down below and select add. Grades can be prioritized by selecting the grade on the list by using move up and move down buttons. To delete a Grade simply right click on the grade and select delete option.">
                                                    <font>
@@ -152,8 +159,11 @@
                                              <font>
                                                 <Font size="18.0" />
                                              </font>
+                                             <VBox.margin>
+                                                <Insets left="10.0" />
+                                             </VBox.margin>
                                           </Text>
-                                          <TextFlow prefWidth="600.0">
+                                          <TextFlow prefWidth="640.0">
                                              <children>
                                                 <Text strokeType="OUTSIDE" strokeWidth="0.0" text="The employee editor provides the tools to assign each employee to a duty. To access the editor, go to Tools and select Employees in the drop down list. There are two options to add employees: Select the “import from .csv” option to import an employee list, or manually insert each employee by entering in a name, selecting grade and clicking the add button.  The employee name should be unique, and it is recommended to have the employee name be in the following format: Last, First. M. To edit an employee you can double click on the name and grade and you press enter once the correction is made. To delete an employee simply right click on the employee and select delete option." wrappingWidth="617.474609375">
                                                    <font>
@@ -170,10 +180,10 @@
                                                 <Font size="18.0" />
                                              </font>
                                              <VBox.margin>
-                                                <Insets />
+                                                <Insets left="10.0" />
                                              </VBox.margin>
                                           </Text>
-                                          <TextFlow prefWidth="600.0">
+                                          <TextFlow prefWidth="640.0">
                                              <children>
                                                 <Text strokeType="OUTSIDE" strokeWidth="0.0" text="To import a list of employees into the program you can create a .csv file using Microsoft excel. CSV file should contain grade and employee in separate columns with grade first and employee second. When saving the file, make sure it is saved as a .csv file. Once it’s saved, you can import the file from the employee editor." wrappingWidth="668.4700107574463">
                                                    <font>
@@ -198,129 +208,140 @@
                   </Tab>
                 <Tab text="Status/Blockouts">
                      <content>
-                        <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                        <AnchorPane prefHeight="200.0" prefWidth="690.0">
                            <children>
-                              <VBox spacing="10.0" style="-fx-background-color: ffffff;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                 <children>
-                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Status and Blockouts" wrappingWidth="270.13669776916504">
-                                       <font>
-                                          <Font name="System Bold" size="18.0" />
-                                       </font>
-                                    </Text>
-                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Status Editor" underline="true" wrappingWidth="270.13669776916504">
-                                       <font>
-                                          <Font size="18.0" />
-                                       </font>
-                                       <VBox.margin>
-                                          <Insets left="10.0" />
-                                       </VBox.margin>
-                                    </Text>
-                                    <TextFlow>
+                              <ScrollPane prefHeight="327.0" prefWidth="690.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
+                                 <content>
+                                    <VBox minWidth="-Infinity" prefWidth="672.0" spacing="10.0" style="-fx-background-color: ffffff;">
                                        <children>
-                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="The status editor is used to identify the reason why an employee is unavailable for duty. To enter a status, click on Tools, select Status in the drop down list, and then the status editor will appear. Next, enter a status code and title, then select increment (this option is necessary for correctly marking a planned absence that is either authorized, or unauthorized). During authorized absences, the status code should not increment while unauthorized absence status codes should." wrappingWidth="270.13669776916504">
+                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Status and Blockouts" wrappingWidth="270.13669776916504">
+                                             <font>
+                                                <Font name="System Bold" size="18.0" />
+                                             </font>
+                                          </Text>
+                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Status Editor" underline="true" wrappingWidth="270.13669776916504">
                                              <font>
                                                 <Font size="18.0" />
                                              </font>
+                                             <VBox.margin>
+                                                <Insets left="10.0" />
+                                             </VBox.margin>
                                           </Text>
-                                       </children>
-                                       <padding>
-                                          <Insets bottom="30.0" left="20.0" />
-                                       </padding>
-                                    </TextFlow>
-                                    <TextFlow>
-                                       <children>
-                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="To finalize the status, click the “Add” button in the bottom right corner. To delete a status, place cursor over the desired status, right click, then select the “delete” option." wrappingWidth="270.13669776916504">
+                                          <TextFlow>
+                                             <children>
+                                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="The status editor is used to identify the reason why an employee is unavailable for duty. To enter a status, click on Tools, select Status in the drop down list, and then the status editor will appear. Next, enter a status code and title, then select increment (this option is necessary for correctly marking a planned absence that is either authorized, or unauthorized). During authorized absences, the status code should not increment while unauthorized absence status codes should." wrappingWidth="270.13669776916504">
+                                                   <font>
+                                                      <Font size="18.0" />
+                                                   </font>
+                                                </Text>
+                                             </children>
+                                             <padding>
+                                                <Insets bottom="30.0" left="20.0" />
+                                             </padding>
+                                          </TextFlow>
+                                          <TextFlow>
+                                             <children>
+                                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="To finalize the status, click the “Add” button in the bottom right corner. To delete a status, place cursor over the desired status, right click, then select the “delete” option." wrappingWidth="270.13669776916504">
+                                                   <font>
+                                                      <Font size="18.0" />
+                                                   </font>
+                                                </Text>
+                                             </children>
+                                             <padding>
+                                                <Insets bottom="30.0" left="20.0" />
+                                             </padding>
+                                          </TextFlow>
+                                          <Text layoutX="20.0" layoutY="111.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Blockout Editor" underline="true" wrappingWidth="638.136697769165">
                                              <font>
                                                 <Font size="18.0" />
                                              </font>
+                                             <VBox.margin>
+                                                <Insets left="10.0" />
+                                             </VBox.margin>
                                           </Text>
+                                          <TextFlow layoutX="20.0" layoutY="116.0">
+                                             <children>
+                                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="The blocThe blockout editor is used to specify a leave time for an employee. To access the blockout editor, go to Tools and select the Blockout Editor in the drop down list and blockout editor will appear. Select a status and the name, to select the time frame of the leave, select the calendar icon and click a date or you can manually enter the dates. Once the information is added, you can select the add button. If you would like to change the viewing order of the list, select the title header and click on the arrow. To edit a blockout date, double click the row and it will appear again on the bottom of the editor, where you can edit the information. To save the new edits, select update button and to cancel select the cancel button. To delete a blockout date simply right click on the line and select delete option.kout editor is used to specify a leave time for an employee. To access the blockout editor, go to Tools and select the Blockout Editor in the drop down list and blockout editor will appear. Select a status and the name, to select the time frame of the leave, select the calendar icon and click a date or you can manually add the dates. Once the information is added, you can select the add button. If you would like to change the viewing order of the list select the title header and click on the arrow. To edit a blockout date, double click the row and it will appear again on the bottom of the editor, where you can edit the information. To save the new edits, select update button and to cancel select the cancel button. To delete a blockout date simply right click on the line and select delete option. " wrappingWidth="270.13669776916504">
+                                                   <font>
+                                                      <Font size="18.0" />
+                                                   </font>
+                                                </Text>
+                                             </children>
+                                             <padding>
+                                                <Insets bottom="30.0" left="20.0" />
+                                             </padding>
+                                          </TextFlow>
                                        </children>
                                        <padding>
-                                          <Insets bottom="30.0" left="20.0" />
+                                          <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                        </padding>
-                                    </TextFlow>
-                                    <Text layoutX="20.0" layoutY="111.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Blockout Editor" underline="true" wrappingWidth="638.136697769165">
-                                       <font>
-                                          <Font size="18.0" />
-                                       </font>
-                                       <VBox.margin>
-                                          <Insets left="10.0" />
-                                       </VBox.margin>
-                                    </Text>
-                                    <TextFlow layoutX="20.0" layoutY="116.0">
-                                       <children>
-                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="The blocThe blockout editor is used to specify a leave time for an employee. To access the blockout editor, go to Tools and select the Blockout Editor in the drop down list and blockout editor will appear. Select a status and the name, to select the time frame of the leave, select the calendar icon and click a date or you can manually enter the dates. Once the information is added, you can select the add button. If you would like to change the viewing order of the list, select the title header and click on the arrow. To edit a blockout date, double click the row and it will appear again on the bottom of the editor, where you can edit the information. To save the new edits, select update button and to cancel select the cancel button. To delete a blockout date simply right click on the line and select delete option.kout editor is used to specify a leave time for an employee. To access the blockout editor, go to Tools and select the Blockout Editor in the drop down list and blockout editor will appear. Select a status and the name, to select the time frame of the leave, select the calendar icon and click a date or you can manually add the dates. Once the information is added, you can select the add button. If you would like to change the viewing order of the list select the title header and click on the arrow. To edit a blockout date, double click the row and it will appear again on the bottom of the editor, where you can edit the information. To save the new edits, select update button and to cancel select the cancel button. To delete a blockout date simply right click on the line and select delete option. " wrappingWidth="270.13669776916504">
-                                             <font>
-                                                <Font size="18.0" />
-                                             </font>
-                                          </Text>
-                                       </children>
-                                       <padding>
-                                          <Insets bottom="30.0" left="20.0" />
-                                       </padding>
-                                    </TextFlow>
-                                 </children>
-                                 <padding>
-                                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                                 </padding>
-                              </VBox>
+                                    </VBox>
+                                 </content>
+                              </ScrollPane>
                            </children>
                         </AnchorPane>
                      </content>
                   </Tab>
                 <Tab text="Holidays">
                      <content>
-                        <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                        <AnchorPane prefHeight="200.0" prefWidth="690.0">
                            <children>
-                              <VBox spacing="10.0" style="-fx-background-color: ffffff;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                 <children>
-                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Holidays" wrappingWidth="172.80336952209473">
-                                       <font>
-                                          <Font name="System Bold" size="18.0" />
-                                       </font>
-                                    </Text>
-                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Holiday Editor" underline="true" wrappingWidth="172.80336952209473">
-                                       <font>
-                                          <Font size="18.0" />
-                                       </font>
-                                       <VBox.margin>
-                                          <Insets left="10.0" />
-                                       </VBox.margin>
-                                    </Text>
-                                    <TextFlow>
+                              <ScrollPane prefHeight="327.0" prefWidth="690.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
+                                 <content>
+                                    <VBox minWidth="-Infinity" prefWidth="672.0" spacing="10.0" style="-fx-background-color: ffffff;">
                                        <children>
-                                          <Text layoutX="10.0" layoutY="10.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Holiday Editor places all employees on leave for a certain time period. To access the Holiday editor, click on Tools select Holiday Editor in the drop down list and blockout editor will appear. To input a holiday, enter a name in the holiday textbox, to select the time frame of the holiday, select the calendar icon and click a date or you can manually add the dates. Once the information is added, you can select the add button. If you would like to change the viewing order of the list select the title header and click on the arrow." wrappingWidth="172.80336952209473">
+                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Holidays" wrappingWidth="172.80336952209473">
+                                             <font>
+                                                <Font name="System Bold" size="18.0" />
+                                             </font>
+                                          </Text>
+                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Holiday Editor" underline="true" wrappingWidth="172.80336952209473">
                                              <font>
                                                 <Font size="18.0" />
                                              </font>
+                                             <VBox.margin>
+                                                <Insets left="10.0" />
+                                             </VBox.margin>
                                           </Text>
+                                          <TextFlow>
+                                             <children>
+                                                <Text layoutX="10.0" layoutY="10.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Holiday Editor places all employees on leave for a certain time period. To access the Holiday editor, click on Tools select Holiday Editor in the drop down list and blockout editor will appear. To input a holiday, enter a name in the holiday textbox, to select the time frame of the holiday, select the calendar icon and click a date or you can manually add the dates. Once the information is added, you can select the add button. If you would like to change the viewing order of the list select the title header and click on the arrow." wrappingWidth="172.80336952209473">
+                                                   <font>
+                                                      <Font size="18.0" />
+                                                   </font>
+                                                </Text>
+                                             </children>
+                                             <padding>
+                                                <Insets bottom="30.0" left="20.0" />
+                                             </padding>
+                                          </TextFlow>
+                                          <TextFlow layoutX="20.0" layoutY="193.0">
+                                             <children>
+                                                <Text layoutX="10.0" layoutY="10.0" strokeType="OUTSIDE" strokeWidth="0.0" text="To edit a holiday time, double click the row and it will appear again on the bottom of the editor, where you can edit the information. To save the new edits, select update button and to cancel select the cancel button. To delete a holiday time simply right click on the line and select delete option." wrappingWidth="172.80336952209473">
+                                                   <font>
+                                                      <Font size="18.0" />
+                                                   </font>
+                                                </Text>
+                                             </children>
+                                             <padding>
+                                                <Insets bottom="30.0" left="20.0" />
+                                             </padding>
+                                          </TextFlow>
                                        </children>
                                        <padding>
-                                          <Insets bottom="30.0" left="20.0" />
+                                          <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                        </padding>
-                                    </TextFlow>
-                                    <TextFlow layoutX="20.0" layoutY="193.0">
-                                       <children>
-                                          <Text layoutX="10.0" layoutY="10.0" strokeType="OUTSIDE" strokeWidth="0.0" text="To edit a holiday time, double click the row and it will appear again on the bottom of the editor, where you can edit the information. To save the new edits, select update button and to cancel select the cancel button. To delete a holiday time simply right click on the line and select delete option." wrappingWidth="172.80336952209473">
-                                             <font>
-                                                <Font size="18.0" />
-                                             </font>
-                                          </Text>
-                                       </children>
-                                       <padding>
-                                          <Insets bottom="30.0" left="20.0" />
-                                       </padding>
-                                    </TextFlow>
-                                 </children>
-                                 <padding>
-                                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                                 </padding>
-                              </VBox>
+                                    </VBox>
+                                 </content>
+                              </ScrollPane>
                            </children>
                         </AnchorPane>
                      </content>
                   </Tab>
               </tabs>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
             </TabPane>
             <HBox alignment="TOP_RIGHT" spacing="10.0">
                <VBox.margin>
