@@ -178,8 +178,8 @@
                   </VBox>
                   <VBox spacing="30.0" GridPane.columnIndex="3" GridPane.rowIndex="1">
                      <children>
-                        <Button fx:id="empoyeeButton" minWidth="-Infinity" mnemonicParsing="false" onAction="#openEmployeeEditor" prefWidth="115.0" text="Grade" />
-                        <Button fx:id="gradeButton" minWidth="-Infinity" mnemonicParsing="false" onAction="#openRankEditor" prefHeight="25.0" prefWidth="115.0" text="Employee" />
+                        <Button fx:id="gradeButton" minWidth="-Infinity" mnemonicParsing="false" onAction="#openRankEditor" prefHeight="25.0" prefWidth="115.0" text="Grade" />
+                        <Button fx:id="empoyeeButton" minWidth="-Infinity" mnemonicParsing="false" onAction="#openEmployeeEditor" prefWidth="115.0" text="Employee" />
                      </children>
                   </VBox>
                   <VBox GridPane.columnIndex="3" GridPane.rowIndex="2">
