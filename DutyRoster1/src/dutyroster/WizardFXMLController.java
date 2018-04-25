@@ -16,6 +16,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.image.Image;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -75,6 +76,7 @@ public class WizardFXMLController extends MainController implements Initializabl
          stage.setResizable(false);
          stage.initModality(Modality.APPLICATION_MODAL);
          stage.setScene(new Scene(root1));
+            stage.getIcons().add(new Image(getClass().getResourceAsStream("RC1.png")));
          stage.setOnHidden(e -> eController.shutDown());
          stage.show(); 
           
@@ -95,7 +97,7 @@ public class WizardFXMLController extends MainController implements Initializabl
             stage.setResizable(false);
             Scene sceneRank = new Scene(root1);
             stage.initModality(Modality.APPLICATION_MODAL);
-
+            stage.getIcons().add(new Image(getClass().getResourceAsStream("RC1.png")));
             stage.setScene(sceneRank);
             stage.setOnHidden(e -> eController.shutDown());
             stage.show(); 
@@ -117,7 +119,7 @@ public class WizardFXMLController extends MainController implements Initializabl
             stage.setTitle("Status Editor");
             stage.setResizable(false);
             Scene sceneStatus2 = new Scene(root1);
-           
+            stage.getIcons().add(new Image(getClass().getResourceAsStream("RC1.png")));
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setScene(sceneStatus2);
             stage.setOnHidden(e -> eController.shutDown());
@@ -140,7 +142,7 @@ public class WizardFXMLController extends MainController implements Initializabl
             stage.setTitle("Blockout Editor");
             stage.setResizable(false);
             Scene sceneStatus2 = new Scene(root1);
-            
+            stage.getIcons().add(new Image(getClass().getResourceAsStream("RC1.png")));
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setScene(sceneStatus2);
             stage.setOnHidden(e -> {
@@ -164,7 +166,7 @@ public class WizardFXMLController extends MainController implements Initializabl
             stage.setTitle("Holidays Editor");
             stage.setResizable(false);
             Scene sceneStatus2 = new Scene(root1);
-           
+            stage.getIcons().add(new Image(getClass().getResourceAsStream("RC1.png")));
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setScene(sceneStatus2);
             stage.setOnHidden(e -> {
@@ -191,6 +193,7 @@ public class WizardFXMLController extends MainController implements Initializabl
             Scene scene = new Scene(root1);
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setScene(scene);
+            stage.getIcons().add(new Image(getClass().getResourceAsStream("RC1.png")));
             stage.show(); 
         }
         catch(IOException e){

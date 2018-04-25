@@ -53,6 +53,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.image.Image;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
@@ -321,6 +322,7 @@ public class MainController implements Initializable {
          stage.initModality(Modality.APPLICATION_MODAL);
          stage.setScene(new Scene(root1));
          stage.setOnHidden(e -> eController.shutDown());
+         stage.getIcons().add(new Image(getClass().getResourceAsStream("RC1.png")));
          stage.show(); 
           
         }
@@ -340,7 +342,7 @@ public class MainController implements Initializable {
             stage.setResizable(false);
             Scene sceneRank = new Scene(root1);
             stage.initModality(Modality.APPLICATION_MODAL);
-
+            stage.getIcons().add(new Image(getClass().getResourceAsStream("RC1.png")));
             stage.setScene(sceneRank);
             stage.setOnHidden(e -> eController.shutDown());
             stage.show(); 
@@ -362,7 +364,7 @@ public class MainController implements Initializable {
             stage.setTitle("Status Editor");
             stage.setResizable(false);
             Scene sceneStatus2 = new Scene(root1);
-           
+            stage.getIcons().add(new Image(getClass().getResourceAsStream("RC1.png")));
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setScene(sceneStatus2);
             stage.setOnHidden(e -> { 
@@ -391,7 +393,7 @@ public class MainController implements Initializable {
             stage.setTitle("Blockout Editor");
             stage.setResizable(false);
             Scene sceneStatus2 = new Scene(root1);
-            
+            stage.getIcons().add(new Image(getClass().getResourceAsStream("RC1.png")));
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setScene(sceneStatus2);
             stage.setOnHidden(e -> {
@@ -418,7 +420,7 @@ public class MainController implements Initializable {
             stage.setTitle("Holidays Editor");
             stage.setResizable(false);
             Scene sceneStatus2 = new Scene(root1);
-           
+            stage.getIcons().add(new Image(getClass().getResourceAsStream("RC1.png")));
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setScene(sceneStatus2);
             stage.setOnHidden(e -> {
@@ -447,6 +449,7 @@ public class MainController implements Initializable {
             Scene sceneCrew = new Scene(root1);
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setScene(sceneCrew);
+            stage.getIcons().add(new Image(getClass().getResourceAsStream("RC1.png")));
             stage.setOnHidden(e -> {
                 eController.shutDown();
                 updateCrew();
@@ -470,6 +473,7 @@ public class MainController implements Initializable {
             Scene scene = new Scene(root1);
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setScene(scene);
+            stage.getIcons().add(new Image(getClass().getResourceAsStream("RC1.png")));
             stage.show(); 
         }
         catch(IOException e){
@@ -489,6 +493,7 @@ public class MainController implements Initializable {
             Scene scene = new Scene(root1);
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setScene(scene);
+            stage.getIcons().add(new Image(getClass().getResourceAsStream("RC1.png")));
             stage.show(); 
         }
         catch(IOException e){
@@ -508,6 +513,7 @@ public class MainController implements Initializable {
             Scene scene = new Scene(root1);
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setScene(scene);
+            stage.getIcons().add(new Image(getClass().getResourceAsStream("RC1.png")));
             stage.show(); 
         }
         catch(IOException e){
@@ -527,6 +533,7 @@ public class MainController implements Initializable {
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setScene(new Scene(root1));
             stage.setMaximized(false);
+            stage.getIcons().add(new Image(getClass().getResourceAsStream("RC1.png")));
             stage.setOnHidden(e -> {
                 mController.shutDown();
                 loadStatusData();

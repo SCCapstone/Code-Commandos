@@ -21,6 +21,7 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -237,6 +238,7 @@ public class LoginController implements Initializable {
             stage.setResizable(true);
             stage.setScene(new Scene(root1));
             stage.setMaximized(true);
+            stage.getIcons().add(new Image(getClass().getResourceAsStream("RC1.png")));
             stage.setOnHidden(e -> mController.shutDown());
             stage.show();
             
@@ -260,6 +262,7 @@ public class LoginController implements Initializable {
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setScene(new Scene(root1));
             stage.setMaximized(false);
+            stage.getIcons().add(new Image(getClass().getResourceAsStream("RC1.png")));
             stage.setOnHidden(e -> mController.shutDown());
             stage.show(); 
           
