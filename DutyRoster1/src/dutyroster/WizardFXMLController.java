@@ -26,8 +26,6 @@ import javafx.stage.Stage;
  */
 public class WizardFXMLController extends MainController implements Initializable {
 
-
-    
     @FXML private Button  btnDone;
     @FXML private CheckBox chkWizard;
     private String pass;

@@ -530,7 +530,7 @@ public class MainController implements Initializable {
             stage.setOnHidden(e -> {
                 mController.shutDown();
                 loadStatusData();
-                loadBlockouts();
+                loadBlockouts(); 
                 loadHolidays();
                 setDate(curYear, curMonth-1);
                     
@@ -575,6 +575,9 @@ public class MainController implements Initializable {
     
     @FXML public void printRosterForm(ActionEvent event){ 
         
+        loadStatusData();
+        loadBlockouts();
+                
         RosterForm form = new RosterForm(rowData, blockoutArray, currentRoster.getTitle(), curYear, curMonth);
         
         try {
@@ -1312,7 +1315,7 @@ public class MainController implements Initializable {
 
     public void loadStatusData(){
         
-        
+        statusArray.removeAll(statusArray);
         statusArray.clear();
         
         SecureFile sc = new SecureFile("Status");
@@ -1337,6 +1340,8 @@ public class MainController implements Initializable {
     
     public void loadBlockouts(){
         
+        
+        blockoutArray.removeAll(blockoutArray);
         blockoutArray.clear();
         
         SecureFile scBO = new SecureFile("Blockouts");
@@ -1410,8 +1415,8 @@ public class MainController implements Initializable {
         SecureFile scEmployees = new SecureFile("Holidays");
         String a = scEmployees.retrieve();
       
-        if(!holidayArray.isEmpty())
-            holidayArray.clear();
+        holidayArray.removeAll(holidayArray);
+        holidayArray.clear();
         
         String aArry[] = a.split("\\|", -1);
         for (String b : aArry){
