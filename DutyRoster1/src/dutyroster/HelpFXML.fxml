@@ -34,7 +34,7 @@
                                           </Text>
                                           <TextFlow>
                                              <children>
-                                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Grades are used to assign employees with a specific title, pay grade or rank. Grades can be imported along with the employee through the Employee Editor, or they can be added in manually.  " wrappingWidth="670.5263671875">
+                                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Rosters are used to assign employees to a duty. There must be grades and employees in the system before you can create a roster. Rosters can be exported in a PDF format." wrappingWidth="670.5263671875">
                                                    <font>
                                                       <Font size="18.0" />
                                                    </font>
@@ -96,6 +96,14 @@
                                                 <Insets bottom="20.0" left="30.0" />
                                              </padding>
                                           </TextFlow>
+                                          <Text layoutX="40.0" layoutY="165.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Roster Priority, Duty Conflicts, and Rest Periods" underline="true" wrappingWidth="470.4999990463257">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                             <VBox.margin>
+                                                <Insets left="20.0" />
+                                             </VBox.margin>
+                                          </Text>
                                           <TextFlow layoutX="20.0" layoutY="670.0">
                                              <children>
                                                 <Text layoutX="10.0" layoutY="10.0" strokeType="OUTSIDE" strokeWidth="0.0" text="An employee that is currently pulling duty on a higher priority roster is exempt from pulling duty on all lower priority rosters for that time. The lower rosters will show that the employee is pulling duty on a higher roster by displaying the letter “D” in the column for that day. The rest time is determined by the longest rest time between both rosters that are being compared. Rest time is considered an authorized absence, so the increment number does not increase during that period." wrappingWidth="670.5263671875">
