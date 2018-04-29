@@ -13,7 +13,7 @@
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.text.TextFlow?>
 
-<AnchorPane id="anchorPane" prefHeight="400.0" prefWidth="690.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dutyroster.HelpController">
+<AnchorPane id="anchorPane" prefHeight="444.0" prefWidth="690.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dutyroster.HelpController">
    <children>
       <VBox spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -54,7 +54,7 @@
                                           </Text>
                                           <TextFlow layoutX="20.0" layoutY="44.0">
                                              <children>
-                                                <Text layoutX="10.0" layoutY="10.0" strokeType="OUTSIDE" strokeWidth="0.0" text=" To create a new roster, you can either select plus button (+) on the top left side of the screen or click on Tools, select add roster in the drop down list, and a new roster will appear." wrappingWidth="670.5263671875">
+                                                <Text layoutX="10.0" layoutY="10.0" strokeType="OUTSIDE" strokeWidth="0.0" text="There are two ways to create a new roster. Either select plus button (+) on the top left side of the screen or click on the &quot;Tools&quot; menu item, select &quot;Add Roster&quot; in the drop down list, and a new roster will appear." wrappingWidth="670.5263671875">
                                                    <font>
                                                       <Font size="18.0" />
                                                    </font>
@@ -74,7 +74,19 @@
                                           </Text>
                                           <TextFlow layoutX="50.0" layoutY="175.0">
                                              <children>
-                                                <Text layoutX="10.0" layoutY="10.0" strokeType="OUTSIDE" strokeWidth="0.0" text="There are three separate types of increments that can be used to track the longest period of downtime from when the employee last pulled duty on a specific roster. Those types are “n” for normal, “w” for weekends, and “h” for holidays. The employee with the highest increment is next in line to pull duty. The initial increment numbers can be edited directly in the roster itself by changing the values in the increment columns labeled “n”, “w”, or “h”. " wrappingWidth="670.5263671875">
+                                                <Text layoutX="10.0" layoutY="10.0" strokeType="OUTSIDE" strokeWidth="0.0" text="There are three separate types of increments that can be used to track the longest period of downtime from when the employee last pulled duty on a specific roster. Those types are “N” for normal, “W” for weekends, and “H” for holidays. The employee with the highest increment is next in line to pull duty. The initial increment numbers can be edited directly in the roster itself by changing the values in the increment columns labeled “N”, “W”, or “H&quot;." wrappingWidth="670.5263671875">
+                                                   <font>
+                                                      <Font size="18.0" />
+                                                   </font>
+                                                </Text>
+                                             </children>
+                                             <padding>
+                                                <Insets bottom="20.0" left="30.0" />
+                                             </padding>
+                                          </TextFlow>
+                                          <TextFlow>
+                                             <children>
+                                                <Text layoutX="10.0" layoutY="10.0" strokeType="OUTSIDE" strokeWidth="0.0" text="The normal “N” increment is always used to mark regular days, or weekdays when the weekends option is enabled in the roster settings. The weekend “W” increment only increments when the “weekends” option is enabled. The holidays “H” increment only increments when the “holidays” option is enabled, and only on holidays that are added to the holiday editor." wrappingWidth="670.5263671875">
                                                    <font>
                                                       <Font size="18.0" />
                                                    </font>
@@ -85,16 +97,16 @@
                                              </padding>
                                           </TextFlow>
                                           <TextFlow layoutX="20.0" layoutY="281.0">
+                                             <padding>
+                                                <Insets bottom="20.0" left="30.0" />
+                                             </padding>
                                              <children>
-                                                <Text layoutX="10.0" layoutY="10.0" strokeType="OUTSIDE" strokeWidth="0.0" text="The normal “n” increment is always used to mark regular days, or weekdays when the “weekends” option is enabled in the roster settings. The weekend “w” increment only increments when the “weekends” option is enabled. Roster Priority, Duty Conflicts, and Rest Periods." wrappingWidth="670.5263671875">
+                                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="If you are creating a new roster, then all increment starting numbers should remain at “1”. If you are adding an ongoing roster, then you must change the starting increments to match the previous numbers for each employee." wrappingWidth="670.5263671875">
                                                    <font>
                                                       <Font size="18.0" />
                                                    </font>
                                                 </Text>
                                              </children>
-                                             <padding>
-                                                <Insets bottom="20.0" left="30.0" />
-                                             </padding>
                                           </TextFlow>
                                           <Text layoutX="40.0" layoutY="165.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Roster Priority, Duty Conflicts, and Rest Periods" underline="true" wrappingWidth="470.4999990463257">
                                              <font>
@@ -104,9 +116,69 @@
                                                 <Insets left="20.0" />
                                              </VBox.margin>
                                           </Text>
+                                          <TextFlow>
+                                             <children>
+                                                <Text layoutX="10.0" layoutY="10.0" strokeType="OUTSIDE" strokeWidth="0.0" text="An employee that is currently pulling duty on a higher priority roster is exempt from pulling duty on all lower priority rosters for that time. In those cases, a Duty Conflict will appear as the letter “D” in the column of a lower roster when the employee is pulling duty on a higher roster for that day. The Rest Period is determined by the longest rest time between both rosters that are being compared. Rest period is considered an authorized absence, so the increment number does not increase during that period." wrappingWidth="670.5263671875">
+                                                   <font>
+                                                      <Font size="18.0" />
+                                                   </font>
+                                                </Text>
+                                             </children>
+                                             <padding>
+                                                <Insets bottom="20.0" left="30.0" />
+                                             </padding>
+                                          </TextFlow>
+                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Assignment Algorithm" underline="true" wrappingWidth="470.4999990463257">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                             <VBox.margin>
+                                                <Insets left="20.0" />
+                                             </VBox.margin>
+                                          </Text>
+                                          <TextFlow>
+                                             <children>
+                                                <Text layoutX="10.0" layoutY="10.0" strokeType="OUTSIDE" strokeWidth="0.0" text="The assignment algorithm is the increment calculation which determines which employees have duty on which days. To run the assignment algorithm, select the “Update Rosters” button. This must happen every time that changes are made." wrappingWidth="670.5263671875">
+                                                   <font>
+                                                      <Font size="18.0" />
+                                                   </font>
+                                                </Text>
+                                             </children>
+                                             <padding>
+                                                <Insets bottom="20.0" left="30.0" />
+                                             </padding>
+                                          </TextFlow>
+                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Changing Months" underline="true" wrappingWidth="470.4999990463257">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                             <VBox.margin>
+                                                <Insets left="20.0" />
+                                             </VBox.margin>
+                                          </Text>
                                           <TextFlow layoutX="20.0" layoutY="670.0">
                                              <children>
-                                                <Text layoutX="10.0" layoutY="10.0" strokeType="OUTSIDE" strokeWidth="0.0" text="An employee that is currently pulling duty on a higher priority roster is exempt from pulling duty on all lower priority rosters for that time. The lower rosters will show that the employee is pulling duty on a higher roster by displaying the letter “D” in the column for that day. The rest time is determined by the longest rest time between both rosters that are being compared. Rest time is considered an authorized absence, so the increment number does not increase during that period." wrappingWidth="670.5263671875">
+                                                <Text layoutX="10.0" layoutY="10.0" strokeType="OUTSIDE" strokeWidth="0.0" text="When moving to the next month, all increment settings go to the default settings. To carry over the last increment numbers from the end of previous month, press the “Set Increments” button. Then, press “Update Rosters” to run the assignment algorithm on the newly selected month. " wrappingWidth="670.5263671875">
+                                                   <font>
+                                                      <Font size="18.0" />
+                                                   </font>
+                                                </Text>
+                                             </children>
+                                             <padding>
+                                                <Insets bottom="20.0" left="30.0" />
+                                             </padding>
+                                          </TextFlow>
+                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Delete Roster" underline="true" wrappingWidth="470.4999990463257">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                             <VBox.margin>
+                                                <Insets left="20.0" />
+                                             </VBox.margin>
+                                          </Text>
+                                          <TextFlow>
+                                             <children>
+                                                <Text layoutX="10.0" layoutY="10.0" strokeType="OUTSIDE" strokeWidth="0.0" text="To delete a roster, simply go to the roster tab, and select the &quot;x&quot; button next to the name. A confirmation message will appear, to ensure that the action is deliberate. Once a roster is deleted, it cannot be recovered." wrappingWidth="670.5263671875">
                                                    <font>
                                                       <Font size="18.0" />
                                                    </font>
