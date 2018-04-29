@@ -34,7 +34,7 @@
                                           </Text>
                                           <TextFlow>
                                              <children>
-                                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Rosters are used to assign employees to a duty. There must be grades and employees in the system before you can create a roster. Rosters can be exported in a PDF format." wrappingWidth="670.5263671875">
+                                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Rosters are used to assign employees to a duty. The Grade and Employee data must filled before a roster can be created." wrappingWidth="670.5263671875">
                                                    <font>
                                                       <Font size="18.0" />
                                                    </font>
@@ -113,7 +113,27 @@
                                                 </Text>
                                              </children>
                                              <padding>
-                                                <Insets left="30.0" />
+                                                <Insets bottom="20.0" left="30.0" />
+                                             </padding>
+                                          </TextFlow>
+                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Export Roster" underline="true" wrappingWidth="470.4999990463257">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                             <VBox.margin>
+                                                <Insets left="20.0" />
+                                             </VBox.margin>
+                                          </Text>
+                                          <TextFlow>
+                                             <children>
+                                                <Text layoutX="10.0" layoutY="10.0" strokeType="OUTSIDE" strokeWidth="0.0" text="A roster can be exported to PDF format in two different ways: Roster Form and Roster Memo. To export a roster form, select the &quot;Export Roster&quot; button. To export a roster memo, select the &quot;Export Memo&quot; button." wrappingWidth="670.5263671875">
+                                                   <font>
+                                                      <Font size="18.0" />
+                                                   </font>
+                                                </Text>
+                                             </children>
+                                             <padding>
+                                                <Insets bottom="20.0" left="30.0" />
                                              </padding>
                                           </TextFlow>
                                        </children>
