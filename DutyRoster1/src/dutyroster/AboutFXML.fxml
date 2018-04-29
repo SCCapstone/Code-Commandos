@@ -16,14 +16,14 @@
          <children>
             <VBox nodeOrientation="LEFT_TO_RIGHT" prefHeight="400.0" prefWidth="690.0" spacing="5.0" style="-fx-background-color: ffffff;">
                <children>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Welcome to the Duty Roster 1.0" wrappingWidth="400.8033695220947">
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Welcome to the Duty Roster 1.0" underline="true" wrappingWidth="400.8033695220947">
                      <font>
                         <Font name="System Bold" size="18.0" />
                      </font>
                   </Text>
-                  <TextFlow prefHeight="130.0" prefWidth="651.0">
+                  <TextFlow prefHeight="337.0" prefWidth="640.0">
                      <children>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Duty Roster 1.0 is an automated military-based scheduling system which has been adapted for public use. This is a basic implementation of a desktop app using JavaFX and NetBeans IDE.">
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Duty Roster 1.0 is an automated military-based scheduling system which has been adapted for public use. This application automates the Department of the Army Form 6 which is used at all levels of command, and in all types of units and organizations. It give leaders a set of powerful tools to quickly create and modify unit duty rosters and guarantees that soldiers are being assigned to specific duties fairly and accurately." wrappingWidth="614.2763671875">
                            <font>
                               <Font size="18.0" />
                            </font>
@@ -33,7 +33,19 @@
                         <Insets left="10.0" />
                      </VBox.margin>
                   </TextFlow>
-                  <Label prefHeight="21.0" prefWidth="618.0" text="Contributors: Austin Freed, Mike Harlow, Harini Karnati, Tanya Peyush and Othen Prock">
+                  <TextFlow prefHeight="337.0" prefWidth="640.0">
+                     <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="This is a basic implementation of a desktop app using JavaFX and NetBeans IDE." wrappingWidth="199.8203125">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Text>
+                     </children>
+                     <VBox.margin>
+                        <Insets left="10.0" top="15.0" />
+                     </VBox.margin>
+                  </TextFlow>
+                  <Label alignment="BOTTOM_LEFT" prefHeight="39.0" prefWidth="618.0" text="Contributors: Austin Freed, Mike Harlow, Harini Karnati, Tanya Peyush and Othen Prock">
                      <VBox.margin>
                         <Insets left="10.0" />
                      </VBox.margin>
