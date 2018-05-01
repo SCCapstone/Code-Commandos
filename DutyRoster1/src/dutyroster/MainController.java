@@ -695,7 +695,7 @@ public class MainController implements Initializable {
         colH1.setMaxWidth(0.01);
         colH1.setEditable(false);
         colH1.setSortable(false);
-        tableView.getColumns().add(colH1); 
+        tableView.getColumns().add(colH1);
         
         TableColumn colInc = createColumn(5, "Increments");
         colInc.setPrefWidth(150);
