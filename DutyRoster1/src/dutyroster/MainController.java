@@ -679,7 +679,7 @@ public class MainController implements Initializable {
         colName.setSortable(false);
         tableView.getColumns().add(colName);
       
-        /*TableColumn colN1 = createColumn(2, "");
+        TableColumn colN1 = createColumn(2, "");
         colN1.setMaxWidth(0.01);
         colN1.setEditable(false);
         colN1.setSortable(false);
@@ -695,16 +695,16 @@ public class MainController implements Initializable {
         colH1.setMaxWidth(0.01);
         colH1.setEditable(false);
         colH1.setSortable(false);
-        tableView.getColumns().add(colH1);*/ 
+        tableView.getColumns().add(colH1); 
         
-        TableColumn colInc = createColumn(2, "Increments");
+        TableColumn colInc = createColumn(5, "Increments");
         colInc.setPrefWidth(150);
         colInc.setMaxWidth(150);
         colInc.setResizable(false);
         colInc.setSortable(false);
         colInc.setStyle("-fx-background-color:#ffffff;");
   
-            TableColumn colN = createColumn(2, "N");
+            TableColumn colN = createColumn(5, "N");
             colN.setPrefWidth(35);
             colN.setMaxWidth(35);
             colN.setResizable(false);
@@ -712,7 +712,7 @@ public class MainController implements Initializable {
             colN.setStyle("-fx-alignment: CENTER;");
             colInc.getColumns().add(colN);  
                       
-            TableColumn colW = createColumn(3, "W");
+            TableColumn colW = createColumn(6, "W");
             colW.setPrefWidth(35);
             colW.setMaxWidth(35);
             colW.setResizable(false);
@@ -721,7 +721,7 @@ public class MainController implements Initializable {
                         + "-fx-border-color:#ffffff;");
             colInc.getColumns().add(colW);
            
-            TableColumn colH = createColumn(4, "H");
+            TableColumn colH = createColumn(7, "H");
             colH.setPrefWidth(35);
             colH.setMaxWidth(35);
             colH.setResizable(false);
@@ -733,7 +733,7 @@ public class MainController implements Initializable {
         tableView.getColumns().add(colInc); 
                     
         for (int i = 1; i <= lastDayOfMonth; i++) {
-            final int finalIdx = i + 5;
+            final int finalIdx = i + 7;
             
             TableColumn col = createColumn(finalIdx, Integer.toString(i));
             col.setResizable(false);
