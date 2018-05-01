@@ -417,7 +417,7 @@
                                           </Text>
                                           <TextFlow>
                                              <children>
-                                                <Text layoutX="10.0" layoutY="10.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Holiday Editor places all employees on leave for a certain time period. To access the Holiday editor, click on Tools select Holiday Editor in the drop down list and blockout editor will appear. To input a holiday, enter a name in the holiday textbox, to select the time frame of the holiday, select the calendar icon and click a date or you can manually add the dates. Once the information is added, you can select the add button. If you would like to change the viewing order of the list select the title header and click on the arrow." wrappingWidth="172.80336952209473">
+                                                <Text layoutX="10.0" layoutY="10.0" strokeType="OUTSIDE" strokeWidth="0.0" text="The Holiday Editor places all employees on leave for a certain time period. To input a holiday, enter a name in the holiday textbox and select the time frame for the holiday. The user can select the calendar icon and choose a date duration for the holiday. They also have the option to manually add the dates. Once the information is added, select the “Add” button. If you would like to change the viewing order of the list select the title header and click on the arrow." wrappingWidth="172.80336952209473">
                                                    <font>
                                                       <Font size="18.0" />
                                                    </font>
@@ -429,7 +429,7 @@
                                           </TextFlow>
                                           <TextFlow layoutX="20.0" layoutY="193.0">
                                              <children>
-                                                <Text layoutX="10.0" layoutY="10.0" strokeType="OUTSIDE" strokeWidth="0.0" text="To edit a holiday time, double click the row and it will appear again on the bottom of the editor, where you can edit the information. To save the new edits, select update button and to cancel select the cancel button. To delete a holiday time simply right click on the line and select delete option." wrappingWidth="172.80336952209473">
+                                                <Text layoutX="10.0" layoutY="10.0" strokeType="OUTSIDE" strokeWidth="0.0" text="To edit a Holiday, the user can double-click on the holiday and adjust the desired fields. To delete a Holiday, right-click on the holiday and select the “Delete” option." wrappingWidth="172.80336952209473">
                                                    <font>
                                                       <Font size="18.0" />
                                                    </font>
