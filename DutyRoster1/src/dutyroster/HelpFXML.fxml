@@ -245,7 +245,7 @@
                                           </Text>
                                           <TextFlow prefHeight="120.0" prefWidth="640.0">
                                              <children>
-                                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="To add a grade, click on Tools select Grades in the drop down list. Enter the name of the grade in the text box down below and select add. Grades can be prioritized by selecting the grade on the list by using move up and move down buttons. To delete a Grade simply right click on the grade and select delete option.">
+                                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Grades can be manually added or deleted using the Grades Editor. To add a grade, enter the name on the text field below and select “Add”. You will receive an error if you add a blank grade name. Grades can be prioritized by selecting the grade on the list by using the “Move Up” and “Move Down” buttons. To delete a Grade simply right click on the grade and select delete option. To close the Grade Editor, select the “Done” button on the bottom corner.">
                                                    <font>
                                                       <Font size="18.0" />
                                                    </font>
@@ -253,6 +253,18 @@
                                              </children>
                                              <VBox.margin>
                                                 <Insets bottom="30.0" left="20.0" />
+                                             </VBox.margin>
+                                          </TextFlow>
+                                          <TextFlow prefHeight="120.0" prefWidth="640.0">
+                                             <children>
+                                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Note: If a CSV file is imported to the Employee Editor in the correct format, grades will automatically be added into the editor. For more information on importing files, see “Employees”. ">
+                                                   <font>
+                                                      <Font size="18.0" />
+                                                   </font>
+                                                </Text>
+                                             </children>
+                                             <VBox.margin>
+                                                <Insets left="20.0" />
                                              </VBox.margin>
                                           </TextFlow>
                                           <Text layoutX="20.0" layoutY="210.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Employee Editor" underline="true" wrappingWidth="668.4700107574463">
@@ -265,7 +277,7 @@
                                           </Text>
                                           <TextFlow prefWidth="640.0">
                                              <children>
-                                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="The employee editor provides the tools to assign each employee to a duty. To access the editor, go to Tools and select Employees in the drop down list. There are two options to add employees: Select the “import from .csv” option to import an employee list, or manually insert each employee by entering in a name, selecting grade and clicking the add button.  The employee name should be unique, and it is recommended to have the employee name be in the following format: Last, First. M. To edit an employee you can double click on the name and grade and you press enter once the correction is made. To delete an employee simply right click on the employee and select delete option." wrappingWidth="617.474609375">
+                                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="The Employee Editor provides the tools to assign each employee to a duty. There are two options to add employees: (1) Select the “import from .csv” option to import an employee list or (2) manually insert each employee in the system. To import employees manually, enter a name in the text field, select a grade from the previously created options, and select the “Add” button. The employee name should be unique, and it is recommended to have the employee name be in the following format: Last, First. M. To edit an employee, double-click on the Name or Grade on the list, and once the corrections are made, press the Enter key. To delete an employee, right-click on the employee and select the “Delete” option." wrappingWidth="617.474609375">
                                                    <font>
                                                       <Font size="18.0" />
                                                    </font>
@@ -285,7 +297,7 @@
                                           </Text>
                                           <TextFlow prefWidth="640.0">
                                              <children>
-                                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="To import a list of employees into the program you can create a .csv file using Microsoft excel. CSV file should contain grade and employee in separate columns with grade first and employee second. When saving the file, make sure it is saved as a .csv file. Once it’s saved, you can import the file from the employee editor." wrappingWidth="668.4700107574463">
+                                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="To import a list of employees into the program, create a CSV (comma-separated values) file using Microsoft Excel. The CSV file should contain a Grade and an Employee in separate columns, with the Grade in the first column, and the Employee in the second column. When saving the file, ensure it is being saved as a CSV file. Once it is saved, import the file from the Employee Editor." wrappingWidth="668.4700107574463">
                                                    <font>
                                                       <Font size="18.0" />
                                                    </font>
