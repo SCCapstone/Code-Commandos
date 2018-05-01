@@ -245,7 +245,7 @@
                                           </Text>
                                           <TextFlow prefHeight="120.0" prefWidth="640.0">
                                              <children>
-                                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Grades can be manually added or deleted using the Grades Editor. To add a grade, enter the name on the text field below and select “Add”. You will receive an error if you add a blank grade name. Grades can be prioritized by selecting the grade on the list by using the “Move Up” and “Move Down” buttons. To delete a Grade simply right click on the grade and select delete option. To close the Grade Editor, select the “Done” button on the bottom corner.">
+                                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Grades can be manually added or deleted using the Grade Editor. To add a grade, enter the name on the text field below and select “Add”. You will receive an error if you add a blank grade name. Grades can be prioritized by selecting the grade on the list by using the “Move Up” and “Move Down” buttons. To delete a Grade simply right click on the grade and select delete option. To close the Grade Editor, select the “Done” button on the bottom corner.">
                                                    <font>
                                                       <Font size="18.0" />
                                                    </font>
@@ -300,7 +300,7 @@
                                           </Text>
                                           <TextFlow prefWidth="640.0">
                                              <children>
-                                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="To import a list of employees into the program you can create a .csv file using Microsoft excel. CSV file should contain grade and employee in separate columns with grade first and employee second. When saving the file, make sure it is saved as a .csv file. Once it’s saved, you can import the file from the employee editor." wrappingWidth="668.4700107574463">
+                                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="To import a list of employees into the program, create a CSV (comma-separated values) file using Microsoft Excel. The CSV file should contain a Grade and an Employee in separate columns, with the Grade in the first column, and the Employee in the second column. When saving the file, ensure it is being saved as a CSV file. Once it is saved, import the file from the Employee Editor." wrappingWidth="668.4700107574463">
                                                    <font>
                                                       <Font size="18.0" />
                                                    </font>
